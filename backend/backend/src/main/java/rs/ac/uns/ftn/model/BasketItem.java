@@ -30,5 +30,5 @@ public class BasketItem {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private Order order;
+    private Orderr order;
 }

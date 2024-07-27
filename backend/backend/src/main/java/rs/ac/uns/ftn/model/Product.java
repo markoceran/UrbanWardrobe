@@ -35,11 +35,6 @@ public class Product {
     @Column(name = "price",nullable = false)
     private double price;
 
-    @ManyToOne
-    @JoinColumn(name = "wishList_id")
-    private WishList wishList;
-
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ProductCategory category;

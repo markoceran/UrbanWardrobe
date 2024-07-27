@@ -26,7 +26,7 @@ public class User extends BasicUser{
     private WishList wishList;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Order> orders;
+    private Set<Orderr> orders;
 
     @PrePersist
     protected void onCreate() {

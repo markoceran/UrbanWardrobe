@@ -75,7 +75,7 @@ public class WebSecurityConfig {
         //http.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint);
         http.authorizeRequests()
 
-
+                .antMatchers("/user/**").permitAll()
                 /*.antMatchers("/users/**").permitAll()
                 .antMatchers("/users/all").hasRole("ADMIN")
                 .antMatchers("/posts").permitAll()

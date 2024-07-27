@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,11 +23,11 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserDTO {
 
-    @NotNull
-    private Long id;
-
     @Email(message="Must be email")
     private String email;
+    @NotBlank
+    @Size(min = 6)
+    private String password;
 
     @NotBlank
     private String firstName;
@@ -37,7 +38,7 @@ public class UserDTO {
     @NotBlank
     private String phoneNumber;
 
-    @NotBlank
+    @NotNull(message="Shipping address cannot be null")
     private ShippingAddress shippingAddress;
 
 }

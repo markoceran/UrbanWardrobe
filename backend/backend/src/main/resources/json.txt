@@ -1,0 +1,15 @@
+{
+  "email": "markoceran88mc",
+  "password": "123456",
+  "firstName": "Marko",
+  "lastName": "Ceran",
+  "phoneNumber": "Marko",
+  "shippingAddress": {
+      "street": "test",
+      "city": "test",
+      "country": "test",
+      "number": 5,
+      "postalCode": "56546546"
+  }
+
+}

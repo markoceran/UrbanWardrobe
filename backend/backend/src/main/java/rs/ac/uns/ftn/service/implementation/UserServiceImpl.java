@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.model.BasicUser;
 import rs.ac.uns.ftn.model.User;
+import rs.ac.uns.ftn.model.dto.UserDTO;
 import rs.ac.uns.ftn.repository.UserRepository;
 import rs.ac.uns.ftn.service.BasicUserService;
 import rs.ac.uns.ftn.service.UserService;
@@ -44,7 +45,7 @@ public class UserServiceImpl implements UserService {
         return getAll().stream().filter(u->u.getEmail().equals(email)).findAny().orElse(null);
     }
     @Override
-    public User createUser(User userForCreate) {
+    public User createUser(UserDTO userForCreate) {
 
         BasicUser user = basicUserService.findByEmail(userForCreate.getEmail());
 
