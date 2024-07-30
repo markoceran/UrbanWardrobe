@@ -42,7 +42,7 @@ public class CourierServiceImpl implements CourierService {
 
     @Override
     public Courier findByEmail(String email) {
-        return getAll().stream().filter(u->u.getEmail().equals(email)).findAny().orElse(null);
+        return courierRepository.findByEmail(email).orElse(null);
     }
     @Override
     public Courier createCourier(UserDTO courier) {

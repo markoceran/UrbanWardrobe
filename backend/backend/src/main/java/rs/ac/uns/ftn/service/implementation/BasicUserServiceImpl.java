@@ -27,6 +27,6 @@ public class BasicUserServiceImpl implements BasicUserService {
 
     @Override
     public BasicUser findByEmail(String email) {
-        return getAll().stream().filter(u->u.getEmail().equals(email)).findAny().orElse(null);
+        return basicUserRepository.findByEmail(email).orElse(null);
     }
 }

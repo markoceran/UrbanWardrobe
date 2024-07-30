@@ -41,7 +41,7 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public Worker findByEmail(String email) {
-        return getAll().stream().filter(u->u.getEmail().equals(email)).findAny().orElse(null);
+        return workerRepository.findByEmail(email).orElse(null);
     }
     @Override
     public Worker createWorker(UserDTO worker) {

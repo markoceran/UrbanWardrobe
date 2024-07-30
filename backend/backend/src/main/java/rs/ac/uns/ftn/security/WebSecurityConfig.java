@@ -77,6 +77,7 @@ public class WebSecurityConfig {
         http.authorizeRequests()
 
                 .antMatchers("/user/**").permitAll()
+                .antMatchers("/product").permitAll()
                 /*.antMatchers("/users/**").permitAll()
                 .antMatchers("/users/all").hasRole("ADMIN")
                 .antMatchers("/posts").permitAll()

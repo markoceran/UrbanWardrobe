@@ -41,7 +41,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Admin findByEmail(String email) {
-        return getAll().stream().filter(u->u.getEmail().equals(email)).findAny().orElse(null);
+        return adminRepository.findByEmail(email).orElse(null);
     }
     @Override
     public Admin createAdmin(UserDTO admin) {

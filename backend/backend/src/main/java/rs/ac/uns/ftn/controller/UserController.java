@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.model.*;
+import rs.ac.uns.ftn.model.dto.JsonResponse;
 import rs.ac.uns.ftn.model.dto.JwtAuthenticationRequest;
 import rs.ac.uns.ftn.model.dto.UserDTO;
 import rs.ac.uns.ftn.model.dto.UserTokenState;
@@ -19,10 +20,7 @@ import rs.ac.uns.ftn.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 @RestController
@@ -84,105 +82,78 @@ public class UserController {
     }
 
     @GetMapping("/profile/{email}")
-    public User user(@PathVariable String email) {
+    public UserDTO profile(@PathVariable String email) {
         logger.info("Find user with email");
-        return this.userService.findByEmail(email);
+        User user = this.userService.findByEmail(email);
+
+        UserDTO userDto = new UserDTO();
+        userDto.setEmail(user.getEmail());
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setPhoneNumber(user.getPhoneNumber());
+        userDto.setShippingAddress(user.getShippingAddress());
+        return userDto;
     }
 
     @PostMapping("/registerUser")
     public ResponseEntity<JsonResponse> registerUser(@RequestBody UserDTO newUser) {
 
-        JsonResponse jsonResponse;
-
         String validationError = validateUser(newUser);
         if (validationError != null) {
             logger.info(validationError);
-            jsonResponse = new JsonResponse(
-                    validationError
-            );
-            return ResponseEntity.badRequest().body(jsonResponse);
+            return ResponseEntity.badRequest().body(new JsonResponse(validationError));
         }
 
         if (newUser.getShippingAddress() == null){
             logger.info("Shipping address is required.");
-            jsonResponse = new JsonResponse(
-                    "Shipping address is required."
-            );
-            return ResponseEntity.badRequest().body(jsonResponse);
+            return ResponseEntity.badRequest().body(new JsonResponse("Shipping address is required."));
         }
 
         userService.createUser(newUser);
 
-        jsonResponse = new JsonResponse(
-                "User successfully registered"
-        );
-        return ResponseEntity.ok(jsonResponse);
+        return ResponseEntity.ok(new JsonResponse("User successfully registered"));
     }
 
     @PostMapping("/registerAdmin")
     public ResponseEntity<JsonResponse> registerAdmin(@RequestBody UserDTO newAdmin) {
 
-        JsonResponse jsonResponse;
-
         String validationError = validateUser(newAdmin);
         if (validationError != null) {
             logger.info(validationError);
-            jsonResponse = new JsonResponse(
-                    validationError
-            );
-            return ResponseEntity.badRequest().body(jsonResponse);
+            return ResponseEntity.badRequest().body(new JsonResponse(validationError));
         }
 
         adminService.createAdmin(newAdmin);
 
-        jsonResponse = new JsonResponse(
-                "Admin successfully registered"
-        );
-        return ResponseEntity.ok(jsonResponse);
+        return ResponseEntity.ok(new JsonResponse("Admin successfully registered"));
     }
 
     @PostMapping("/registerWorker")
-    public ResponseEntity<JsonResponse> registerWorker(@RequestBody @Valid UserDTO newWorker) {
-
-        JsonResponse jsonResponse;
+    public ResponseEntity<JsonResponse> registerWorker(@RequestBody UserDTO newWorker) {
 
         String validationError = validateUser(newWorker);
         if (validationError != null) {
             logger.info(validationError);
-            jsonResponse = new JsonResponse(
-                    validationError
-            );
-            return ResponseEntity.badRequest().body(jsonResponse);
+            return ResponseEntity.badRequest().body(new JsonResponse(validationError));
         }
 
         workerService.createWorker(newWorker);
 
-        jsonResponse = new JsonResponse(
-                "Worker successfully registered"
-        );
-        return ResponseEntity.ok(jsonResponse);
+        return ResponseEntity.ok(new JsonResponse("Worker successfully registered"));
     }
 
     @PostMapping("/registerCourier")
-    public ResponseEntity<JsonResponse> registerCourier(@RequestBody @Valid UserDTO newCourier) {
-
-        JsonResponse jsonResponse;
+    public ResponseEntity<JsonResponse> registerCourier(@RequestBody UserDTO newCourier) {
 
         String validationError = validateUser(newCourier);
         if (validationError != null) {
             logger.info(validationError);
-            jsonResponse = new JsonResponse(
-                    validationError
-            );
-            return ResponseEntity.badRequest().body(jsonResponse);
+            return ResponseEntity.badRequest().body(new JsonResponse(validationError));
         }
 
         courierService.createCourier(newCourier);
 
-        jsonResponse = new JsonResponse(
-                "Courier successfully registered"
-        );
-        return ResponseEntity.ok(jsonResponse);
+        return ResponseEntity.ok(new JsonResponse("Courier successfully registered"));
     }
 
     public String validateUser(UserDTO newUser) {
@@ -246,11 +217,10 @@ public class UserController {
         TokenUtils.clearAuthenticationCookie(request, response);
 
         // Create response body
-        JsonResponse jsonResponse = new JsonResponse("Logged out successfully");
         logger.info("Logged out successfully");
 
         // Return the response
-        return ResponseEntity.ok(jsonResponse);
+        return ResponseEntity.ok(new JsonResponse("Logged out successfully"));
     }
 
 

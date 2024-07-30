@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +30,8 @@ public class Product {
     @Column(name = "description",nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonManagedReference
     private Set<SizeQuantity> sizeQuantities;
 
     @Column(name = "price",nullable = false)
@@ -41,7 +43,6 @@ public class Product {
 
     @PrePersist
     protected void onCreate() {
-        price = 0;
         code = generateCode();
     }
 

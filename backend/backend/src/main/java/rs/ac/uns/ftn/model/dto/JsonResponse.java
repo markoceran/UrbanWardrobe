@@ -1,4 +1,4 @@
-package rs.ac.uns.ftn.model;
+package rs.ac.uns.ftn.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

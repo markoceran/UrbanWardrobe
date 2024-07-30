@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByEmail(String email) {
-        return getAll().stream().filter(u->u.getEmail().equals(email)).findAny().orElse(null);
+        return userRepository.findByEmail(email).orElse(null);
     }
     @Override
     public User createUser(UserDTO userForCreate) {
