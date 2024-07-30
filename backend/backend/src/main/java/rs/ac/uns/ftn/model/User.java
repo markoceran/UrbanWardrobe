@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,13 +20,16 @@ public class User extends BasicUser{
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "basket_id", referencedColumnName = "id")
+    @JsonManagedReference
     private Basket basket;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "wishlist_id", referencedColumnName = "id")
+    @JsonManagedReference
     private WishList wishList;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Set<Orderr> orders;
 
     @PrePersist

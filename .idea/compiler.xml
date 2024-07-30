@@ -10,7 +10,6 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="backend" target="11" />
       <module name="svt-projekat" target="11" />
     </bytecodeTargetLevel>
   </component>

@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.model.BasicUser;
 import rs.ac.uns.ftn.model.Worker;
+import rs.ac.uns.ftn.model.dto.UserDTO;
 import rs.ac.uns.ftn.repository.WorkerRepository;
 import rs.ac.uns.ftn.service.BasicUserService;
 import rs.ac.uns.ftn.service.WorkerService;
@@ -43,7 +44,7 @@ public class WorkerServiceImpl implements WorkerService {
         return getAll().stream().filter(u->u.getEmail().equals(email)).findAny().orElse(null);
     }
     @Override
-    public Worker createWorker(Worker worker) {
+    public Worker createWorker(UserDTO worker) {
 
         BasicUser user = basicUserService.findByEmail(worker.getEmail());
 

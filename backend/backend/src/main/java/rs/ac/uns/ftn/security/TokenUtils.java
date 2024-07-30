@@ -8,6 +8,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import rs.ac.uns.ftn.model.BasicUser;
 import rs.ac.uns.ftn.model.User;
 
 import javax.servlet.http.Cookie;
@@ -89,11 +90,10 @@ public class TokenUtils {
                 && !isTokenExpired(token);
     }
 
-    public String generateToken(User user) {
+    public String generateToken(UserDetails user) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", user.getEmail());
-        claims.put("jti", user.getId());
-        claims.put("role", user.getRole());
+        claims.put("sub", user.getUsername());
+        claims.put("role", user.getAuthorities());
         claims.put("created", new Date(System.currentTimeMillis()));
         return Jwts.builder().setClaims(claims)
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))

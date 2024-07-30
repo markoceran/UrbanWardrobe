@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.model.Admin;
 import rs.ac.uns.ftn.model.BasicUser;
+import rs.ac.uns.ftn.model.dto.UserDTO;
 import rs.ac.uns.ftn.repository.AdminRepository;
 import rs.ac.uns.ftn.service.AdminService;
 import rs.ac.uns.ftn.service.BasicUserService;
@@ -43,7 +44,7 @@ public class AdminServiceImpl implements AdminService {
         return getAll().stream().filter(u->u.getEmail().equals(email)).findAny().orElse(null);
     }
     @Override
-    public Admin createAdmin(Admin admin) {
+    public Admin createAdmin(UserDTO admin) {
 
         BasicUser user = basicUserService.findByEmail(admin.getEmail());
 

@@ -6,27 +6,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.model.*;
 import rs.ac.uns.ftn.model.dto.JwtAuthenticationRequest;
 import rs.ac.uns.ftn.model.dto.UserDTO;
 import rs.ac.uns.ftn.model.dto.UserTokenState;
 import rs.ac.uns.ftn.security.TokenUtils;
-import rs.ac.uns.ftn.service.AdminService;
-import rs.ac.uns.ftn.service.CourierService;
-import rs.ac.uns.ftn.service.UserService;
-import rs.ac.uns.ftn.service.WorkerService;
+import rs.ac.uns.ftn.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +40,9 @@ public class UserController {
 
     @Autowired
     private CourierService courierService;
+
+    @Autowired
+    private BasicUserService basicUserService;
 
 
     @Autowired
@@ -82,6 +78,10 @@ public class UserController {
     public List<Courier> allCourier() {
         return this.courierService.getAll();
     }
+    @GetMapping("/allBasicUser")
+    public List<BasicUser> allBasicUser() {
+        return this.basicUserService.getAll();
+    }
 
     @GetMapping("/profile/{email}")
     public User user(@PathVariable String email) {
@@ -90,155 +90,168 @@ public class UserController {
     }
 
     @PostMapping("/registerUser")
-    public ResponseEntity<?> registerUser(@RequestBody @Valid UserDTO newUser) {
+    public ResponseEntity<JsonResponse> registerUser(@RequestBody UserDTO newUser) {
 
-        User createdUser = userService.createUser(newUser);
+        JsonResponse jsonResponse;
 
-        if (createdUser == null) {
-
-            logger.info("User is null");
-            ErrorResponse errorResponse = new ErrorResponse(
-                    "User with this email already exists",
-                    HttpStatus.BAD_REQUEST.value(),
-                    System.currentTimeMillis()
+        String validationError = validateUser(newUser);
+        if (validationError != null) {
+            logger.info(validationError);
+            jsonResponse = new JsonResponse(
+                    validationError
             );
-            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-
+            return ResponseEntity.badRequest().body(jsonResponse);
         }
 
-        newUser.setPassword("");
+        if (newUser.getShippingAddress() == null){
+            logger.info("Shipping address is required.");
+            jsonResponse = new JsonResponse(
+                    "Shipping address is required."
+            );
+            return ResponseEntity.badRequest().body(jsonResponse);
+        }
 
-        return new ResponseEntity<>(newUser, HttpStatus.OK);
+        userService.createUser(newUser);
+
+        jsonResponse = new JsonResponse(
+                "User successfully registered"
+        );
+        return ResponseEntity.ok(jsonResponse);
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<UserTokenState> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) {
-//
-//        boolean isValid = true;
-//
-//        List<Banned> banneds = bannedService.getAll();
-//
-//        if(!banneds.isEmpty()){
-//            for (Banned b : banneds) {
-//                if (b.getUser() != null && b.getUser().getUsername().equals(authenticationRequest.getUsername()) && b.getBy2() != null) {
-//                    isValid = false;
-//                    logger.info("User is bannned");
-//                }
-//            }
-//        }
-//
-//
-//        if (isValid) {
-//            // Ukoliko kredencijali nisu ispravni, logovanje nece biti uspesno, desice se
-//            // AuthenticationException
-//            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-//                    authenticationRequest.getUsername(), authenticationRequest.getPassword()));
-//
-//            // Ukoliko je autentifikacija uspesna, ubaci korisnika u trenutni security
-//            // kontekst
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//            // Kreiraj token za tog korisnika
-//            UserDetails user = (UserDetails) authentication.getPrincipal();
-//            String jwt = tokenUtils.generateToken(user);
-//            int expiresIn = tokenUtils.getExpiredIn();
-//
-//            User loggedUser = userService.findByUsername(authenticationRequest.getUsername());
-//            loggedUser.setLastLogin(LocalDateTime.now());
-//
-//            userService.update(loggedUser.getId(), loggedUser);
-//
-//            logger.info("Token is created");
-//
-//            // Vrati token kao odgovor na uspesnu autentifikaciju
-//            return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
-//        }
-//
-//        logger.info("User is unauthorized");
-//
-//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//    }
-//
-//    @PostMapping("/logout")
-//    public ResponseEntity<Map<String, String>> logout(HttpServletRequest request, HttpServletResponse response) {
-//
-//        SecurityContextHolder.getContext().setAuthentication(null);
-//
-//        TokenUtils.clearAuthenticationCookie(request, response);
-//
-//        Map<String, String> responseBody = new HashMap<>();
-//        responseBody.put("message", "Logged out successfully");
-//
-//        logger.info("Logged out successfully");
-//
-//        return ResponseEntity.ok(responseBody);
-//    }
+    @PostMapping("/registerAdmin")
+    public ResponseEntity<JsonResponse> registerAdmin(@RequestBody UserDTO newAdmin) {
 
-//    @PutMapping("/editProfile")
-//    public ResponseEntity<User> updateUserData(@RequestHeader("Authorization") String token, @RequestBody User user) throws Exception {
-//
-//        String tokenValue = token.replace("Bearer ", "");
-//
-//        String username = tokenUtils.getUsernameFromToken(tokenValue);
-//        User loggedUser = userService.findByUsername(username);
-//
-//        if (loggedUser == null) {
-//            logger.info("Logged user is not present");
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//        }
-//
-//        List<User> allUser = userService.getAll();
-//        for (User u : allUser) {
-//            if (!loggedUser.getUsername().equals(user.getUsername()) && u.getUsername().equals(user.getUsername())) {
-//                logger.info("FORBIDDEN");
-//                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-//            }
-//        }
-//
-//        user.setPassword(loggedUser.getPassword());
-//
-//
-//        User updated = userService.update(loggedUser.getId(), user);
-//        if (updated != null) {
-//            logger.info("Success");
-//            return ResponseEntity.ok(updated);
-//        } else {
-//            logger.info("Not found");
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-//
-//    @PutMapping("/editPassword")
-//    public ResponseEntity<User> editPassword(@RequestHeader("Authorization") String token, @RequestParam String oldPassword, @RequestParam String newPassword) throws Exception {
-//
-//        User updated = null;
-//
-//        String tokenValue = token.replace("Bearer ", "");
-//
-//        String username = tokenUtils.getUsernameFromToken(tokenValue);
-//        User loggedUser = userService.findByUsername(username);
-//
-//        if (loggedUser == null) {
-//            logger.info("User is not present");
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//        }
-//
-//
-//        if (passwordEncoder.matches(oldPassword, loggedUser.getPassword())) {
-//
-//            loggedUser.setPassword(passwordEncoder.encode(newPassword));
-//            updated = userService.update(loggedUser.getId(), loggedUser);
-//
-//        }
-//
-//        if (updated != null) {
-//            logger.info("Success");
-//            return ResponseEntity.ok(updated);
-//        } else {
-//            logger.info("Bad request");
-//            return ResponseEntity.badRequest().build();
-//        }
-//    }
+        JsonResponse jsonResponse;
+
+        String validationError = validateUser(newAdmin);
+        if (validationError != null) {
+            logger.info(validationError);
+            jsonResponse = new JsonResponse(
+                    validationError
+            );
+            return ResponseEntity.badRequest().body(jsonResponse);
+        }
+
+        adminService.createAdmin(newAdmin);
+
+        jsonResponse = new JsonResponse(
+                "Admin successfully registered"
+        );
+        return ResponseEntity.ok(jsonResponse);
+    }
+
+    @PostMapping("/registerWorker")
+    public ResponseEntity<JsonResponse> registerWorker(@RequestBody @Valid UserDTO newWorker) {
+
+        JsonResponse jsonResponse;
+
+        String validationError = validateUser(newWorker);
+        if (validationError != null) {
+            logger.info(validationError);
+            jsonResponse = new JsonResponse(
+                    validationError
+            );
+            return ResponseEntity.badRequest().body(jsonResponse);
+        }
+
+        workerService.createWorker(newWorker);
+
+        jsonResponse = new JsonResponse(
+                "Worker successfully registered"
+        );
+        return ResponseEntity.ok(jsonResponse);
+    }
+
+    @PostMapping("/registerCourier")
+    public ResponseEntity<JsonResponse> registerCourier(@RequestBody @Valid UserDTO newCourier) {
+
+        JsonResponse jsonResponse;
+
+        String validationError = validateUser(newCourier);
+        if (validationError != null) {
+            logger.info(validationError);
+            jsonResponse = new JsonResponse(
+                    validationError
+            );
+            return ResponseEntity.badRequest().body(jsonResponse);
+        }
+
+        courierService.createCourier(newCourier);
+
+        jsonResponse = new JsonResponse(
+                "Courier successfully registered"
+        );
+        return ResponseEntity.ok(jsonResponse);
+    }
+
+    public String validateUser(UserDTO newUser) {
+        if (newUser.getEmail() == null || !newUser.getEmail().contains("@gmail.com")) {
+            return "Validation error. Email format must be @gmail.com.";
+        }
+        if (newUser.getFirstName() == null || newUser.getFirstName().isEmpty() ||
+                newUser.getLastName() == null || newUser.getLastName().isEmpty() ||
+                newUser.getEmail() == null || newUser.getEmail().isEmpty() ||
+                newUser.getPassword() == null || newUser.getPassword().isEmpty() ||
+                newUser.getPhoneNumber() == null || newUser.getPhoneNumber().isEmpty()) {
+            return "Validation error. All fields are required.";
+        }
+        if (newUser.getPassword().length() < 6) {
+            return "Validation error. Password must be at least 6 characters long.";
+        }
+        BasicUser user = basicUserService.findByEmail(newUser.getEmail());
+        if (user != null) {
+            return "User with this email already exists.";
+        }
+        return null;
+    }
+
+
+    @PostMapping("/login")
+    public ResponseEntity<UserTokenState> login(@RequestBody JwtAuthenticationRequest authenticationRequest) {
+
+        try {
+            // Authenticate the user
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword())
+            );
+
+            // Set the authentication context
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // Retrieve the user details
+            org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+
+            // Generate JWT token
+            String jwt = tokenUtils.generateToken(user);
+            int expiresIn = tokenUtils.getExpiredIn();
+
+            logger.info("Token is created");
+
+            // Return token as a response
+            return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+    }
+
+
+    @PostMapping("/logout")
+    public ResponseEntity<JsonResponse> logout(HttpServletRequest request, HttpServletResponse response) {
+
+        // Clear the authentication and security context
+        SecurityContextHolder.clearContext();
+
+        // Clear the authentication cookie
+        TokenUtils.clearAuthenticationCookie(request, response);
+
+        // Create response body
+        JsonResponse jsonResponse = new JsonResponse("Logged out successfully");
+        logger.info("Logged out successfully");
+
+        // Return the response
+        return ResponseEntity.ok(jsonResponse);
+    }
 
 
 }

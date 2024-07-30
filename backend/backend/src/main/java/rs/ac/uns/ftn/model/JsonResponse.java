@@ -9,8 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ErrorResponse {
+public class JsonResponse {
     private String message;
-    private int status;
-    private long timestamp;
 }
