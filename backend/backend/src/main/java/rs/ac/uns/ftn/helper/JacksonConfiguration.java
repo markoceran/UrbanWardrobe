@@ -1,10 +1,8 @@
-package rs.ac.uns.ftn;
+package rs.ac.uns.ftn.helper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.UrlResource;
 
 @Configuration
 public class JacksonConfiguration {

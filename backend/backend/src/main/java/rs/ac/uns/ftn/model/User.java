@@ -26,7 +26,7 @@ public class User extends BasicUser{
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "wishlist_id", referencedColumnName = "id")
     @JsonManagedReference
-    private WishList wishList;
+    private Wishlist wishList;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
@@ -40,7 +40,7 @@ public class User extends BasicUser{
         }
 
         if (wishList == null) {
-            wishList = new WishList();
+            wishList = new Wishlist();
             wishList.setUser(this);
         }
 

@@ -13,7 +13,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class WishList {
+public class Wishlist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +21,8 @@ public class WishList {
 
     @ManyToMany
     @JoinTable(
-            name = "wish_list_product",
-            joinColumns = @JoinColumn(name = "wish_list_id"),
+            name = "wishlist_product",
+            joinColumns = @JoinColumn(name = "wishlist_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     private Set<Product> products;

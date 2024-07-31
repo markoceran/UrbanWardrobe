@@ -16,4 +16,6 @@ public interface UserService {
 
     List<User> getAll();
 
+    void save(User user);
+
 }

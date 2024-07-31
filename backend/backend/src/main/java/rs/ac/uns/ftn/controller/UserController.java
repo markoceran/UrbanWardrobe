@@ -15,7 +15,7 @@ import rs.ac.uns.ftn.model.dto.JsonResponse;
 import rs.ac.uns.ftn.model.dto.JwtAuthenticationRequest;
 import rs.ac.uns.ftn.model.dto.UserDTO;
 import rs.ac.uns.ftn.model.dto.UserTokenState;
-import rs.ac.uns.ftn.security.TokenUtils;
+import rs.ac.uns.ftn.helper.TokenUtils;
 import rs.ac.uns.ftn.service.*;
 
 import javax.servlet.http.HttpServletRequest;

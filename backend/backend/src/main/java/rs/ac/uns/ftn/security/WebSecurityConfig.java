@@ -12,13 +12,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import rs.ac.uns.ftn.service.BasicUserService;
-import rs.ac.uns.ftn.service.implementation.BasicUserServiceImpl;
+import rs.ac.uns.ftn.helper.TokenUtils;
 import rs.ac.uns.ftn.service.implementation.UserDetailsServiceImpl;
 
 
@@ -78,6 +76,7 @@ public class WebSecurityConfig {
 
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/product").permitAll()
+
                 /*.antMatchers("/users/**").permitAll()
                 .antMatchers("/users/all").hasRole("ADMIN")
                 .antMatchers("/posts").permitAll()

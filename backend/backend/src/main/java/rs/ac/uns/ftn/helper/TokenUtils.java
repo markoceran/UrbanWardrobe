@@ -1,4 +1,4 @@
-package rs.ac.uns.ftn.security;
+package rs.ac.uns.ftn.helper;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,8 +8,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import rs.ac.uns.ftn.model.BasicUser;
-import rs.ac.uns.ftn.model.User;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -27,89 +25,84 @@ public class TokenUtils {
     @Value("36000000")
     private Long expiration;
 
-    public String getEmailFromToken(String token) {
-        String email;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(token);
-            String accessToken = jsonNode.get("accessToken").asText();
 
-            Claims claims = this.getClaimsFromToken(accessToken);
-            email = claims.getSubject();
-        } catch (Exception e) {
-            email = null;
+    public String extractTokenFromRequest(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            return authorizationHeader.substring(7);
         }
-        return email;
+        return null;
+    }
+
+    public String getEmailFromToken(String token) {
+        try {
+            Claims claims = getClaimsFromToken(token);
+            return claims.getSubject();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public String getIdFromToken(String token) {
-        String id;
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(token);
-            String accessToken = jsonNode.get("accessToken").asText();
-
-            Claims claims = this.getClaimsFromToken(accessToken);
-            id = claims.getId();
+            Claims claims = getClaimsFromToken(token);
+            return claims.getId();
         } catch (Exception e) {
-            id = null;
+            return null;
         }
-        return id;
     }
 
     private Claims getClaimsFromToken(String token) {
-        Claims claims;
         try {
-            claims = Jwts.parser().setSigningKey(this.secret)
-                    .parseClaimsJws(token).getBody();
+            return Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (Exception e) {
-            claims = null;
+            return null;
         }
-        return claims;
     }
 
     public Date getExpirationDateFromToken(String token) {
-        Date expirationDate;
         try {
-            final Claims claims = this.getClaimsFromToken(token);
-            expirationDate = claims.getExpiration();
+            Claims claims = getClaimsFromToken(token);
+            return claims.getExpiration();
         } catch (Exception e) {
-            expirationDate = null;
+            return null;
         }
-        return expirationDate;
     }
 
     private boolean isTokenExpired(String token) {
-        final Date expirationDate = this.getExpirationDateFromToken(token);
-        return expirationDate.before(new Date(System.currentTimeMillis()));
+        Date expirationDate = getExpirationDateFromToken(token);
+        return expirationDate != null && expirationDate.before(new Date());
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
-        final String email = getEmailFromToken(token);
-        return email.equals(userDetails.getUsername())
-                && !isTokenExpired(token);
+        String email = getEmailFromToken(token);
+        return email != null && email.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
     public String generateToken(UserDetails user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("sub", user.getUsername());
         claims.put("role", user.getAuthorities());
-        claims.put("created", new Date(System.currentTimeMillis()));
-        return Jwts.builder().setClaims(claims)
+        claims.put("created", new Date());
+        return Jwts.builder()
+                .setClaims(claims)
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(SignatureAlgorithm.HS512, secret).compact();
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
     }
 
     public int getExpiredIn() {
         return expiration.intValue();
     }
 
-
     public static void clearAuthenticationCookie(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("authenticationToken")) {
+                if ("authenticationToken".equals(cookie.getName())) {
                     cookie.setValue("");
                     cookie.setPath("/");
                     cookie.setMaxAge(0);
@@ -119,6 +112,5 @@ public class TokenUtils {
             }
         }
     }
-
 
 }

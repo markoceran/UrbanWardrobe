@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import rs.ac.uns.ftn.helper.TokenUtils;
 import rs.ac.uns.ftn.service.implementation.UserDetailsServiceImpl;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

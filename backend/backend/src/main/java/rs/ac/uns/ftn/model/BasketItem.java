@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ public class BasketItem {
 
     @ManyToOne
     @JoinColumn(name = "basket_id")
+    @JsonBackReference
     private Basket basket;
 
     @ManyToOne
