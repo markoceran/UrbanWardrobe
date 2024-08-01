@@ -9,4 +9,5 @@ public interface BasketService {
 
     BasketItem removeBasketItem(Long basketItemId, String loggedUserEmail);
 
+    BasketItem decreaseQuantityFromBasketItem(Long basketItemId, String loggedUserEmail);
 }

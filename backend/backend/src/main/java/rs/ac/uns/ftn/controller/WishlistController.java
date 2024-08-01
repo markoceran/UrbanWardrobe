@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.logging.Logger;
 
 @RestController
-@RequestMapping("/wishList")
+@RequestMapping("/wishlist")
 public class WishlistController {
 
     @Autowired

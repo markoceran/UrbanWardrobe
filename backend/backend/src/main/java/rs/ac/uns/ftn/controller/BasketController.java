@@ -35,8 +35,8 @@ public class BasketController {
 
         BasketItem basketItem = basketService.addBasketItem(productId, size, loggedUserEmail);
         if (basketItem == null) {
-            logger.info("Error while adding product to basket");
-            return ResponseEntity.badRequest().body(new JsonResponse("Error while adding product to basket"));
+            logger.info("Can't add product to basket. Product out of stock.");
+            return ResponseEntity.badRequest().body(new JsonResponse("Can't add product to basket. Product out of stock."));
         }
 
         return ResponseEntity.ok(new JsonResponse("Product successfully added to basket."));
@@ -49,11 +49,25 @@ public class BasketController {
 
         BasketItem basketItem = basketService.removeBasketItem(basketItemId, loggedUserEmail);
         if (basketItem == null) {
-            logger.info("Error while removing product from basket");
-            return ResponseEntity.badRequest().body(new JsonResponse("Error while removing product from basket"));
+            logger.info("Error while removing product from basket.");
+            return ResponseEntity.badRequest().body(new JsonResponse("Error while removing product from basket."));
         }
 
         return ResponseEntity.ok(new JsonResponse("Product successfully removed from basket."));
+    }
+
+    @PutMapping("/decreaseQuantityFromBasketItem/{basketItemId}")
+    public ResponseEntity<JsonResponse> decreaseQuantityFromBasketItem(@PathVariable Long basketItemId, HttpServletRequest request) {
+        String token = tokenUtils.extractTokenFromRequest(request);
+        String loggedUserEmail = tokenUtils.getEmailFromToken(token);
+
+        BasketItem basketItem = basketService.decreaseQuantityFromBasketItem(basketItemId, loggedUserEmail);
+        if (basketItem == null) {
+            logger.info("Error while decreasing quantity from basket item.");
+            return ResponseEntity.badRequest().body(new JsonResponse("Error while decreasing quantity from basket item."));
+        }
+
+        return ResponseEntity.ok(new JsonResponse("Quantity successfully decreased."));
     }
 
 }

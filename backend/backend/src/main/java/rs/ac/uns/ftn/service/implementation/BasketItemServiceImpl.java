@@ -18,4 +18,9 @@ public class BasketItemServiceImpl implements BasketItemService {
     public Optional<BasketItem> getById(Long id) {
         return basketItemRepository.findById(id);
     }
+
+    @Override
+    public void save(BasketItem basketItem) {
+        basketItemRepository.save(basketItem);
+    }
 }

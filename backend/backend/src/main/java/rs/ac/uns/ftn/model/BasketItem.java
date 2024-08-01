@@ -33,4 +33,7 @@ public class BasketItem {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Orderr order;
+
+    @Column(name = "quantity", nullable = false)
+    private int quantity = 1;
 }
