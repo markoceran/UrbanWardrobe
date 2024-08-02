@@ -98,15 +98,16 @@ public class UserController {
     @PostMapping("/registerUser")
     public ResponseEntity<JsonResponse> registerUser(@RequestBody UserDTO newUser) {
 
-        String validationError = validateUser(newUser);
-        if (validationError != null) {
-            logger.info(validationError);
-            return ResponseEntity.badRequest().body(new JsonResponse(validationError));
+        String validationErrorUser = validateUser(newUser);
+        if (validationErrorUser != null) {
+            logger.info(validationErrorUser);
+            return ResponseEntity.badRequest().body(new JsonResponse(validationErrorUser));
         }
 
-        if (newUser.getShippingAddress() == null){
-            logger.info("Shipping address is required.");
-            return ResponseEntity.badRequest().body(new JsonResponse("Shipping address is required."));
+        String validationErrorShippingAddress = validateShippingAddress(newUser.getShippingAddress());
+        if (validationErrorShippingAddress != null) {
+            logger.info(validationErrorShippingAddress);
+            return ResponseEntity.badRequest().body(new JsonResponse(validationErrorShippingAddress));
         }
 
         userService.createUser(newUser);
@@ -177,6 +178,22 @@ public class UserController {
         return null;
     }
 
+    public String validateShippingAddress(ShippingAddress shippingAddress) {
+        if (shippingAddress == null) {
+            return "Validation error. Shipping address is required.";
+        }
+        if (shippingAddress.getCountry() == null || shippingAddress.getCountry().isEmpty() ||
+                shippingAddress.getCity() == null || shippingAddress.getCity().isEmpty() ||
+                shippingAddress.getStreet() == null || shippingAddress.getStreet().isEmpty() ||
+                shippingAddress.getPostalCode() == null || shippingAddress.getPostalCode().isEmpty()) {
+            return "Validation error. All fields are required.";
+        }
+        if (shippingAddress.getNumber() <= 0) {
+            return "Validation error. Address number must be greater than zero.";
+        }
+        return null;
+    }
+
 
     @PostMapping("/login")
     public ResponseEntity<UserTokenState> login(@RequestBody JwtAuthenticationRequest authenticationRequest) {
@@ -221,6 +238,27 @@ public class UserController {
 
         // Return the response
         return ResponseEntity.ok(new JsonResponse("Logged out successfully"));
+    }
+
+    @PutMapping("/updateShippingAddress")
+    public ResponseEntity<JsonResponse> updateShippingAddress(@RequestBody ShippingAddress newShippingAddress, HttpServletRequest request) {
+
+        String token = tokenUtils.extractTokenFromRequest(request);
+        String loggedUserEmail = tokenUtils.getEmailFromToken(token);
+
+        String validationErrorShippingAddress = validateShippingAddress(newShippingAddress);
+        if (validationErrorShippingAddress != null) {
+            logger.info(validationErrorShippingAddress);
+            return ResponseEntity.badRequest().body(new JsonResponse(validationErrorShippingAddress));
+        }
+
+        ShippingAddress shippingAddress = userService.updateShippingAddress(newShippingAddress, loggedUserEmail);
+
+        if (shippingAddress != null) {
+            return ResponseEntity.ok(new JsonResponse("Shipping address updated successfully."));
+        } else {
+            return ResponseEntity.badRequest().body(new JsonResponse("Failed to update shipping address."));
+        }
     }
 
 

@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.service;
 
+import rs.ac.uns.ftn.model.ShippingAddress;
 import rs.ac.uns.ftn.model.User;
 import rs.ac.uns.ftn.model.dto.UserDTO;
 
@@ -17,5 +18,7 @@ public interface UserService {
     List<User> getAll();
 
     void save(User user);
+
+    ShippingAddress updateShippingAddress(ShippingAddress shippingAddress, String loggedUserEmail);
 
 }

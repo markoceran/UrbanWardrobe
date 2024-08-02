@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.model.BasicUser;
+import rs.ac.uns.ftn.model.ShippingAddress;
 import rs.ac.uns.ftn.model.User;
 import rs.ac.uns.ftn.model.dto.UserDTO;
 import rs.ac.uns.ftn.repository.UserRepository;
@@ -68,5 +69,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(User user) {
         userRepository.save(user);
+    }
+
+    @Override
+    public ShippingAddress updateShippingAddress(ShippingAddress shippingAddress, String loggedUserEmail) {
+        User user = this.findByEmail(loggedUserEmail);
+        if (user != null) {
+            shippingAddress.setId(user.getShippingAddress().getId());
+            user.setShippingAddress(shippingAddress);
+            this.save(user);
+            return shippingAddress;
+        }
+        return null;
     }
 }

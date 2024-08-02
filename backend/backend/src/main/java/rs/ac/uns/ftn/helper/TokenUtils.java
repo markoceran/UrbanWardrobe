@@ -43,15 +43,6 @@ public class TokenUtils {
         }
     }
 
-    public String getIdFromToken(String token) {
-        try {
-            Claims claims = getClaimsFromToken(token);
-            return claims.getId();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
     private Claims getClaimsFromToken(String token) {
         try {
             return Jwts.parser()
