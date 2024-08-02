@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.model.Product;
+import rs.ac.uns.ftn.model.Size;
 import rs.ac.uns.ftn.model.SizeQuantity;
 import rs.ac.uns.ftn.repository.ProductRepository;
 import rs.ac.uns.ftn.service.ProductService;
@@ -53,6 +54,37 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<Product> getProducts(Pageable pageable) {
-        return productRepository.findAll(pageable);
+        return productRepository.findAvailableProducts(pageable);
     }
+
+    @Override
+    public Product refillQuantity(Long productId, Size size, int quantity) {
+        Optional<Product> productOptional = this.getById(productId);
+
+        if (productOptional.isEmpty()) {
+            return null;
+        } else {
+            Product product = productOptional.get();
+            boolean found = false;
+            for (SizeQuantity sq : product.getSizeQuantities()) {
+                if (sq.getSize().equals(size)) {
+                    sq.setQuantity(sq.getQuantity() + quantity);
+                    sizeQuantityService.save(sq);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                SizeQuantity sizeQuantity = new SizeQuantity();
+                sizeQuantity.setSize(size);
+                sizeQuantity.setQuantity(quantity);
+                sizeQuantity.setProduct(product);
+                sizeQuantityService.save(sizeQuantity);
+                product.getSizeQuantities().add(sizeQuantity);
+            }
+            return product;
+        }
+    }
+
+
 }

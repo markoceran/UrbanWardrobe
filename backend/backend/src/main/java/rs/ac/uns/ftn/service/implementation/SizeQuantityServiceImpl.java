@@ -29,4 +29,9 @@ public class SizeQuantityServiceImpl implements SizeQuantityService {
 
         return sizeQuantityRepository.save(newSizeQuantity);
     }
+
+    @Override
+    public void save(SizeQuantity sizeQuantity) {
+        sizeQuantityRepository.save(sizeQuantity);
+    }
 }

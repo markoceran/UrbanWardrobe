@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.model.Size;
 import rs.ac.uns.ftn.model.dto.JsonResponse;
 import rs.ac.uns.ftn.model.Product;
 import rs.ac.uns.ftn.model.dto.PaginationResponse;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -88,6 +90,11 @@ public class ProductController {
     public ResponseEntity<PaginationResponse> getProducts(
             @RequestParam(defaultValue = "0") int page) {
 
+        if(page < 0){
+            PaginationResponse response = new PaginationResponse("Page number is less than 0.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
         Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Order.asc("id")));
 
         Page<Product> productsPage = productService.getProducts(pageable);
@@ -99,6 +106,22 @@ public class ProductController {
         response.setCurrentPage(productsPage.getNumber());
 
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/refillQuantity/{productId}/{quantity}")
+    public ResponseEntity<JsonResponse> refillQuantity(@PathVariable Long productId, @RequestBody Size size, @PathVariable int quantity) {
+
+        if (quantity <= 0){
+            return ResponseEntity.badRequest().body(new JsonResponse("Can't refill quantity. Quantity can't be less than 0 or 0."));
+        }
+
+        Product product = productService.refillQuantity(productId, size, quantity);
+        if (product == null) {
+            logger.info("Error refilling quantity.");
+            return ResponseEntity.badRequest().body(new JsonResponse("Error refilling quantity."));
+        }
+
+        return ResponseEntity.ok(new JsonResponse("Product size successfully refilled."));
     }
 
 

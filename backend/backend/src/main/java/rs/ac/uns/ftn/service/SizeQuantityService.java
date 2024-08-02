@@ -9,4 +9,6 @@ public interface SizeQuantityService {
     SizeQuantity createSizeQuantity(SizeQuantity sizeQuantity);
 
     List<SizeQuantity> getAll();
+
+    void save(SizeQuantity sizeQuantity);
 }
