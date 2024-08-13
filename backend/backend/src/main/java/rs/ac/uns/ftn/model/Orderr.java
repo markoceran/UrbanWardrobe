@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -22,10 +23,10 @@ public class Orderr {
     private Long id;
 
     @Column(name = "creationTime",nullable = false)
-    private LocalDate creationTime;
+    private LocalDateTime creationTime;
 
     @Column(name = "estimatedDeliveryTime",nullable = false)
-    private LocalDate estimatedDeliveryTime;
+    private LocalDateTime estimatedDeliveryTime;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
@@ -51,7 +52,7 @@ public class Orderr {
 
     @PrePersist
     protected void onCreate() {
-        creationTime = LocalDate.now();  // Automatically set the order date when a new order is created
+        creationTime = LocalDateTime.now();  // Automatically set the order date when a new order is created
         estimatedDeliveryTime = creationTime.plusDays(4);
         status = OrderStatus.Processing;
     }

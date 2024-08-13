@@ -1,9 +1,13 @@
 package rs.ac.uns.ftn.helper;
 
 import org.springframework.stereotype.Component;
+import rs.ac.uns.ftn.model.Orderr;
 import rs.ac.uns.ftn.model.Product;
 import rs.ac.uns.ftn.model.Size;
 import rs.ac.uns.ftn.model.SizeQuantity;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 @Component
 public class Helper {
@@ -45,6 +49,17 @@ public class Helper {
             }
         }
         return false;
+    }
+
+    public boolean isOrderLessThanOneDayOld(Orderr order) {
+        if (order == null || order.getCreationTime() == null) {
+            return false;
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        Duration duration = Duration.between(order.getCreationTime(), now);
+
+        return duration.toHours() < 24; // 24 hours = 1 day
     }
 
 

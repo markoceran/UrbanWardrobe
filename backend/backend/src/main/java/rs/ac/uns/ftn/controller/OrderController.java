@@ -52,4 +52,18 @@ public class OrderController {
         return ResponseEntity.ok(myOrders);
     }
 
+    @PutMapping("/cancelOrder/{orderId}")
+    public ResponseEntity<JsonResponse> cancelOrder(@PathVariable Long orderId, HttpServletRequest request) {
+        String token = tokenUtils.extractTokenFromRequest(request);
+        String loggedUserEmail = tokenUtils.getEmailFromToken(token);
+
+        Orderr order = orderService.cancelOrder(loggedUserEmail, orderId);
+        if (order == null) {
+            logger.info("Order can't be cancelled.");
+            return ResponseEntity.badRequest().body(new JsonResponse("Order can't be cancelled."));
+        }
+
+        return ResponseEntity.ok(new JsonResponse("Order successfully cancelled."));
+    }
+
 }

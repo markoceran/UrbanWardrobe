@@ -4,15 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.helper.Helper;
 import rs.ac.uns.ftn.model.BasketItem;
+import rs.ac.uns.ftn.model.OrderStatus;
 import rs.ac.uns.ftn.model.Orderr;
 import rs.ac.uns.ftn.model.User;
 import rs.ac.uns.ftn.repository.OrderRepository;
-import rs.ac.uns.ftn.service.BasketItemService;
-import rs.ac.uns.ftn.service.OrderService;
-import rs.ac.uns.ftn.service.SizeQuantityService;
-import rs.ac.uns.ftn.service.UserService;
+import rs.ac.uns.ftn.service.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -23,6 +22,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private SizeQuantityService sizeQuantityService;
@@ -86,6 +88,36 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Orderr cancelOrder(String loggedUserEmail, Long orderId) {
+
+        User loggedUser = userService.findByEmail(loggedUserEmail);
+        if (loggedUser == null) {
+            throw new IllegalArgumentException("Logged user not found.");
+        }
+
+        Orderr orderForCancel = loggedUser.getOrders().stream()
+                .filter(orderr -> orderr.getId().equals(orderId))
+                .findFirst()
+                .orElse(null);
+
+        if (orderForCancel == null) {
+            throw new IllegalArgumentException("Order not found for the given ID.");
+        }
+
+
+        if(helper.isOrderLessThanOneDayOld(orderForCancel) && orderForCancel.getStatus().equals(OrderStatus.Processing)){
+            for(BasketItem basketItem : orderForCancel.getBasketItems()){
+                productService.refillQuantity(basketItem.getProduct().getId(), basketItem.getSize(), basketItem.getQuantity());
+            }
+            orderForCancel.setStatus(OrderStatus.Cancelled);
+            save(orderForCancel);
+            return orderForCancel;
+        }
+
+        return null;
+    }
+
+    @Override
     public List<Orderr> getAll() {
         return orderRepository.findAll();
     }
@@ -97,7 +129,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Optional<Orderr> getById(Long id) {
+        return orderRepository.findById(id);
+    }
+
+    @Override
     public void save(Orderr order) {
         orderRepository.save(order);
     }
+
 }
