@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,9 @@ public class Orderr {
     private LocalDate estimatedDeliveryTime;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Set<BasketItem> basketItems;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference
@@ -50,9 +53,6 @@ public class Orderr {
     protected void onCreate() {
         creationTime = LocalDate.now();  // Automatically set the order date when a new order is created
         estimatedDeliveryTime = creationTime.plusDays(4);
-        productsAmount = 0;
-        shippingAmount = 0;
-        totalAmount = 0;
         status = OrderStatus.Processing;
     }
 

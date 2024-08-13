@@ -32,6 +32,7 @@ public class BasketItem {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
+    @JsonBackReference
     private Orderr order;
 
     @Column(name = "quantity", nullable = false)
