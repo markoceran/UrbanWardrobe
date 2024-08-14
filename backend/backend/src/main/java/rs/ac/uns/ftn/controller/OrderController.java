@@ -96,4 +96,10 @@ public class OrderController {
         return ResponseEntity.ok(new JsonResponse("Order successfully delivered."));
     }
 
+    @GetMapping("/sentOrders")
+    public ResponseEntity<?> sentOrders() {
+        List<Orderr> sentOrders = orderService.getSentOrders();
+        return ResponseEntity.ok(sentOrders);
+    }
+
 }

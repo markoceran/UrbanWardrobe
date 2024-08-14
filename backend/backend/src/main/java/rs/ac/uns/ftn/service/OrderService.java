@@ -25,4 +25,6 @@ public interface OrderService {
     Orderr sentOrder(Long orderId);
 
     Orderr deliverOrder(Long orderId);
+
+    List<Orderr> getSentOrders();
 }

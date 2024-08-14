@@ -174,4 +174,11 @@ public class OrderServiceImpl implements OrderService {
         return null;
     }
 
+    @Override
+    public List<Orderr> getSentOrders() {
+        List<Orderr> processingOrders = orderRepository.findByStatus(OrderStatus.Sent);
+
+        return processingOrders;
+    }
+
 }
