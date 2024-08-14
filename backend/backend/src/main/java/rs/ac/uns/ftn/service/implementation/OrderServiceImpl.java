@@ -13,6 +13,7 @@ import rs.ac.uns.ftn.service.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -136,6 +137,41 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void save(Orderr order) {
         orderRepository.save(order);
+    }
+
+    @Override
+    public List<Orderr> getPendingOrders() {
+        List<Orderr> processingOrders = orderRepository.findByStatus(OrderStatus.Processing);
+
+        return processingOrders.stream()
+                .filter(order -> !helper.isOrderLessThanOneDayOld(order))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Orderr sentOrder(Long orderId) {
+        Optional<Orderr> orderForSent = getById(orderId);
+
+        if(orderForSent.isPresent() && orderForSent.get().getStatus().equals(OrderStatus.Processing) && !helper.isOrderLessThanOneDayOld(orderForSent.get())){
+            orderForSent.get().setStatus(OrderStatus.Sent);
+            save(orderForSent.get());
+            return orderForSent.get();
+        }
+
+        return null;
+    }
+
+    @Override
+    public Orderr deliverOrder(Long orderId) {
+        Optional<Orderr> orderForSent = getById(orderId);
+
+        if(orderForSent.isPresent() && orderForSent.get().getStatus().equals(OrderStatus.Sent) && !helper.isOrderLessThanOneDayOld(orderForSent.get())){
+            orderForSent.get().setStatus(OrderStatus.Delivered);
+            save(orderForSent.get());
+            return orderForSent.get();
+        }
+
+        return null;
     }
 
 }

@@ -26,7 +26,7 @@ public class Orderr {
     private LocalDateTime creationTime;
 
     @Column(name = "estimatedDeliveryTime",nullable = false)
-    private LocalDateTime estimatedDeliveryTime;
+    private LocalDate estimatedDeliveryTime;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
@@ -53,7 +53,7 @@ public class Orderr {
     @PrePersist
     protected void onCreate() {
         creationTime = LocalDateTime.now();  // Automatically set the order date when a new order is created
-        estimatedDeliveryTime = creationTime.plusDays(4);
+        estimatedDeliveryTime = LocalDate.from(creationTime.plusDays(4));
         status = OrderStatus.Processing;
     }
 

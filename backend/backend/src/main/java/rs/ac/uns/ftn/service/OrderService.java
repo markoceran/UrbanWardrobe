@@ -19,4 +19,10 @@ public interface OrderService {
     Optional<Orderr> getById(Long id);
 
     void save(Orderr order);
+
+    List<Orderr> getPendingOrders();
+
+    Orderr sentOrder(Long orderId);
+
+    Orderr deliverOrder(Long orderId);
 }

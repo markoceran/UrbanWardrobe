@@ -66,4 +66,34 @@ public class OrderController {
         return ResponseEntity.ok(new JsonResponse("Order successfully cancelled."));
     }
 
+    @GetMapping("/pendingOrders")
+    public ResponseEntity<?> pendingOrders() {
+        List<Orderr> pendingOrders = orderService.getPendingOrders();
+        return ResponseEntity.ok(pendingOrders);
+    }
+
+    @PutMapping("/sentOrder/{orderId}")
+    public ResponseEntity<JsonResponse> sentOrder(@PathVariable Long orderId) {
+
+        Orderr order = orderService.sentOrder(orderId);
+        if (order == null) {
+            logger.info("Order can't be sent.");
+            return ResponseEntity.badRequest().body(new JsonResponse("Order can't be sent."));
+        }
+
+        return ResponseEntity.ok(new JsonResponse("Order successfully sent."));
+    }
+
+    @PutMapping("/deliverOrder/{orderId}")
+    public ResponseEntity<JsonResponse> deliverOrder(@PathVariable Long orderId) {
+
+        Orderr order = orderService.deliverOrder(orderId);
+        if (order == null) {
+            logger.info("Order can't be deliver.");
+            return ResponseEntity.badRequest().body(new JsonResponse("Order can't be deliver."));
+        }
+
+        return ResponseEntity.ok(new JsonResponse("Order successfully delivered."));
+    }
+
 }
