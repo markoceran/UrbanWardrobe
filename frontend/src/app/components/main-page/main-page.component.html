@@ -1,6 +1,27 @@
 <app-header></app-header>
 <div class="background">
+    <div class="content">
+        <div *ngIf="products.length === 0">
+          <p>No products available.</p>
+        </div>
 
+        <div class="product-list">
+          <div *ngFor="let product of products" class="product-card">
+              <div class="card-header">
+                  <h3>{{ product.name }}</h3> 
+              </div>
+              <div class="card-body">
+                  <p><strong></strong> {{ product.price }} €</p>                   
+              </div>
+          </div>
+        </div>
+      
+    </div>
+</div>
+<div class="pagination">
+  <button class="btn btn-outline-secondary" (click)="goToPage(pageNumber - 1)" [disabled]="pageNumber === 0">Previous</button>
+  <span>Page {{ pageNumber + 1 }} of {{ totalPages }}</span>
+  <button class="btn btn-outline-secondary" (click)="goToPage(pageNumber + 1)" [disabled]="pageNumber + 1 === totalPages">Next</button>
 </div>
   
 

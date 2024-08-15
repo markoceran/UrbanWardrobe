@@ -1,11 +1,15 @@
 <nav class="nav">
   <ul class="navbar">
-    <li class="nav-item">
-      <a class="nav-link" *ngIf="isLoggedIn()" (click)="logout()">Logout</a>
+    <li class="nav-item navbar-left">
+      <img class="logo" src="assets/IMG_1027.png" alt="Logo">
+      <a class="nav-link">Woman</a>
+      <a class="nav-link">Men</a>
     </li>
-
-    <li class="nav-item">
-      <a class="nav-link" *ngIf="isLoggedIn()" aria-pressed="true" routerLink="/Main-Page">Main page</a>
+    <li class="nav-item navbar-right">
+      <a class="nav-link"><i class="fas fa-magnifying-glass"></i> Search</a>
+      <a class="nav-link"><i class="fas fa-basket-shopping"></i> Basket</a>
+      <a class="nav-link"><i class="fas fa-heart"></i> Wishlist</a>
+      <a class="nav-link"><i class="fas fa-user"></i> Profile</a>
     </li>
   </ul>
 </nav>
