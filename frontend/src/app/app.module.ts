@@ -24,13 +24,15 @@ import { NgxCaptchaModule } from 'ngx-captcha';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
+import { CreateProductComponent } from './components/create-product/create-product.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainPageComponent,
     HeaderComponent,
-    LoginComponent
+    LoginComponent,
+    CreateProductComponent
   ],
   imports: [
     BrowserModule,

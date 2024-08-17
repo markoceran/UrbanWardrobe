@@ -2,19 +2,18 @@ package rs.ac.uns.ftn.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.model.Size;
-import rs.ac.uns.ftn.model.dto.JsonResponse;
-import rs.ac.uns.ftn.model.Product;
-import rs.ac.uns.ftn.model.dto.PaginationResponse;
-import rs.ac.uns.ftn.service.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.model.Product;
+import rs.ac.uns.ftn.model.Size;
+import rs.ac.uns.ftn.model.dto.JsonResponse;
+import rs.ac.uns.ftn.model.dto.PaginationResponse;
+import rs.ac.uns.ftn.service.ProductService;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +25,7 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
 
     private final Logger logger;
 
@@ -51,23 +51,23 @@ public class ProductController {
     }
 
     @PostMapping("")
-    public ResponseEntity<JsonResponse> create(@RequestBody Product newProduct) {
+    public ResponseEntity<Product> create(@RequestBody Product newProduct) {
 
         String validationError = validateProduct(newProduct);
         if (validationError != null) {
             logger.info(validationError);
-            return ResponseEntity.badRequest().body(new JsonResponse(validationError));
+            return ResponseEntity.badRequest().body(null);
         }
 
         try {
-            productService.createProduct(newProduct);
-            return ResponseEntity.ok(new JsonResponse("Product successfully created."));
+            Product createdProduct = productService.createProduct(newProduct);
+            return ResponseEntity.ok(createdProduct);
         } catch (DataIntegrityViolationException e) {
             logger.info("Unique constraint violation.");
-            return ResponseEntity.badRequest().body(new JsonResponse("Product code already exists."));
+            return ResponseEntity.badRequest().body(null);
         } catch (Exception e) {
             logger.info("Database error.");
-            return ResponseEntity.internalServerError().body(new JsonResponse("Database error."));
+            return ResponseEntity.internalServerError().body(null);
         }
     }
 
