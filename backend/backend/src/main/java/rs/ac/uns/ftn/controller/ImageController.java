@@ -1,12 +1,14 @@
 package rs.ac.uns.ftn.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.core.io.InputStreamResource;
 import rs.ac.uns.ftn.model.dto.JsonResponse;
-import rs.ac.uns.ftn.service.MinioService;
+import rs.ac.uns.ftn.service.ImageService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,13 +19,13 @@ import java.util.List;
 public class ImageController {
 
     @Autowired
-    private MinioService minioService;
+    private ImageService imageService;
 
     @PostMapping("/upload/{productCode}")
     public ResponseEntity<JsonResponse> uploadFiles(@PathVariable String productCode, @RequestParam("images") List<MultipartFile> files) {
         try {
             for (MultipartFile file : files) {
-                minioService.uploadFile(productCode, file);
+                imageService.uploadFile(productCode, file);
             }
             return ResponseEntity.ok(new JsonResponse("Files uploaded successfully"));
         } catch (IOException e) {
@@ -32,12 +34,14 @@ public class ImageController {
     }
 
     @GetMapping("/download/{productCode}/{fileName}")
-    public ResponseEntity<InputStreamResource> downloadFile(@PathVariable String productCode, @PathVariable String fileName) {
+    public ResponseEntity<byte[]> downloadFile(@PathVariable String productCode, @PathVariable String fileName) {
         try {
-            InputStream inputStream = minioService.downloadFile(productCode, fileName);
-            return ResponseEntity.ok()
-                    .header("Content-Disposition", "attachment; filename=" + fileName)
-                    .body(new InputStreamResource(inputStream));
+            InputStream inputStream = imageService.downloadFile(productCode, fileName);
+            byte[] imageBytes = inputStream.readAllBytes();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+            headers.setContentLength(imageBytes.length);
+            return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
         } catch (IOException e) {
             return ResponseEntity.internalServerError().body(null);
         }
@@ -46,7 +50,7 @@ public class ImageController {
     @GetMapping("/list/{productCode}")
     public ResponseEntity<List<String>> listFiles(@PathVariable String productCode) {
         try {
-            List<String> files = minioService.listFiles(productCode);
+            List<String> files = imageService.listFiles(productCode);
             return ResponseEntity.ok(files);
         } catch (IOException e) {
             return ResponseEntity.internalServerError().body(null);

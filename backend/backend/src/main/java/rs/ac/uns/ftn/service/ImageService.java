@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class MinioService {
+public class ImageService {
 
     @Autowired
     private MinioClient minioClient;

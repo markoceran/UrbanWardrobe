@@ -2,15 +2,21 @@ package rs.ac.uns.ftn.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.model.Product;
+import rs.ac.uns.ftn.model.ProductWithImages;
 import rs.ac.uns.ftn.model.Size;
 import rs.ac.uns.ftn.model.SizeQuantity;
 import rs.ac.uns.ftn.repository.ProductRepository;
+import rs.ac.uns.ftn.service.ImageService;
 import rs.ac.uns.ftn.service.ProductService;
 import rs.ac.uns.ftn.service.SizeQuantityService;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +28,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private SizeQuantityService sizeQuantityService;
+
+    @Autowired
+    private ImageService imageService;
 
 
     @Override
@@ -48,14 +57,55 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product findByCode(String code) {
-        return productRepository.findByCode(code).orElse(null);
+    public ProductWithImages findByCode(String code) throws IOException {
+
+        Product product = productRepository.findByCode(code).orElse(null);
+        if (product == null) {
+            return null;
+        }
+        List<String> fileNameList = imageService.listFiles(code);
+        ProductWithImages productWithImages = new ProductWithImages();
+
+        productWithImages.setId(product.getId());
+        productWithImages.setName(product.getName());
+        productWithImages.setCode(product.getCode());
+        productWithImages.setDescription(product.getDescription());
+        productWithImages.setCategory(product.getCategory());
+        productWithImages.setPrice(product.getPrice());
+        productWithImages.setSizeQuantities(product.getSizeQuantities());
+
+        productWithImages.setImagesName(fileNameList);
+
+        return productWithImages;
     }
 
     @Override
-    public Page<Product> getProducts(Pageable pageable) {
-        return productRepository.findAvailableProducts(pageable);
+    public Page<ProductWithImages> getProducts(Pageable pageable) throws IOException {
+        Page<Product> productPage = productRepository.findAvailableProducts(pageable);
+        List<Product> products = productPage.getContent();
+        List<ProductWithImages> productsWithImages = new ArrayList<>();
+
+        for (Product product : products) {
+            List<String> fileNameList = imageService.listFiles(product.getCode());
+            ProductWithImages productWithImages = new ProductWithImages();
+
+            productWithImages.setId(product.getId());
+            productWithImages.setName(product.getName());
+            productWithImages.setCode(product.getCode());
+            productWithImages.setDescription(product.getDescription());
+            productWithImages.setCategory(product.getCategory());
+            productWithImages.setPrice(product.getPrice());
+            productWithImages.setSizeQuantities(product.getSizeQuantities());
+
+            productWithImages.setImagesName(fileNameList);
+
+            productsWithImages.add(productWithImages);
+        }
+
+        // Convert List<ProductWithImages> to Page<ProductWithImages>
+        return new PageImpl<>(productsWithImages, pageable, productPage.getTotalElements());
     }
+
 
     @Override
     public Product refillQuantity(Long productId, Size size, int quantity) {

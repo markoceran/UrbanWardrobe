@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { NewProduct } from 'src/app/models/newProduct';
@@ -18,7 +18,7 @@ export class CreateProductComponent implements OnInit {
 
   productForm!: FormGroup;
   submitted = false;
-  imageFiles: File[] = [];
+  imageFiles: Set<File> = new Set<File>;
   responseProductCode: any;
 
   categories = Object.values(ProductCategory);
@@ -30,15 +30,11 @@ export class CreateProductComponent implements OnInit {
     this.productForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-      price: [0, [Validators.required, Validators.min(0.01)]],
+      price: [0, [Validators.required, Validators.min(1)]],
       category: ['', Validators.required],
       sizeQuantities: this.fb.array([this.createSizeQuantity()]),
       images: [null]
     });
-  }
-
-  get f() {
-    return this.productForm.controls;
   }
 
   get sizeQuantities() {
@@ -47,8 +43,8 @@ export class CreateProductComponent implements OnInit {
 
   createSizeQuantity(): FormGroup {
     return this.fb.group({
-      size: ['XS', Validators.required],
-      quantity: [0, [Validators.required, Validators.min(0)]]
+      size: ['', Validators.required],
+      quantity: [1, [Validators.required, Validators.min(1)]]
     });
   }
 
@@ -60,17 +56,32 @@ export class CreateProductComponent implements OnInit {
     this.sizeQuantities.removeAt(index);
   }
 
- 
+  get f(): { [key: string]: AbstractControl } {
+    return this.productForm.controls;
+  }
+
+
   onFileChange(event: any): void {
     // Handle file input change
     const files: FileList = event.target.files;
     for (let i = 0; i < files.length; i++) {
-      this.imageFiles.push(files[i]);
+      this.imageFiles.add(files[i]);
     }
   }
 
+  getAvailableSizes(index: number): string[] {
+    // Get the list of currently selected sizes
+    const selectedSizes = this.sizeQuantities.controls
+      .map((control, i) => i !== index ? control.get('size')?.value : null)
+      .filter(size => size != null);
+
+    // Return sizes that are not selected
+    return this.sizes.filter(size => !selectedSizes.includes(size));
+  }
+  
+
   uploadImages(): void {
-    if (this.imageFiles.length === 0) {
+    if (this.imageFiles.size === 0) {
       this.openSnackBar("No images selected for upload!", "");
       console.warn('No images selected for upload.');
       return;
@@ -82,7 +93,6 @@ export class CreateProductComponent implements OnInit {
       formData.append('images', file);
     }
 
-    // Call the service method to upload images
     this.imageService.uploadImages(this.responseProductCode, formData).subscribe(
       () => {
         console.log('Images uploaded successfully!');
@@ -107,6 +117,12 @@ export class CreateProductComponent implements OnInit {
       return;
     }
 
+    if (this.imageFiles.size === 0) {
+      this.openSnackBar("No images selected for upload!", "");
+      console.warn('No images selected for upload.');
+      return;
+    }
+
     const formValues = this.productForm.value;
 
     const newProduct: NewProduct = {
@@ -117,27 +133,19 @@ export class CreateProductComponent implements OnInit {
       category: formValues.category
     };
 
-    if (this.imageFiles.length !== 0) {
-
-      this.productService.createProduct(newProduct).subscribe(
-      (product:Product) => {
-        this.responseProductCode = product.code;
-        this.uploadImages();
-
-        this.openSnackBar("Product created successfully!", "");
-        console.log('Product created successfully!');
-        this.router.navigate(['/Main-Page']);
-      },
-      (error) => {
-        this.openSnackBar("Error creating product!", "");
-        console.error('Error creating product:', error);
-      }
-      );
-      
-    }else{
-      this.openSnackBar("No images selected for upload!", "");
-      console.warn('No images selected for upload.');
+    this.productService.createProduct(newProduct).subscribe(
+    (product:Product) => {
+      this.responseProductCode = product.code;
+      this.uploadImages();
+      this.openSnackBar("Product created successfully!", "");
+      console.log('Product created successfully!');
+      this.router.navigate(['/Main-Page']);
+    },
+    (error) => {
+      this.openSnackBar("Error creating product!", "");
+      console.error('Error creating product:', error);
     }
+    );
 
   }
 }

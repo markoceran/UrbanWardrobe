@@ -4,18 +4,20 @@
         <div *ngIf="products.length === 0">
           <p>No products available.</p>
         </div>
-
         <div class="product-list">
-          <div *ngFor="let product of products" class="product-card">
+          <div *ngFor="let product of products" class="product-card" (click)="openProductDetails(product.code)">
               <div class="card-header">
-                  <h3>{{ product.name }}</h3> 
+                <div class="image-container">
+                  <img *ngIf="product.images.length > 0" [src]="sanitizeUrl(product.images[0])" alt="{{ product.name }} image" class="product-image">
+                  <a class="overlay-element"><i class="far fa-heart"></i></a>
+                </div>
               </div>
               <div class="card-body">
-                  <p><strong></strong> {{ product.price }} €</p>                   
+                  <p>{{ product.name }}</p> 
+                  <p>€{{ product.price }}</p>                   
               </div>
           </div>
         </div>
-      
     </div>
 </div>
 <div class="pagination">

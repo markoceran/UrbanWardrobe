@@ -14,5 +14,11 @@ export class ImageService {
     uploadImages(productCode: string, formData: FormData): Observable<any> {
         return this.http.post<any>(`${environment.baseApiUrl}/${this.url}/upload/${productCode}`, formData);
     }
+
+    getImage(productCode: string, fileName: string): Observable<Blob> {
+        return this.http.get(`${environment.baseApiUrl}/${this.url}/download/${productCode}/${fileName}`, {
+          responseType: 'blob'
+        });
+    }
     
 }

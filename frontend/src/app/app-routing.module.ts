@@ -4,6 +4,7 @@ import { LoginComponent } from './components/login/login.component';
 import { MainPageComponent } from './components/main-page/main-page.component';
 import {LoginGuardService} from "./guards/login-guard.service";
 import { CreateProductComponent } from './components/create-product/create-product.component';
+import { ProductDetailsComponent } from './components/product-details/product-details.component';
 
 
 const routes: Routes = [
@@ -19,6 +20,10 @@ const routes: Routes = [
   {
     path: 'createProduct',
     component: CreateProductComponent
+  },
+  {
+    path: 'product/:productCode',
+    component: ProductDetailsComponent
   }
 ];
 

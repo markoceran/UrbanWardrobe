@@ -68,11 +68,11 @@ public class OrderServiceImpl implements OrderService {
         Orderr newOrder = new Orderr();
         newOrder.setUser(loggedUser);
         newOrder.setProductsAmount(productsAmount);
-        if(productsAmount > 5000){
+        if(productsAmount > 100){
             newOrder.setShippingAmount(0);
         }
         else{
-            newOrder.setShippingAmount(300);
+            newOrder.setShippingAmount(3);
         }
         newOrder.setTotalAmount(productsAmount + newOrder.getShippingAmount());
         orderRepository.save(newOrder);

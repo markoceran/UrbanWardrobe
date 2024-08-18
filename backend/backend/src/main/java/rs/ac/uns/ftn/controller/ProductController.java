@@ -10,11 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.model.Product;
+import rs.ac.uns.ftn.model.ProductWithImages;
 import rs.ac.uns.ftn.model.Size;
 import rs.ac.uns.ftn.model.dto.JsonResponse;
 import rs.ac.uns.ftn.model.dto.PaginationResponse;
 import rs.ac.uns.ftn.service.ProductService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -38,13 +40,25 @@ public class ProductController {
         return this.productService.getAll();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable int id) {
-        logger.info("Find product by id");
-        Optional<Product> product = this.productService.getById(Long.valueOf(id));
+//    @GetMapping("/getById/{id}")
+//    public ResponseEntity<?> getById(@PathVariable int id) {
+//        logger.info("Find product by id");
+//        Optional<Product> product = this.productService.getById(Long.valueOf(id));
+//
+//        if (product.isPresent()) {
+//            return ResponseEntity.ok(product.get());
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new JsonResponse("Product not found"));
+//        }
+//    }
 
-        if (product.isPresent()) {
-            return ResponseEntity.ok(product.get());
+    @GetMapping("/{code}")
+    public ResponseEntity<?> getByCode(@PathVariable String code) throws IOException {
+        logger.info("Find product by code");
+        ProductWithImages product = this.productService.findByCode(code);
+
+        if (product != null) {
+            return ResponseEntity.ok(product);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new JsonResponse("Product not found"));
         }
@@ -88,7 +102,7 @@ public class ProductController {
 
     @GetMapping("")
     public ResponseEntity<PaginationResponse> getProducts(
-            @RequestParam(defaultValue = "0") int page) {
+            @RequestParam(defaultValue = "0") int page) throws IOException {
 
         if(page < 0){
             PaginationResponse response = new PaginationResponse("Page number is less than 0.");
@@ -97,7 +111,7 @@ public class ProductController {
 
         Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Order.asc("id")));
 
-        Page<Product> productsPage = productService.getProducts(pageable);
+        Page<ProductWithImages> productsPage = productService.getProducts(pageable);
 
         PaginationResponse response = new PaginationResponse("Products fetched successfully.");
         response.setData(productsPage.getContent());

@@ -1,9 +1,12 @@
 .container {
-  background-color: #a1adcfc1;
   width: 40%;
   min-height: 100vh; /* Ensures the background covers the full viewport height */
-  
 }
+
+.form-container input,textarea,select {
+    background-color: #4040404b;
+}
+
 
 .form-container {
     padding: 20px;

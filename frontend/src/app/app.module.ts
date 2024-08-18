@@ -25,6 +25,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { CreateProductComponent } from './components/create-product/create-product.component';
+import { ProductDetailsComponent } from './components/product-details/product-details.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { CreateProductComponent } from './components/create-product/create-produ
     MainPageComponent,
     HeaderComponent,
     LoginComponent,
-    CreateProductComponent
+    CreateProductComponent,
+    ProductDetailsComponent
   ],
   imports: [
     BrowserModule,

@@ -5,6 +5,7 @@ import { PaginationResponse } from "../models/paginationResponse";
 import { Product } from "../models/product";
 import { environment } from "src/environments/environment";
 import { NewProduct } from "../models/newProduct";
+import { ProductWithImages } from "../models/productWithImages";
 
 @Injectable({
     providedIn: 'root'
@@ -21,6 +22,11 @@ export class ProductService {
 
     createProduct(product: NewProduct): Observable<Product> {
         return this.http.post<Product>(`${environment.baseApiUrl}/${this.url}`, product);
+    }
+
+
+    getProductByCode(code: string): Observable<ProductWithImages> {
+        return this.http.get<ProductWithImages>(`${environment.baseApiUrl}/${this.url}/${code}`);
     }
     
 }
