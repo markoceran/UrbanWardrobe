@@ -4,6 +4,8 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { LoginDTO } from "../dto/loginDTO";
 import { jwtDecode } from 'jwt-decode';
+import { UserDTO } from "../models/userDTO";
+import { JsonResponse } from "../models/jsonResponse";
 
 @Injectable({
 providedIn: 'root'
@@ -93,5 +95,12 @@ export class AuthService {
     }
     return true;
    }
+
+  public register(user: UserDTO): Observable<JsonResponse> {
+    return this.http.post<JsonResponse>(`${environment.baseApiUrl}/${this.url}/registerUser`, user, {
+      headers: { 'Content-Type': 'application/json' },
+      responseType: 'json'
+    });
+  }
 
 }

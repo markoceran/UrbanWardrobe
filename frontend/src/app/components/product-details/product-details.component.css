@@ -10,27 +10,29 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.product-images .carousel-slide {
-  width: 100%;
-  max-width: 500px; /* Fixed width */
+.carousel-slide {
+  width: 500px; /* Fixed width */
   height: 800px; /* Fixed height */
   position: relative;
   overflow: hidden;
-}
-
-.product-images .carousel-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Ensures image covers the area while maintaining aspect ratio */
   border-radius: 8px;
 }
 
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures image covers the area while maintaining aspect ratio */
+}
 
 .carousel-inner {
   width: 100%;
   height: 100%;
 }
 
+.carousel-item {
+  width: 100%;
+  height: 100%;
+}
 
 .carousel-item img:hover {
   transform: scale(1.05);
@@ -44,14 +46,15 @@
   border: none;
   padding: 10px;
   cursor: pointer;
+  z-index: 1; /* Ensure controls are above other content */
 }
 
 .carousel-control-prev {
-  left: 0;
+  left: 10px; /* Adjust positioning as needed */
 }
 
 .carousel-control-next {
-  right: 0;
+  right: 10px; /* Adjust positioning as needed */
 }
 
 
