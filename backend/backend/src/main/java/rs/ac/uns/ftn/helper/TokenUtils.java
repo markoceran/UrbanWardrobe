@@ -19,17 +19,28 @@ import java.util.Map;
 @Component
 public class TokenUtils {
 
-    @Value("biloKojiString")
+    @Value("${jwt.secret:biloKojiString}")
     private String secret;
 
-    @Value("36000000")
+    @Value("${jwt.expiration:36000000}")
     private Long expiration;
 
-
+    /**
+     * Extracts the JWT token from the Authorization header or from a JSON object.
+     *
+     * @param request the HTTP servlet request
+     * @return the extracted JWT token or null if not found
+     */
     public String extractTokenFromRequest(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            return authorizationHeader.substring(7);
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode tokenJson = objectMapper.readTree(authorizationHeader.substring(7));
+                return tokenJson.get("accessToken").asText();
+            } catch (Exception e) {
+                return null;
+            }
         }
         return null;
     }
@@ -103,5 +114,4 @@ public class TokenUtils {
             }
         }
     }
-
 }

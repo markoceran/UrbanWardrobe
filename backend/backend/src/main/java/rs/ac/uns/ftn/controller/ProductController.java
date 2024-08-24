@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.helper.TokenUtils;
 import rs.ac.uns.ftn.model.Product;
 import rs.ac.uns.ftn.model.ProductWithImages;
 import rs.ac.uns.ftn.model.Size;
@@ -16,6 +17,7 @@ import rs.ac.uns.ftn.model.dto.JsonResponse;
 import rs.ac.uns.ftn.model.dto.PaginationResponse;
 import rs.ac.uns.ftn.service.ProductService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +30,9 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private TokenUtils tokenUtils;
+
 
     private final Logger logger;
 
@@ -39,18 +44,6 @@ public class ProductController {
     public List<Product> allProduct() {
         return this.productService.getAll();
     }
-
-//    @GetMapping("/getById/{id}")
-//    public ResponseEntity<?> getById(@PathVariable int id) {
-//        logger.info("Find product by id");
-//        Optional<Product> product = this.productService.getById(Long.valueOf(id));
-//
-//        if (product.isPresent()) {
-//            return ResponseEntity.ok(product.get());
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new JsonResponse("Product not found"));
-//        }
-//    }
 
     @GetMapping("/{code}")
     public ResponseEntity<?> getByCode(@PathVariable String code) throws IOException {
@@ -102,16 +95,19 @@ public class ProductController {
 
     @GetMapping("")
     public ResponseEntity<PaginationResponse> getProducts(
-            @RequestParam(defaultValue = "0") int page) throws IOException {
+            @RequestParam(defaultValue = "0") int page, HttpServletRequest request) throws IOException {
 
         if(page < 0){
             PaginationResponse response = new PaginationResponse("Page number is less than 0.");
             return ResponseEntity.badRequest().body(response);
         }
 
+        String token = tokenUtils.extractTokenFromRequest(request);
+        String loggedUserEmail = tokenUtils.getEmailFromToken(token);
+
         Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Order.asc("id")));
 
-        Page<ProductWithImages> productsPage = productService.getProducts(pageable);
+        Page<ProductWithImages> productsPage = productService.getProducts(pageable, loggedUserEmail);
 
         PaginationResponse response = new PaginationResponse("Products fetched successfully.");
         response.setData(productsPage.getContent());

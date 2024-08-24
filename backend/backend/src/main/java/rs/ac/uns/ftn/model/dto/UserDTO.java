@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rs.ac.uns.ftn.model.Basket;
 import rs.ac.uns.ftn.model.ShippingAddress;
+import rs.ac.uns.ftn.model.Wishlist;
 
 @Getter
 @Setter
@@ -23,5 +25,9 @@ public class UserDTO {
     private String phoneNumber;
 
     private ShippingAddress shippingAddress;
+
+    private Basket basket;
+
+    private WishlistDTO wishlist;
 
 }

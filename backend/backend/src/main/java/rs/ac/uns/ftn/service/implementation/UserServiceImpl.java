@@ -3,14 +3,16 @@ package rs.ac.uns.ftn.service.implementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.model.BasicUser;
-import rs.ac.uns.ftn.model.ShippingAddress;
-import rs.ac.uns.ftn.model.User;
+import rs.ac.uns.ftn.model.*;
 import rs.ac.uns.ftn.model.dto.UserDTO;
+import rs.ac.uns.ftn.model.dto.WishlistDTO;
 import rs.ac.uns.ftn.repository.UserRepository;
 import rs.ac.uns.ftn.service.BasicUserService;
+import rs.ac.uns.ftn.service.ImageService;
 import rs.ac.uns.ftn.service.UserService;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +24,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private BasicUserService basicUserService;
+
+    @Autowired
+    private ImageService imageService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -81,5 +86,53 @@ public class UserServiceImpl implements UserService {
             return shippingAddress;
         }
         return null;
+    }
+
+    @Override
+    public UserDTO getUserProfile(String email) throws IOException {
+        User user = findByEmail(email);
+        if (user == null) {
+            return null;
+        }
+
+        WishlistDTO wishlistDTO = new WishlistDTO();
+        wishlistDTO.setId(user.getWishList().getId());
+        wishlistDTO.setUser(user);
+
+        List<ProductWithImages> productsWithImages = new ArrayList<>();
+
+        for (Product product : user.getWishList().getProducts()) {
+
+            List<String> fileNameList = imageService.listFiles(product.getCode());
+
+            ProductWithImages productWithImages = new ProductWithImages();
+
+            productWithImages.setId(product.getId());
+            productWithImages.setName(product.getName());
+            productWithImages.setCode(product.getCode());
+            productWithImages.setDescription(product.getDescription());
+            productWithImages.setCategory(product.getCategory());
+            productWithImages.setPrice(product.getPrice());
+            productWithImages.setSizeQuantities(product.getSizeQuantities());
+
+            productWithImages.setImagesName(fileNameList);
+
+
+            productsWithImages.add(productWithImages);
+        }
+
+        wishlistDTO.setProducts(productsWithImages);
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setFirstName(user.getFirstName());
+        userDTO.setLastName(user.getLastName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setPhoneNumber(user.getPhoneNumber());
+        userDTO.setShippingAddress(user.getShippingAddress());
+        userDTO.setBasket(user.getBasket());
+        userDTO.setWishlist(wishlistDTO);
+
+        return userDTO;
+
     }
 }

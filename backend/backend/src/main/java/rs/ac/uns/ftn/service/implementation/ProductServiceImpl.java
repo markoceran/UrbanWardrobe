@@ -5,14 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.model.Product;
-import rs.ac.uns.ftn.model.ProductWithImages;
-import rs.ac.uns.ftn.model.Size;
-import rs.ac.uns.ftn.model.SizeQuantity;
+import rs.ac.uns.ftn.model.*;
 import rs.ac.uns.ftn.repository.ProductRepository;
 import rs.ac.uns.ftn.service.ImageService;
 import rs.ac.uns.ftn.service.ProductService;
 import rs.ac.uns.ftn.service.SizeQuantityService;
+import rs.ac.uns.ftn.service.UserService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +29,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ImageService imageService;
+
+    @Autowired
+    private UserService userService;
 
 
     @Override
@@ -80,13 +81,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductWithImages> getProducts(Pageable pageable) throws IOException {
+    public Page<ProductWithImages> getProducts(Pageable pageable, String loggedUserEmail) throws IOException {
+
+        User loggedUser = userService.findByEmail(loggedUserEmail);
+        if (loggedUser == null) {
+            return Page.empty(pageable);
+        }
+
         Page<Product> productPage = productRepository.findAvailableProducts(pageable);
         List<Product> products = productPage.getContent();
         List<ProductWithImages> productsWithImages = new ArrayList<>();
 
         for (Product product : products) {
+
             List<String> fileNameList = imageService.listFiles(product.getCode());
+
             ProductWithImages productWithImages = new ProductWithImages();
 
             productWithImages.setId(product.getId());
@@ -98,6 +107,13 @@ public class ProductServiceImpl implements ProductService {
             productWithImages.setSizeQuantities(product.getSizeQuantities());
 
             productWithImages.setImagesName(fileNameList);
+
+            Optional<Product> productFromWishlist = loggedUser.getWishList().getProducts().stream().filter(p ->  p.getId() == product.getId()).findFirst();
+            if (productFromWishlist.isPresent()) {
+                productWithImages.setInWishlist(true);
+            }else {
+                productWithImages.setInWishlist(false);
+            }
 
             productsWithImages.add(productWithImages);
         }

@@ -20,6 +20,7 @@ import rs.ac.uns.ftn.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -82,17 +83,10 @@ public class UserController {
     }
 
     @GetMapping("/profile/{email}")
-    public UserDTO profile(@PathVariable String email) {
+    public UserDTO profile(@PathVariable String email) throws IOException {
         logger.info("Find user with email");
-        User user = this.userService.findByEmail(email);
-
-        UserDTO userDto = new UserDTO();
-        userDto.setEmail(user.getEmail());
-        userDto.setFirstName(user.getFirstName());
-        userDto.setLastName(user.getLastName());
-        userDto.setPhoneNumber(user.getPhoneNumber());
-        userDto.setShippingAddress(user.getShippingAddress());
-        return userDto;
+        UserDTO userDTO = this.userService.getUserProfile(email);
+        return userDTO;
     }
 
     @PostMapping("/registerUser")

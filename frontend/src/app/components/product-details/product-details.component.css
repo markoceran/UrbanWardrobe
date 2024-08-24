@@ -34,10 +34,6 @@
   height: 100%;
 }
 
-.carousel-item img:hover {
-  transform: scale(1.05);
-}
-
 .carousel-control-prev,
 .carousel-control-next {
   position: absolute;

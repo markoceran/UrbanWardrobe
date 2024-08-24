@@ -11,4 +11,5 @@ export interface ProductWithImages {
     category: ProductCategory;
     imagesName: string[];
     images: string[];
+    inWishlist: boolean;
 }

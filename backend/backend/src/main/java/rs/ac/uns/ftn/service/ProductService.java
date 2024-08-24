@@ -20,7 +20,7 @@ public interface ProductService {
 
     ProductWithImages findByCode(String code) throws IOException;
 
-    Page<ProductWithImages> getProducts(Pageable pageable) throws IOException;
+    Page<ProductWithImages> getProducts(Pageable pageable, String loggedUserEmail) throws IOException;
 
     Product refillQuantity(Long productId, Size size, int quantity);
 }

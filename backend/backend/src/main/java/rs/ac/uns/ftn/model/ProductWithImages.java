@@ -33,4 +33,6 @@ public class ProductWithImages {
 
     private List<String> imagesName;
 
+    private boolean inWishlist;
+
 }

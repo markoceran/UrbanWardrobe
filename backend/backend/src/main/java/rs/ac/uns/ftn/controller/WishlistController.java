@@ -30,7 +30,6 @@ public class WishlistController {
     public ResponseEntity<JsonResponse> addProduct(@PathVariable Long productId, HttpServletRequest request) {
         String token = tokenUtils.extractTokenFromRequest(request);
         String loggedUserEmail = tokenUtils.getEmailFromToken(token);
-
         Product product = wishlistService.addProduct(productId, loggedUserEmail);
         if (product == null) {
             logger.info("Error while adding product to wishlist");

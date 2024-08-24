@@ -6,6 +6,7 @@ import {LoginGuardService} from "./guards/login-guard.service";
 import { CreateProductComponent } from './components/create-product/create-product.component';
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { RegisterComponent } from './components/register/register.component';
+import { WishlistComponent } from './components/wishlist/wishlist.component';
 
 
 const routes: Routes = [
@@ -29,6 +30,10 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent
+  },
+  {
+    path: 'wishlist',
+    component: WishlistComponent
   }
 ];
 

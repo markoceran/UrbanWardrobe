@@ -15,7 +15,7 @@ export class AuthService {
   private url = "user";
   constructor(private http: HttpClient) { }
 
-  public Login(loginDTO: LoginDTO): Observable<string> {
+  Login(loginDTO: LoginDTO): Observable<string> {
     return this.http.post(`${environment.baseApiUrl}/${this.url}/login`, loginDTO, {responseType : 'text'});
   }
 
@@ -96,11 +96,15 @@ export class AuthService {
     return true;
    }
 
-  public register(user: UserDTO): Observable<JsonResponse> {
+  register(user: UserDTO): Observable<JsonResponse> {
     return this.http.post<JsonResponse>(`${environment.baseApiUrl}/${this.url}/registerUser`, user, {
       headers: { 'Content-Type': 'application/json' },
       responseType: 'json'
     });
+  }
+
+  getUser(): Observable<UserDTO> {
+    return this.http.get<UserDTO>(`${environment.baseApiUrl}/${this.url}/profile/${this.getUserEmailFromToken()}`);
   }
 
 }
