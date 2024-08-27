@@ -4,17 +4,23 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.ac.uns.ftn.model.ProductWithImages;
-
-import java.util.List;
+import rs.ac.uns.ftn.model.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class WishlistDTO {
+public class BasketItemDTO {
+
     private Long id;
 
-    private List<ProductWithImages> products;
+    private ProductWithImages product;
 
+    private Size size;
+
+    private Basket basket;
+
+    private Orderr order;
+
+    private int quantity;
 }

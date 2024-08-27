@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.model.*;
+import rs.ac.uns.ftn.model.dto.BasketDTO;
+import rs.ac.uns.ftn.model.dto.BasketItemDTO;
 import rs.ac.uns.ftn.model.dto.UserDTO;
 import rs.ac.uns.ftn.model.dto.WishlistDTO;
 import rs.ac.uns.ftn.repository.UserRepository;
@@ -89,7 +91,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO getUserProfile(String email) throws IOException {
+    public WishlistDTO getUserWishlist(String email) throws IOException {
         User user = findByEmail(email);
         if (user == null) {
             return null;
@@ -97,7 +99,6 @@ public class UserServiceImpl implements UserService {
 
         WishlistDTO wishlistDTO = new WishlistDTO();
         wishlistDTO.setId(user.getWishList().getId());
-        wishlistDTO.setUser(user);
 
         List<ProductWithImages> productsWithImages = new ArrayList<>();
 
@@ -123,16 +124,53 @@ public class UserServiceImpl implements UserService {
 
         wishlistDTO.setProducts(productsWithImages);
 
-        UserDTO userDTO = new UserDTO();
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setPhoneNumber(user.getPhoneNumber());
-        userDTO.setShippingAddress(user.getShippingAddress());
-        userDTO.setBasket(user.getBasket());
-        userDTO.setWishlist(wishlistDTO);
+        return wishlistDTO;
 
-        return userDTO;
+    }
+
+    @Override
+    public BasketDTO getUserBasket(String email) throws IOException {
+        User user = findByEmail(email);
+        if (user == null) {
+            return null;
+        }
+
+        BasketDTO basketDTO = new BasketDTO();
+        basketDTO.setId(user.getBasket().getId());
+
+        List<BasketItemDTO> basketItemDTOS = new ArrayList<>();
+
+        for (BasketItem basketItem : user.getBasket().getBasketItems()) {
+
+            List<String> fileNameList = imageService.listFiles(basketItem.getProduct().getCode());
+
+            BasketItemDTO basketItemDTO = new BasketItemDTO();
+
+            basketItemDTO.setId(basketItem.getId());
+            basketItemDTO.setBasket(basketItem.getBasket());
+            basketItemDTO.setSize(basketItem.getSize());
+            basketItemDTO.setQuantity(basketItem.getQuantity());
+            basketItemDTO.setOrder(basketItem.getOrder());
+
+            ProductWithImages productWithImages = new ProductWithImages();
+
+            productWithImages.setId(basketItem.getProduct().getId());
+            productWithImages.setName(basketItem.getProduct().getName());
+            productWithImages.setCode(basketItem.getProduct().getCode());
+            productWithImages.setDescription(basketItem.getProduct().getDescription());
+            productWithImages.setCategory(basketItem.getProduct().getCategory());
+            productWithImages.setPrice(basketItem.getProduct().getPrice());
+            productWithImages.setSizeQuantities(basketItem.getProduct().getSizeQuantities());
+            productWithImages.setImagesName(fileNameList);
+
+            basketItemDTO.setProduct(productWithImages);
+
+            basketItemDTOS.add(basketItemDTO);
+        }
+
+        basketDTO.setBasketItems(basketItemDTOS);
+
+        return basketDTO;
 
     }
 }

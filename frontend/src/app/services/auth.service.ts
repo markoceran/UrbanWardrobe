@@ -6,6 +6,8 @@ import { LoginDTO } from "../dto/loginDTO";
 import { jwtDecode } from 'jwt-decode';
 import { UserDTO } from "../models/userDTO";
 import { JsonResponse } from "../models/jsonResponse";
+import { Wishlist } from "../models/wishlist";
+import { Basket } from "../models/basket";
 
 @Injectable({
 providedIn: 'root'
@@ -103,8 +105,12 @@ export class AuthService {
     });
   }
 
-  getUser(): Observable<UserDTO> {
-    return this.http.get<UserDTO>(`${environment.baseApiUrl}/${this.url}/profile/${this.getUserEmailFromToken()}`);
+  getUserWishlist(): Observable<Wishlist> {
+    return this.http.get<Wishlist>(`${environment.baseApiUrl}/${this.url}/wishlist/${this.getUserEmailFromToken()}`);
+  }
+
+  getUserBasket(): Observable<Basket> {
+    return this.http.get<Basket>(`${environment.baseApiUrl}/${this.url}/basket/${this.getUserEmailFromToken()}`);
   }
 
 }

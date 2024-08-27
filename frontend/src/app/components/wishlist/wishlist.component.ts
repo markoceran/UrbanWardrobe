@@ -2,12 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { ProductWithImages } from 'src/app/models/productWithImages';
-import { UserDTO } from 'src/app/models/userDTO';
 import { Wishlist } from 'src/app/models/wishlist';
 import { AuthService } from 'src/app/services/auth.service';
 import { ImageService } from 'src/app/services/image.service';
-import { WishlistService } from 'src/app/services/wishlist.service';
 
 @Component({
   selector: 'app-wishlist',
@@ -17,7 +14,7 @@ import { WishlistService } from 'src/app/services/wishlist.service';
 export class WishlistComponent implements OnInit {
 
   wishlist: Wishlist = {
-    products: [], user: {} as any,
+    products: [],
     id: 0
   }; // Initialize wishlist
 
@@ -30,9 +27,9 @@ export class WishlistComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.authService.getUser().subscribe(
-      (response: UserDTO) => {
-        this.wishlist = response.wishlist;
+    this.authService.getUserWishlist().subscribe(
+      (response: Wishlist) => {
+        this.wishlist = response;
         // Ensure images are initialized as an empty array
         this.wishlist.products.forEach(product => {
           product.images = [];

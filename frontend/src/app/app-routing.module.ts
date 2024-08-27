@@ -7,6 +7,7 @@ import { CreateProductComponent } from './components/create-product/create-produ
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { RegisterComponent } from './components/register/register.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
+import { BasketComponent } from './components/basket/basket.component';
 
 
 const routes: Routes = [
@@ -34,6 +35,10 @@ const routes: Routes = [
   {
     path: 'wishlist',
     component: WishlistComponent
+  },
+  {
+    path: 'basket',
+    component: BasketComponent
   }
 ];
 

@@ -18,12 +18,13 @@
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    margin-top: 50px;
+    margin-top: 10px;
     border: 1px solid rgba(97, 97, 97, 0.7);
   }
   
   .wishlist-image {
     flex: 0 0 150px;
+    align-content: center;
   }
   
   .wishlist-image img {

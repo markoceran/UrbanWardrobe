@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+import { JsonResponse } from 'src/app/models/jsonResponse';
 import { ProductWithImages } from 'src/app/models/productWithImages';
+import { Size } from 'src/app/models/size';
+import { BasketService } from 'src/app/services/basket.service';
 import { ImageService } from 'src/app/services/image.service';
 import { ProductService } from 'src/app/services/product.service';
 
@@ -20,7 +24,9 @@ export class ProductDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private productService: ProductService,
     private imageService: ImageService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private basketService: BasketService,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -44,9 +50,23 @@ export class ProductDetailsComponent implements OnInit {
     this.selectedSize = size;
   }
 
-  addToCart(): void {
+  addToBasket(): void {
     if (this.selectedSize) {
-      // Logic to add the product with the selected size to the cart
+      const size = Size[this.selectedSize as keyof typeof Size];
+      this.basketService.addBasketItem(this.product.id, size).subscribe(
+        (response:JsonResponse) => {
+          this.openSnackBar(response.message, "");
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        },
+        (error) => {
+          this.openSnackBar(error.error?.message, "");
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        }
+      );
     } else {
       alert('Please select a size.');
     }
@@ -73,5 +93,12 @@ export class ProductDetailsComponent implements OnInit {
     return Array.from(this.product.sizeQuantities)
       .sort((a, b) => sizeOrder.indexOf(a.size) - sizeOrder.indexOf(b.size));
   }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action,  {
+      duration: 2000
+    });
+  }
+
 
 }

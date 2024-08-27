@@ -10,6 +10,7 @@ import rs.ac.uns.ftn.model.dto.JsonResponse;
 import rs.ac.uns.ftn.service.BasketService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @RestController
@@ -29,7 +30,10 @@ public class BasketController {
     }
 
     @PutMapping("/addBasketItem/{productId}")
-    public ResponseEntity<JsonResponse> addBasketItem(@PathVariable Long productId, @RequestBody Size size, HttpServletRequest request) {
+    public ResponseEntity<JsonResponse> addBasketItem(@PathVariable Long productId, @RequestBody Map<String, String> sizeRequest, HttpServletRequest request) {
+        String sizeValue = sizeRequest.get("size");
+        Size size = Size.valueOf(sizeValue);
+
         String token = tokenUtils.extractTokenFromRequest(request);
         String loggedUserEmail = tokenUtils.getEmailFromToken(token);
 

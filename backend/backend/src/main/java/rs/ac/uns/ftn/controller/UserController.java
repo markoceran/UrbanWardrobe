@@ -11,10 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.model.*;
-import rs.ac.uns.ftn.model.dto.JsonResponse;
-import rs.ac.uns.ftn.model.dto.JwtAuthenticationRequest;
-import rs.ac.uns.ftn.model.dto.UserDTO;
-import rs.ac.uns.ftn.model.dto.UserTokenState;
+import rs.ac.uns.ftn.model.dto.*;
 import rs.ac.uns.ftn.helper.TokenUtils;
 import rs.ac.uns.ftn.service.*;
 
@@ -82,11 +79,18 @@ public class UserController {
         return this.basicUserService.getAll();
     }
 
-    @GetMapping("/profile/{email}")
-    public UserDTO profile(@PathVariable String email) throws IOException {
+    @GetMapping("/wishlist/{email}")
+    public WishlistDTO wishlist(@PathVariable String email) throws IOException {
         logger.info("Find user with email");
-        UserDTO userDTO = this.userService.getUserProfile(email);
-        return userDTO;
+        WishlistDTO wishlistDTO = this.userService.getUserWishlist(email);
+        return wishlistDTO;
+    }
+
+    @GetMapping("/basket/{email}")
+    public BasketDTO basket(@PathVariable String email) throws IOException {
+        logger.info("Find user with email");
+        BasketDTO basketDTO = this.userService.getUserBasket(email);
+        return basketDTO;
     }
 
     @PostMapping("/registerUser")

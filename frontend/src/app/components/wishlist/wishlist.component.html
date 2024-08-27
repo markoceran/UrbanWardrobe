@@ -1,14 +1,15 @@
 <app-header></app-header>
 <div class="wishlist-page">
     <h4 class="title">Wishlist</h4>
-    <div class="wishlist-card" *ngFor="let product of wishlist.products" (click)="openProductDetails(product.code)">
+    <div class="wishlist-card" *ngFor="let product of wishlist.products">
         <div class="wishlist-image">
-            <img *ngIf="product.images.length > 0" [src]="sanitizeUrl(product.images[0])" alt="{{ product.name }} image" class="product-image">
+            <img *ngIf="product.images.length > 0" [src]="sanitizeUrl(product.images[0])" alt="{{ product.name }} image" class="product-image" (click)="openProductDetails(product.code)">
         </div>
         <div class="wishlist-info">
             <h2>{{ product.name }}</h2>
             <p>{{ product.description }}</p>
-            <p><strong>Price:</strong> €{{ product.price }}</p>
+            <p>{{ product.code }}</p>
+            <p><strong>€{{ product.price }}</strong></p>
         </div>
     </div>
 </div>
