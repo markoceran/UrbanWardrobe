@@ -10,6 +10,7 @@ import rs.ac.uns.ftn.service.OrderService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 @RestController
@@ -42,8 +43,17 @@ public class OrderController {
         return ResponseEntity.ok(new JsonResponse("Order successfully created."));
     }
 
+    @GetMapping("/{orderId}")
+    public ResponseEntity<?> getById(@PathVariable Long orderId) {
+        Optional<Orderr> order = orderService.getById(orderId);
+        if (order.isPresent()) {
+            return ResponseEntity.ok(order.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @GetMapping("/myOrders")
-    public ResponseEntity<?> getById(HttpServletRequest request) {
+    public ResponseEntity<?> myOrders(HttpServletRequest request) {
         String token = tokenUtils.extractTokenFromRequest(request);
         String loggedUserEmail = tokenUtils.getEmailFromToken(token);
 

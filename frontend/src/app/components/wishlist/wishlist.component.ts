@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { JsonResponse } from 'src/app/models/jsonResponse';
 import { Wishlist } from 'src/app/models/wishlist';
 import { AuthService } from 'src/app/services/auth.service';
 import { ImageService } from 'src/app/services/image.service';
+import { WishlistService } from 'src/app/services/wishlist.service';
 
 @Component({
   selector: 'app-wishlist',
@@ -23,7 +25,8 @@ export class WishlistComponent implements OnInit {
     private _snackBar: MatSnackBar, 
     private sanitizer: DomSanitizer, 
     private imageService: ImageService,
-    private router: Router
+    private router: Router,
+    private wishlistService: WishlistService
   ) { }
 
   ngOnInit(): void {
@@ -62,6 +65,23 @@ export class WishlistComponent implements OnInit {
 
   openProductDetails(productCode: string){
     this.router.navigate(['/product/' + productCode]);
+  }
+
+  removeProductFromWishlist(productId: number): void {
+    this.wishlistService.removeFromWishlist(productId).subscribe(
+          (response: JsonResponse) => {
+            this.openSnackBar(response.message, "");
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          },
+          (error) => {
+            this.openSnackBar(error.error?.message, "");
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          }
+    );
   }
 
 }

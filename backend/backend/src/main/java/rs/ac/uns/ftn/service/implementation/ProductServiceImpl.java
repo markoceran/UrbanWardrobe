@@ -111,8 +111,6 @@ public class ProductServiceImpl implements ProductService {
             Optional<Product> productFromWishlist = loggedUser.getWishList().getProducts().stream().filter(p ->  p.getId() == product.getId()).findFirst();
             if (productFromWishlist.isPresent()) {
                 productWithImages.setInWishlist(true);
-            }else {
-                productWithImages.setInWishlist(false);
             }
 
             productsWithImages.add(productWithImages);

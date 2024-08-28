@@ -21,4 +21,9 @@ export class BasketService {
         return this.http.put<JsonResponse>(`${environment.baseApiUrl}/${this.url}/removeBasketItem/${basketItemId}`, {});
     }
 
+    decreaseQuantityFromBasketItem(basketItemId: number): Observable<JsonResponse> {
+        return this.http.put<JsonResponse>(`${environment.baseApiUrl}/${this.url}/decreaseQuantityFromBasketItem/${basketItemId}`, {});
+    }
+
+
 }

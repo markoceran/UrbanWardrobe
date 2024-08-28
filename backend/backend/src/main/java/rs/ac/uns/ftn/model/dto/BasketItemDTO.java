@@ -23,4 +23,8 @@ public class BasketItemDTO {
     private Orderr order;
 
     private int quantity;
+
+    private boolean sizeOnStock = true;
+
+    private boolean haveEnoughOnStock = true;
 }

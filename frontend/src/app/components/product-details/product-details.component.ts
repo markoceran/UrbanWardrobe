@@ -58,7 +58,7 @@ export class ProductDetailsComponent implements OnInit {
           this.openSnackBar(response.message, "");
           setTimeout(() => {
             window.location.reload();
-          }, 2000);
+          }, 1000);
         },
         (error) => {
           this.openSnackBar(error.error?.message, "");

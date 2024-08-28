@@ -48,3 +48,11 @@
     margin: 10px 0;
   }
   
+  .out-of-stock{
+    color: red;
+  }
+
+  .options-btn{
+    border: none;
+    margin-right: 13px;
+  }

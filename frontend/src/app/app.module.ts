@@ -29,6 +29,8 @@ import { ProductDetailsComponent } from './components/product-details/product-de
 import { RegisterComponent } from './components/register/register.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { BasketComponent } from './components/basket/basket.component';
+import { OrderDetailsComponent } from './components/order-details/order-details.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,9 @@ import { BasketComponent } from './components/basket/basket.component';
     ProductDetailsComponent,
     RegisterComponent,
     WishlistComponent,
-    BasketComponent
+    BasketComponent,
+    OrderDetailsComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

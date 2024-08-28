@@ -12,4 +12,5 @@ export interface ProductWithImages {
     imagesName: string[];
     images: string[];
     inWishlist: boolean;
+    outOfStock: boolean
 }

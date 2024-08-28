@@ -33,6 +33,8 @@ public class ProductWithImages {
 
     private List<String> imagesName;
 
-    private boolean inWishlist;
+    private boolean inWishlist = false;
+
+    private boolean outOfStock = false;
 
 }

@@ -78,12 +78,40 @@
     border: none;
     margin-right: 13px;
   }
+
+  .tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
   
-  .change-quantity{
-    margin-right: 40px;
-    align-content: center;
+  .text-with-tooltip {
+    border-bottom: 1px dotted black; /* Optional: Adds a dotted underline to indicate that it's hoverable */
+  }
+  
+  .tooltip-text {
+    visibility: hidden;
+    width: 180px;
+    background-color: rgb(112, 112, 112);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Position the tooltip above the text */
+    left: 50%;
+    opacity: 0;
+    transition: opacity 0.3s;
+    left: 125%;
+    margin-left: -90px; /* Adjust based on the tooltip width */
+  }
+  
+  .tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
   }
 
-  .change-quantity input{
-    width: 50px;
+  .out-of-stock{
+    color: red;
   }

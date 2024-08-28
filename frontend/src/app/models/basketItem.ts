@@ -11,4 +11,6 @@ export interface BasketItem {
     basket: Basket;
     order: Order; 
     quantity: number;
+    sizeOnStock: boolean;
+    haveEnoughOnStock: boolean;
 }

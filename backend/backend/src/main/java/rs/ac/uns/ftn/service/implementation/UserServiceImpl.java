@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.service.implementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.helper.Helper;
 import rs.ac.uns.ftn.model.*;
 import rs.ac.uns.ftn.model.dto.BasketDTO;
 import rs.ac.uns.ftn.model.dto.BasketItemDTO;
@@ -29,6 +30,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ImageService imageService;
+
+    @Autowired
+    private Helper helper;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -118,6 +122,10 @@ public class UserServiceImpl implements UserService {
 
             productWithImages.setImagesName(fileNameList);
 
+            if(!helper.onStock(product)){
+                productWithImages.setOutOfStock(true);
+            }
+
 
             productsWithImages.add(productWithImages);
         }
@@ -151,6 +159,14 @@ public class UserServiceImpl implements UserService {
             basketItemDTO.setSize(basketItem.getSize());
             basketItemDTO.setQuantity(basketItem.getQuantity());
             basketItemDTO.setOrder(basketItem.getOrder());
+
+            if(!helper.sizeOnStock(basketItem.getProduct(), basketItem.getSize())){
+                basketItemDTO.setSizeOnStock(false);
+            }
+
+            if(!helper.haveEnoughOnStock(basketItem.getProduct(), basketItem.getSize(), basketItem.getQuantity())){
+                basketItemDTO.setHaveEnoughOnStock(false);
+            }
 
             ProductWithImages productWithImages = new ProductWithImages();
 

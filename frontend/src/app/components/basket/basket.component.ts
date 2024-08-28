@@ -3,8 +3,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Basket } from 'src/app/models/basket';
+import { JsonResponse } from 'src/app/models/jsonResponse';
 import { AuthService } from 'src/app/services/auth.service';
+import { BasketService } from 'src/app/services/basket.service';
 import { ImageService } from 'src/app/services/image.service';
+import { OrderService } from 'src/app/services/order.service';
+import { YesNoSnackBarService } from 'src/app/services/yesNoSnackBar.service';
 
 @Component({
   selector: 'app-basket',
@@ -22,14 +26,15 @@ export class BasketComponent implements OnInit {
   shippingAmount:number = 0;
   totalAmount:number = 0;
 
-  selectedBasketItemId: number | null = null;
-
   constructor(
     private authService: AuthService, 
     private _snackBar: MatSnackBar, 
     private sanitizer: DomSanitizer, 
     private imageService: ImageService,
-    private router: Router
+    private router: Router,
+    private yesNoSnackBarService: YesNoSnackBarService,
+    private basketService: BasketService,
+    private orderService: OrderService
   ) { }
 
   ngOnInit(): void {
@@ -48,7 +53,6 @@ export class BasketComponent implements OnInit {
           }
           this.totalAmount = this.productsAmount + this.shippingAmount;
 
-          // Fetch images
           if (basketItem.product.imagesName.length > 0) {
             this.imageService.getImage(basketItem.product.code, basketItem.product.imagesName[0]).subscribe(blob => {
               const image = URL.createObjectURL(blob);
@@ -79,8 +83,64 @@ export class BasketComponent implements OnInit {
     this.router.navigate(['/product/' + productCode]);
   }
 
-  openFormForEdit(basketItemId: number): void {
-    this.selectedBasketItemId = this.selectedBasketItemId === basketItemId ? null : basketItemId;
+  askForDeleteBasketItem(basketItemId: number): void {
+    this.yesNoSnackBarService.open('Are you sure you want to delete basket item?').then((result) => {
+      if (result) {
+        console.log('User clicked Yes');
+        this.basketService.removeBasketItem(basketItemId).subscribe(
+          (response: JsonResponse) => {
+            this.openSnackBar(response.message, "");
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          },
+          (error) => {
+            this.openSnackBar(error.error?.message, "");
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          }
+        );
+      } else {
+        // User clicked 'No' or the SnackBar dismissed automatically
+        console.log('User clicked No or SnackBar dismissed');
+      }
+    });
+  }
+
+  decreaseQuantity(basketItemId: number): void {
+    this.basketService.decreaseQuantityFromBasketItem(basketItemId).subscribe(
+        (response: JsonResponse) => {
+          this.openSnackBar(response.message, "");
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        },
+        (error) => {
+          this.openSnackBar(error.error?.message, "");
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        }
+    );
+  }
+
+  createOrder(){
+    if(this.basket.basketItems.length > 0){
+      this.orderService.create().subscribe(
+      (response: JsonResponse) => {
+        this.openSnackBar(response.message, "");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1300);
+      },
+      (error) => {
+        this.openSnackBar(error.error?.message, "");
+        setTimeout(() => {
+          window.location.reload();
+        }, 4000);
+      });
+    }
   }
 
 }
