@@ -1,6 +1,5 @@
-import { Basket } from "./basket";
+import { Order } from "./order";
 import { ShippingAddress } from "./shippingAddress";
-import { Wishlist } from "./wishlist";
 
 export class UserDTO {
     email!: string;
@@ -9,6 +8,5 @@ export class UserDTO {
     lastName!: string;
     phoneNumber!: string;
     shippingAddress!: ShippingAddress;
-    basket!: Basket;
-    wishlist!: Wishlist
+    orders!: Set<Order>;
 }

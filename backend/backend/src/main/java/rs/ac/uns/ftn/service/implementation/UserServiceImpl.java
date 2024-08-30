@@ -5,19 +5,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.helper.Helper;
 import rs.ac.uns.ftn.model.*;
-import rs.ac.uns.ftn.model.dto.BasketDTO;
-import rs.ac.uns.ftn.model.dto.BasketItemDTO;
-import rs.ac.uns.ftn.model.dto.UserDTO;
-import rs.ac.uns.ftn.model.dto.WishlistDTO;
+import rs.ac.uns.ftn.model.dto.*;
 import rs.ac.uns.ftn.repository.UserRepository;
 import rs.ac.uns.ftn.service.BasicUserService;
 import rs.ac.uns.ftn.service.ImageService;
 import rs.ac.uns.ftn.service.UserService;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -85,108 +81,142 @@ public class UserServiceImpl implements UserService {
     @Override
     public ShippingAddress updateShippingAddress(ShippingAddress shippingAddress, String loggedUserEmail) {
         User user = this.findByEmail(loggedUserEmail);
-        if (user != null) {
-            shippingAddress.setId(user.getShippingAddress().getId());
+        if (user != null && shippingAddress != null) {
+            ShippingAddress existingAddress = user.getShippingAddress();
+
+            if (existingAddress != null) {
+                shippingAddress.setId(existingAddress.getId());
+            } else {
+                return null;
+            }
+
             user.setShippingAddress(shippingAddress);
             this.save(user);
+
             return shippingAddress;
         }
         return null;
     }
 
+
     @Override
-    public WishlistDTO getUserWishlist(String email) throws IOException {
+    public Wishlist getUserWishlist(String email) {
         User user = findByEmail(email);
         if (user == null) {
             return null;
         }
 
-        WishlistDTO wishlistDTO = new WishlistDTO();
-        wishlistDTO.setId(user.getWishList().getId());
-
-        List<ProductWithImages> productsWithImages = new ArrayList<>();
-
-        for (Product product : user.getWishList().getProducts()) {
-
-            List<String> fileNameList = imageService.listFiles(product.getCode());
-
-            ProductWithImages productWithImages = new ProductWithImages();
-
-            productWithImages.setId(product.getId());
-            productWithImages.setName(product.getName());
-            productWithImages.setCode(product.getCode());
-            productWithImages.setDescription(product.getDescription());
-            productWithImages.setCategory(product.getCategory());
-            productWithImages.setPrice(product.getPrice());
-            productWithImages.setSizeQuantities(product.getSizeQuantities());
-
-            productWithImages.setImagesName(fileNameList);
-
-            if(!helper.onStock(product)){
-                productWithImages.setOutOfStock(true);
-            }
-
-
-            productsWithImages.add(productWithImages);
+        Wishlist wishlist = user.getWishList();
+        if (wishlist == null) {
+            return null;
         }
 
-        wishlistDTO.setProducts(productsWithImages);
+        for (Product product : wishlist.getProducts()) {
+            if (product == null) {
+                continue;
+            }
 
-        return wishlistDTO;
+            try {
+                List<String> fileNameList = imageService.listFiles(product.getCode());
+                product.setImagesName(fileNameList);
+            } catch (Exception e) {
+                product.setImagesName(Collections.emptyList());
+            }
 
+            if (!helper.onStock(product)) {
+                product.setOutOfStock(true);
+            }
+        }
+
+        wishlist.setUser(null);
+
+        return wishlist;
     }
 
     @Override
-    public BasketDTO getUserBasket(String email) throws IOException {
+    public Basket getUserBasket(String email) {
         User user = findByEmail(email);
         if (user == null) {
             return null;
         }
 
-        BasketDTO basketDTO = new BasketDTO();
-        basketDTO.setId(user.getBasket().getId());
+        Basket basket = user.getBasket();
+        if (basket == null) {
+            return null;
+        }
 
-        List<BasketItemDTO> basketItemDTOS = new ArrayList<>();
+        for (BasketItem basketItem : basket.getBasketItems()) {
 
-        for (BasketItem basketItem : user.getBasket().getBasketItems()) {
+            if (basketItem == null) {
+                continue;
+            }
 
-            List<String> fileNameList = imageService.listFiles(basketItem.getProduct().getCode());
-
-            BasketItemDTO basketItemDTO = new BasketItemDTO();
-
-            basketItemDTO.setId(basketItem.getId());
-            basketItemDTO.setBasket(basketItem.getBasket());
-            basketItemDTO.setSize(basketItem.getSize());
-            basketItemDTO.setQuantity(basketItem.getQuantity());
-            basketItemDTO.setOrder(basketItem.getOrder());
+            try {
+                List<String> fileNameList = imageService.listFiles(basketItem.getProduct().getCode());
+                basketItem.getProduct().setImagesName(fileNameList);
+            } catch (Exception e) {
+                basketItem.getProduct().setImagesName(Collections.emptyList());
+            }
 
             if(!helper.sizeOnStock(basketItem.getProduct(), basketItem.getSize())){
-                basketItemDTO.setSizeOnStock(false);
+                basketItem.setSizeOnStock(false);
             }
 
             if(!helper.haveEnoughOnStock(basketItem.getProduct(), basketItem.getSize(), basketItem.getQuantity())){
-                basketItemDTO.setHaveEnoughOnStock(false);
+                basketItem.setHaveEnoughOnStock(false);
             }
 
-            ProductWithImages productWithImages = new ProductWithImages();
-
-            productWithImages.setId(basketItem.getProduct().getId());
-            productWithImages.setName(basketItem.getProduct().getName());
-            productWithImages.setCode(basketItem.getProduct().getCode());
-            productWithImages.setDescription(basketItem.getProduct().getDescription());
-            productWithImages.setCategory(basketItem.getProduct().getCategory());
-            productWithImages.setPrice(basketItem.getProduct().getPrice());
-            productWithImages.setSizeQuantities(basketItem.getProduct().getSizeQuantities());
-            productWithImages.setImagesName(fileNameList);
-
-            basketItemDTO.setProduct(productWithImages);
-
-            basketItemDTOS.add(basketItemDTO);
+            basketItem.setOrder(null);
+            basketItem.setBasket(null);
         }
 
-        basketDTO.setBasketItems(basketItemDTOS);
+        basket.setUser(null);
 
-        return basketDTO;
+        return basket;
 
     }
+
+    @Override
+    public UserDTO getUserProfile(String email) {
+        User user = findByEmail(email);
+        if (user == null) {
+            return null;
+        }
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setFirstName(user.getFirstName());
+        userDTO.setLastName(user.getLastName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setPhoneNumber(user.getPhoneNumber());
+        userDTO.setShippingAddress(user.getShippingAddress());
+
+        for (Orderr order : user.getOrders()) {
+            if (order == null) {
+                continue;
+            }
+
+            for (BasketItem basketItem : order.getBasketItems()){
+
+                if (basketItem == null) {
+                    continue;
+                }
+
+                try {
+                    List<String> fileNameList = imageService.listFiles(basketItem.getProduct().getCode());
+                    basketItem.getProduct().setImagesName(fileNameList);
+                } catch (Exception e) {
+                    basketItem.getProduct().setImagesName(Collections.emptyList());
+                }
+
+                basketItem.setOrder(null);
+                basketItem.setBasket(null);
+            }
+
+            order.setUser(null);
+        }
+
+        userDTO.setOrders(user.getOrders());
+        return userDTO;
+    }
+
 }

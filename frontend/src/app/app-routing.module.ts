@@ -9,6 +9,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { BasketComponent } from './components/basket/basket.component';
 import { OrderDetailsComponent } from './components/order-details/order-details.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 
 const routes: Routes = [
@@ -44,6 +45,10 @@ const routes: Routes = [
   {
     path: 'order/:id',
     component: OrderDetailsComponent
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent
   }
 ];
 

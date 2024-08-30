@@ -1,6 +1,6 @@
-import { ProductWithImages } from "./productWithImages";
+import { Product } from "./product";
 
 export interface Wishlist {
     id: number;
-    products: ProductWithImages[];
+    products: Product[];
 }

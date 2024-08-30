@@ -4,7 +4,6 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { JsonResponse } from 'src/app/models/jsonResponse';
 import { Product } from 'src/app/models/product';
-import { ProductWithImages } from 'src/app/models/productWithImages';
 import { ImageService } from 'src/app/services/image.service';
 import { ProductService } from 'src/app/services/product.service';
 import { WishlistService } from 'src/app/services/wishlist.service';
@@ -17,7 +16,7 @@ import { WishlistService } from 'src/app/services/wishlist.service';
 })
 export class MainPageComponent implements OnInit  {
   
-  products: ProductWithImages[] = [];
+  products: Product[] = [];
   pageNumber = 0;
   currentPage = 0;
   totalElements = 0;
@@ -31,7 +30,7 @@ export class MainPageComponent implements OnInit  {
 
   loadProducts(): void {
     this.productService.getProducts(this.pageNumber).subscribe(response => {
-      this.products = response.data.map((product: ProductWithImages) => ({
+      this.products = response.data.map((product: Product) => ({
         ...product,
         images: [] // Ensure images is initialized
       }));

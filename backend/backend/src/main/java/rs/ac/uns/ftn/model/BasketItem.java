@@ -37,4 +37,9 @@ public class BasketItem {
 
     @Column(name = "quantity", nullable = false)
     private int quantity = 1;
+
+    @Transient
+    private boolean sizeOnStock = true;
+    @Transient
+    private boolean haveEnoughOnStock = true;
 }

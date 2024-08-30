@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -57,5 +58,11 @@ public class Product {
         return codeBuilder.toString();
     }
 
+    @Transient
+    private List<String> imagesName;
+    @Transient
+    private boolean inWishlist = false;
+    @Transient
+    private boolean outOfStock = false;
 
 }

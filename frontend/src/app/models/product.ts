@@ -9,4 +9,8 @@ export interface Product {
     sizeQuantities: Set<SizeQuantity>;
     price: number;
     category: ProductCategory;
+    imagesName: string[];
+    images: string[];
+    inWishlist: boolean;
+    outOfStock: boolean;
 }

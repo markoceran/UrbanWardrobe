@@ -12,7 +12,7 @@ export class HeaderComponent implements OnInit{
 
   role: any;
 
-  constructor(private router: Router,private authService:AuthService) { }
+  constructor(private authService:AuthService) { }
 
   
   ngOnInit(): void {
@@ -23,12 +23,6 @@ export class HeaderComponent implements OnInit{
 
   isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
-  }
-
-
-  logout() {
-    localStorage.clear();
-    this.router.navigate(['']);
   }
 
 }

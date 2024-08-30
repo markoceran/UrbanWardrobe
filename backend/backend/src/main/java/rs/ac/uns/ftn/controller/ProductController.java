@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.helper.TokenUtils;
 import rs.ac.uns.ftn.model.Product;
-import rs.ac.uns.ftn.model.ProductWithImages;
 import rs.ac.uns.ftn.model.Size;
 import rs.ac.uns.ftn.model.dto.JsonResponse;
 import rs.ac.uns.ftn.model.dto.PaginationResponse;
@@ -20,7 +19,6 @@ import rs.ac.uns.ftn.service.ProductService;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 @RestController
@@ -48,7 +46,7 @@ public class ProductController {
     @GetMapping("/{code}")
     public ResponseEntity<?> getByCode(@PathVariable String code) throws IOException {
         logger.info("Find product by code");
-        ProductWithImages product = this.productService.findByCode(code);
+        Product product = this.productService.findByCode(code);
 
         if (product != null) {
             return ResponseEntity.ok(product);
@@ -107,7 +105,7 @@ public class ProductController {
 
         Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Order.asc("id")));
 
-        Page<ProductWithImages> productsPage = productService.getProducts(pageable, loggedUserEmail);
+        Page<Product> productsPage = productService.getProducts(pageable, loggedUserEmail);
 
         PaginationResponse response = new PaginationResponse("Products fetched successfully.");
         response.setData(productsPage.getContent());

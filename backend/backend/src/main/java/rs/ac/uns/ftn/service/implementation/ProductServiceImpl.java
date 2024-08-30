@@ -13,8 +13,8 @@ import rs.ac.uns.ftn.service.SizeQuantityService;
 import rs.ac.uns.ftn.service.UserService;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,30 +58,25 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductWithImages findByCode(String code) throws IOException {
+    public Product findByCode(String code) {
 
         Product product = productRepository.findByCode(code).orElse(null);
         if (product == null) {
             return null;
         }
-        List<String> fileNameList = imageService.listFiles(code);
-        ProductWithImages productWithImages = new ProductWithImages();
 
-        productWithImages.setId(product.getId());
-        productWithImages.setName(product.getName());
-        productWithImages.setCode(product.getCode());
-        productWithImages.setDescription(product.getDescription());
-        productWithImages.setCategory(product.getCategory());
-        productWithImages.setPrice(product.getPrice());
-        productWithImages.setSizeQuantities(product.getSizeQuantities());
+        try {
+            List<String> fileNameList = imageService.listFiles(code);
+            product.setImagesName(fileNameList);
+        } catch (Exception e) {
+            product.setImagesName(Collections.emptyList());
+        }
 
-        productWithImages.setImagesName(fileNameList);
-
-        return productWithImages;
+        return product;
     }
 
     @Override
-    public Page<ProductWithImages> getProducts(Pageable pageable, String loggedUserEmail) throws IOException {
+    public Page<Product> getProducts(Pageable pageable, String loggedUserEmail) {
 
         User loggedUser = userService.findByEmail(loggedUserEmail);
         if (loggedUser == null) {
@@ -90,34 +85,23 @@ public class ProductServiceImpl implements ProductService {
 
         Page<Product> productPage = productRepository.findAvailableProducts(pageable);
         List<Product> products = productPage.getContent();
-        List<ProductWithImages> productsWithImages = new ArrayList<>();
 
         for (Product product : products) {
 
-            List<String> fileNameList = imageService.listFiles(product.getCode());
-
-            ProductWithImages productWithImages = new ProductWithImages();
-
-            productWithImages.setId(product.getId());
-            productWithImages.setName(product.getName());
-            productWithImages.setCode(product.getCode());
-            productWithImages.setDescription(product.getDescription());
-            productWithImages.setCategory(product.getCategory());
-            productWithImages.setPrice(product.getPrice());
-            productWithImages.setSizeQuantities(product.getSizeQuantities());
-
-            productWithImages.setImagesName(fileNameList);
+            try {
+                List<String> fileNameList = imageService.listFiles(product.getCode());
+                product.setImagesName(fileNameList);
+            } catch (Exception e) {
+                product.setImagesName(Collections.emptyList());
+            }
 
             Optional<Product> productFromWishlist = loggedUser.getWishList().getProducts().stream().filter(p ->  p.getId() == product.getId()).findFirst();
             if (productFromWishlist.isPresent()) {
-                productWithImages.setInWishlist(true);
+                product.setInWishlist(true);
             }
 
-            productsWithImages.add(productWithImages);
         }
-
-        // Convert List<ProductWithImages> to Page<ProductWithImages>
-        return new PageImpl<>(productsWithImages, pageable, productPage.getTotalElements());
+        return new PageImpl<>(products, pageable, productPage.getTotalElements());
     }
 
 

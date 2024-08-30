@@ -113,4 +113,8 @@ export class AuthService {
     return this.http.get<Basket>(`${environment.baseApiUrl}/${this.url}/basket/${this.getUserEmailFromToken()}`);
   }
 
+  getUserProfile(): Observable<UserDTO> {
+    return this.http.get<UserDTO>(`${environment.baseApiUrl}/${this.url}/profile/${this.getUserEmailFromToken()}`);
+  }
+
 }

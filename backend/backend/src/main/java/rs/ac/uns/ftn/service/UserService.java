@@ -1,10 +1,10 @@
 package rs.ac.uns.ftn.service;
 
+import rs.ac.uns.ftn.model.Basket;
 import rs.ac.uns.ftn.model.ShippingAddress;
 import rs.ac.uns.ftn.model.User;
-import rs.ac.uns.ftn.model.dto.BasketDTO;
+import rs.ac.uns.ftn.model.Wishlist;
 import rs.ac.uns.ftn.model.dto.UserDTO;
-import rs.ac.uns.ftn.model.dto.WishlistDTO;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,7 +24,9 @@ public interface UserService {
 
     ShippingAddress updateShippingAddress(ShippingAddress shippingAddress, String loggedUserEmail);
 
-    WishlistDTO getUserWishlist(String email) throws IOException;
+    Wishlist getUserWishlist(String email);
 
-    BasketDTO getUserBasket(String email) throws IOException;
+    Basket getUserBasket(String email);
+
+    UserDTO getUserProfile(String email);
 }

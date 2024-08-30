@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { JsonResponse } from 'src/app/models/jsonResponse';
-import { ProductWithImages } from 'src/app/models/productWithImages';
+import { Product } from 'src/app/models/product';
 import { Size } from 'src/app/models/size';
 import { BasketService } from 'src/app/services/basket.service';
 import { ImageService } from 'src/app/services/image.service';
@@ -16,7 +16,7 @@ import { ProductService } from 'src/app/services/product.service';
 })
 export class ProductDetailsComponent implements OnInit {
 
-  product!: ProductWithImages;
+  product!: Product;
   selectedSize: string | null = null;
   currentSlideIndex = 0;
 
