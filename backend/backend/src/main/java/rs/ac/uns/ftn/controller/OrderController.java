@@ -44,22 +44,12 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<?> getById(@PathVariable Long orderId) {
-        Optional<Orderr> order = orderService.getById(orderId);
-        if (order.isPresent()) {
-            return ResponseEntity.ok(order.get());
+    public ResponseEntity<Orderr> getById(@PathVariable Long orderId) {
+        Orderr order = orderService.getByIdWithImages(orderId);
+        if (order != null) {
+            return ResponseEntity.ok(order);
         }
         return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping("/myOrders")
-    public ResponseEntity<?> myOrders(HttpServletRequest request) {
-        String token = tokenUtils.extractTokenFromRequest(request);
-        String loggedUserEmail = tokenUtils.getEmailFromToken(token);
-
-        List<Orderr> myOrders = orderService.getByUser(loggedUserEmail);
-
-        return ResponseEntity.ok(myOrders);
     }
 
     @PutMapping("/cancelOrder/{orderId}")

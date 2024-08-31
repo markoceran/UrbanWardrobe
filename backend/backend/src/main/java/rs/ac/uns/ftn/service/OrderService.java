@@ -5,6 +5,7 @@ import rs.ac.uns.ftn.model.User;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface OrderService {
 
@@ -14,7 +15,7 @@ public interface OrderService {
 
     List<Orderr> getAll();
 
-    List<Orderr> getByUser(String loggedUserEmail);
+    Orderr getByIdWithImages(Long id);
 
     Optional<Orderr> getById(Long id);
 
@@ -27,4 +28,5 @@ public interface OrderService {
     Orderr deliverOrder(Long orderId);
 
     List<Orderr> getSentOrders();
+
 }

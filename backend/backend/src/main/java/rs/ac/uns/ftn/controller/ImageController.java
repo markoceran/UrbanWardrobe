@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import rs.ac.uns.ftn.model.dto.JsonResponse;
-import rs.ac.uns.ftn.service.ImageService;
+import rs.ac.uns.ftn.service.implementation.ImageService;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -6,20 +6,21 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.helper.Helper;
 import rs.ac.uns.ftn.model.*;
 import rs.ac.uns.ftn.model.dto.*;
+import rs.ac.uns.ftn.repository.OrderRepository;
 import rs.ac.uns.ftn.repository.UserRepository;
 import rs.ac.uns.ftn.service.BasicUserService;
-import rs.ac.uns.ftn.service.ImageService;
 import rs.ac.uns.ftn.service.UserService;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     @Autowired
     private BasicUserService basicUserService;
@@ -128,8 +129,6 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        wishlist.setUser(null);
-
         return wishlist;
     }
 
@@ -166,14 +165,8 @@ public class UserServiceImpl implements UserService {
                 basketItem.setHaveEnoughOnStock(false);
             }
 
-            basketItem.setOrder(null);
-            basketItem.setBasket(null);
         }
-
-        basket.setUser(null);
-
         return basket;
-
     }
 
     @Override
@@ -190,32 +183,10 @@ public class UserServiceImpl implements UserService {
         userDTO.setPhoneNumber(user.getPhoneNumber());
         userDTO.setShippingAddress(user.getShippingAddress());
 
-        for (Orderr order : user.getOrders()) {
-            if (order == null) {
-                continue;
-            }
+        // Fetch sorted orders from the repository
+        Set<Orderr> sortedOrders = orderRepository.findOrdersByUserEmail(email);
+        userDTO.setOrders(sortedOrders);
 
-            for (BasketItem basketItem : order.getBasketItems()){
-
-                if (basketItem == null) {
-                    continue;
-                }
-
-                try {
-                    List<String> fileNameList = imageService.listFiles(basketItem.getProduct().getCode());
-                    basketItem.getProduct().setImagesName(fileNameList);
-                } catch (Exception e) {
-                    basketItem.getProduct().setImagesName(Collections.emptyList());
-                }
-
-                basketItem.setOrder(null);
-                basketItem.setBasket(null);
-            }
-
-            order.setUser(null);
-        }
-
-        userDTO.setOrders(user.getOrders());
         return userDTO;
     }
 

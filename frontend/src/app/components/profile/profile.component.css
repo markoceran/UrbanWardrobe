@@ -70,13 +70,12 @@
   }
   
   .profile-content {
-    padding: 30px;
+    padding: 54px;
+    text-align: center;
   }
   
   .profile-content h3 {
     font-size: 20px;
-    border-bottom: 1px solid rgb(89, 125, 174);
-    width: fit-content;
     margin-bottom: 20px;
   }
 
@@ -85,7 +84,7 @@
   }
   
   .logout-btn {
-    background-color: #dc3545;
+    background-color: #cc1515b5;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -96,4 +95,54 @@
   .logout-btn:hover {
     background-color: #c82333;
   }
+
+  .order-card {
+    display: flex;
+    flex-direction: row;
+    background-color: #adbadcaf;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-top: 10px;
+    border: 1px solid rgba(97, 97, 97, 0.7);
+  }
+
+  .order-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.465);
+    cursor: pointer;
+  }
   
+  .order-info {
+    flex: 1;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .order-info h2 {
+    font-size: 20px;
+    margin-top: 5px;
+    margin-bottom: 17px;
+  }
+  
+  .order-info p {
+    margin: 4px 0;
+    font-size: 15px;
+  }
+  
+
+.status-processing {
+  color: orange;
+}
+
+.status-sent {
+  color: blue;
+}
+
+.status-delivered {
+  color: green;
+}
+
+.status-cancelled {
+  color: red;
+}

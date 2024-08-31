@@ -20,6 +20,9 @@ export class ProfileComponent implements OnInit {
     this.authService.getUserProfile().subscribe(
       (response: UserDTO) => {
         this.user = response;
+        this.user.orders.forEach(order => {
+          order.creationTime = this.convertToDate(order.creationTime.toString());
+        })
       },
       (error) => {
         this.openSnackBar(error.error?.message, "");
@@ -32,17 +35,33 @@ export class ProfileComponent implements OnInit {
   }
 
   editProfile() {
-    // Logic to edit profile
+    
   }
 
   logout() {
-    localStorage.clear();
-    this.router.navigate(['']);
+    this.authService.logout();
   }
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 3500
     });
+  }
+
+  convertToDate(dateString: string): Date {
+    const dateParts = dateString.split(',').map(part => parseInt(part, 10));
+    return new Date(
+      dateParts[0], // Year
+      dateParts[1] - 1, // Month (0-indexed)
+      dateParts[2], // Day
+      dateParts[3], // Hour
+      dateParts[4], // Minute
+      dateParts[5], // Second
+      dateParts[6] / 1000000 // Convert nanoseconds to milliseconds (since JavaScript Date uses milliseconds)
+    );
+  }
+
+  openOrderDetails(id:number){
+    this.router.navigate(['/order/' + id]);
   }
 }

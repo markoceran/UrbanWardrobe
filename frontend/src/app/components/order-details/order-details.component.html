@@ -1,1 +1,48 @@
 <app-header></app-header>
+<div class="order-details-container">
+    <div class="order-header">
+        <h1>Order details</h1>
+        <p>Order date: {{ order?.creationTime | date:'dd.MM.yyyy - HH:mm' }}</p>
+        <p>Estimated delivery: {{ order?.estimatedDeliveryTime | date:'dd.MM.yyyy' }}</p>
+    </div>
+
+    <div class="order-status">
+        <h3>
+            <strong>Status:
+            <span [ngClass]="{
+              'status-processing': order?.status === 'Processing',
+              'status-sent': order?.status === 'Sent',
+              'status-delivered': order?.status === 'Delivered',
+              'status-cancelled': order?.status === 'Cancelled'
+            }">
+              {{ order?.status }}
+            </span>
+            </strong>
+        </h3>
+    </div>
+
+    <div class="order-items">
+        <h2>Items in your order</h2>
+        <div class="order-item" *ngFor="let item of order?.basketItems">
+            <img *ngIf="item.product.images.length > 0" [src]="sanitizeUrl(item.product.images[0])" alt="{{ item.product.name }} image" class="product-image">
+            <div class="item-details">
+                <h3>{{ item.product.name }}</h3>
+                <p>Code: {{ item.product.code }}</p>
+                <p>Size: {{ item.size }}</p>
+                <p>Quantity: {{ item.quantity }}</p>
+                <p>Price: €{{ item.product.price }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="order-summary">
+        <h2>Order summary</h2>
+        <p>Products amount: €{{ order?.productsAmount }}</p>
+        <p>Shipping: €{{ order?.shippingAmount }}</p>
+        <h3>Total: €{{ order?.totalAmount }}</h3>
+    </div>
+
+    <div class="order-actions">
+        <button class="cancel-order-btn">Cancel order</button>
+    </div>
+</div>

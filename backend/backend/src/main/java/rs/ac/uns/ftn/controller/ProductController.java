@@ -38,7 +38,7 @@ public class ProductController {
         this.logger = Logger.getLogger(String.valueOf(UserController.class));
     }
 
-    @GetMapping("allProduct")
+    @GetMapping("/allProduct")
     public List<Product> allProduct() {
         return this.productService.getAll();
     }

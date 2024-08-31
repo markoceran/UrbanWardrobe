@@ -7,13 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.model.*;
 import rs.ac.uns.ftn.repository.ProductRepository;
-import rs.ac.uns.ftn.service.ImageService;
 import rs.ac.uns.ftn.service.ProductService;
 import rs.ac.uns.ftn.service.SizeQuantityService;
 import rs.ac.uns.ftn.service.UserService;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;

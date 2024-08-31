@@ -1,4 +1,4 @@
-package rs.ac.uns.ftn.service;
+package rs.ac.uns.ftn.service.implementation;
 
 import io.minio.*;
 import io.minio.errors.MinioException;

@@ -3,8 +3,8 @@ import { OrderStatus } from "./orderStatus";
 
 export interface Order {
     id: number;
-    creationTime: string;
-    estimatedDeliveryTime: string;
+    creationTime: Date;
+    estimatedDeliveryTime: Date;
     basketItems: BasketItem[];
     productsAmount: number;
     shippingAmount: number;

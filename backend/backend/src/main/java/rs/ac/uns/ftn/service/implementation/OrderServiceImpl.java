@@ -10,6 +10,7 @@ import rs.ac.uns.ftn.model.User;
 import rs.ac.uns.ftn.repository.OrderRepository;
 import rs.ac.uns.ftn.service.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -35,6 +36,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private Helper helper;
+
+    @Autowired
+    private ImageService imageService;
 
     @Override
     public String createOrder(String loggedUserEmail) {
@@ -124,9 +128,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Orderr> getByUser(String loggedUserEmail) {
-        User loggedUser = userService.findByEmail(loggedUserEmail);
-        return orderRepository.findByUser(loggedUser);
+    public Orderr getByIdWithImages(Long id) {
+        Optional<Orderr> orderOptional =  orderRepository.findById(id);
+        if (orderOptional.isPresent()) {
+            for (BasketItem basketItem : orderOptional.get().getBasketItems()){
+                if (basketItem == null) {
+                    continue;
+                }
+                try {
+                    List<String> fileNameList = imageService.listFiles(basketItem.getProduct().getCode());
+                    basketItem.getProduct().setImagesName(fileNameList);
+                } catch (Exception e) {
+                    basketItem.getProduct().setImagesName(Collections.emptyList());
+                }
+            }
+            return orderOptional.get();
+        }else{
+            return null;
+        }
     }
 
     @Override

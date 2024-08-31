@@ -8,6 +8,7 @@ import { UserDTO } from "../models/userDTO";
 import { JsonResponse } from "../models/jsonResponse";
 import { Wishlist } from "../models/wishlist";
 import { Basket } from "../models/basket";
+import { Router } from "@angular/router";
 
 @Injectable({
 providedIn: 'root'
@@ -15,7 +16,7 @@ providedIn: 'root'
 export class AuthService {
   
   private url = "user";
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   Login(loginDTO: LoginDTO): Observable<string> {
     return this.http.post(`${environment.baseApiUrl}/${this.url}/login`, loginDTO, {responseType : 'text'});
@@ -26,6 +27,11 @@ export class AuthService {
       return false;
     }
     return true;
+  }
+
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['']);
   }
 
    private secretKey = 'my_secret_key';
@@ -96,6 +102,12 @@ export class AuthService {
       return Date.now() >= expiryTimestamp;
     }
     return true;
+   }
+
+   checkTokenOnStartup(): void {
+    if (this.isTokenExpired()) {
+      this.logout();
+    }
    }
 
   register(user: UserDTO): Observable<JsonResponse> {
