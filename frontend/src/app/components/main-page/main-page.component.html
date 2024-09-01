@@ -22,9 +22,9 @@
     </div>
 </div>
 <div class="pagination">
-  <button class="btn btn-outline-secondary" (click)="goToPage(pageNumber - 1)" [disabled]="pageNumber === 0">Previous</button>
+  <button class="btn btn-outline-secondary" (click)="goToPage(pageNumber - 1)" [disabled]="pageNumber === 0 || totalPages === 0">Previous</button>
   <span>Page {{ pageNumber + 1 }} of {{ totalPages }}</span>
-  <button class="btn btn-outline-secondary" (click)="goToPage(pageNumber + 1)" [disabled]="pageNumber + 1 === totalPages">Next</button>
+  <button class="btn btn-outline-secondary" (click)="goToPage(pageNumber + 1)" [disabled]="pageNumber + 1 === totalPages || totalPages === 0">Next</button>
 </div>
   
 

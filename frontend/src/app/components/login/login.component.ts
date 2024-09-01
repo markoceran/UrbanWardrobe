@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
     this.authService.Login(login).subscribe({
       next: (token: string) => {
         localStorage.setItem('authToken', token);
-        this.router.navigate(['/Main-Page']);
+        this.router.navigate(['/Main-Page', 'home']);
       },
       error: (error) => {
         this.formGroup.setErrors({ unauthenticated: true });

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.helper.TokenUtils;
 import rs.ac.uns.ftn.model.Product;
+import rs.ac.uns.ftn.model.ProductCategory;
 import rs.ac.uns.ftn.model.Size;
 import rs.ac.uns.ftn.model.dto.JsonResponse;
 import rs.ac.uns.ftn.model.dto.PaginationResponse;
@@ -19,6 +20,7 @@ import rs.ac.uns.ftn.service.ProductService;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @RestController
@@ -91,7 +93,7 @@ public class ProductController {
         return null;
     }
 
-    @GetMapping("")
+    @GetMapping("/home")
     public ResponseEntity<PaginationResponse> getProducts(
             @RequestParam(defaultValue = "0") int page, HttpServletRequest request) throws IOException {
 
@@ -106,6 +108,34 @@ public class ProductController {
         Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Order.asc("id")));
 
         Page<Product> productsPage = productService.getProducts(pageable, loggedUserEmail);
+
+        PaginationResponse response = new PaginationResponse("Products fetched successfully.");
+        response.setData(productsPage.getContent());
+        response.setTotalElements(productsPage.getTotalElements());
+        response.setTotalPages(productsPage.getTotalPages());
+        response.setCurrentPage(productsPage.getNumber());
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/byCategory")
+    public ResponseEntity<PaginationResponse> getProductsByCategory(
+            @RequestParam(defaultValue = "0") int page, @RequestParam Map<String, String> categoryRequest, HttpServletRequest request) throws IOException {
+
+        if(page < 0){
+            PaginationResponse response = new PaginationResponse("Page number is less than 0.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        String categoryValue = categoryRequest.get("category");
+        ProductCategory productCategory = ProductCategory.valueOf(categoryValue);
+
+        String token = tokenUtils.extractTokenFromRequest(request);
+        String loggedUserEmail = tokenUtils.getEmailFromToken(token);
+
+        Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Order.asc("id")));
+
+        Page<Product> productsPage = productService.getProductsByCategory(pageable, productCategory, loggedUserEmail);
 
         PaginationResponse response = new PaginationResponse("Products fetched successfully.");
         response.setData(productsPage.getContent());

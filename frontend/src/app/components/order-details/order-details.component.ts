@@ -3,9 +3,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { BasketItem } from 'src/app/models/basketItem';
+import { JsonResponse } from 'src/app/models/jsonResponse';
 import { Order } from 'src/app/models/order';
 import { ImageService } from 'src/app/services/image.service';
 import { OrderService } from 'src/app/services/order.service';
+import { YesNoSnackBarService } from 'src/app/services/yesNoSnackBar.service';
 
 @Component({
   selector: 'app-order-details',
@@ -21,7 +23,8 @@ export class OrderDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
     private sanitizer: DomSanitizer,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private yesNoSnackBarService: YesNoSnackBarService
   ) { }
 
   ngOnInit(): void {
@@ -44,7 +47,7 @@ export class OrderDetailsComponent implements OnInit {
       },
       (error) => {
         this.openSnackBar(error.error?.message, "");
-      });
+    });
   }
 
   openSnackBar(message: string, action: string) {
@@ -68,5 +71,31 @@ export class OrderDetailsComponent implements OnInit {
       dateParts[5], // Second
       dateParts[6] / 1000000 // Convert nanoseconds to milliseconds (since JavaScript Date uses milliseconds)
     );
+  }
+
+  cancelOrder(orderId:number | undefined){
+    this.yesNoSnackBarService.open('Are you sure you want to cancel order?').then((result) => {
+      if (result) {
+        console.log('User clicked Yes');
+        if(orderId != undefined){
+          this.orderService.cancel(orderId).subscribe(
+          (response: JsonResponse) => {
+            this.openSnackBar(response.message, "");
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          },
+          (error) => {
+            this.openSnackBar(error.error?.message, "");
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          });
+        }
+      } else {
+        // User clicked 'No' or the SnackBar dismissed automatically
+        console.log('User clicked No or SnackBar dismissed');
+      }
+    });
   }
 }

@@ -139,7 +139,7 @@ export class CreateProductComponent implements OnInit {
       this.uploadImages();
       this.openSnackBar("Product created successfully!", "");
       console.log('Product created successfully!');
-      this.router.navigate(['/Main-Page']);
+      this.router.navigate(['/Main-Page', 'home']);
     },
     (error) => {
       this.openSnackBar("Error creating product!", "");

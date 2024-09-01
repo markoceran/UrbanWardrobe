@@ -11,6 +11,7 @@ import rs.ac.uns.ftn.service.ProductService;
 import rs.ac.uns.ftn.service.SizeQuantityService;
 import rs.ac.uns.ftn.service.UserService;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -81,6 +82,35 @@ public class ProductServiceImpl implements ProductService {
         }
 
         Page<Product> productPage = productRepository.findAvailableProducts(pageable);
+        List<Product> products = productPage.getContent();
+
+        for (Product product : products) {
+
+            try {
+                List<String> fileNameList = imageService.listFiles(product.getCode());
+                product.setImagesName(fileNameList);
+            } catch (Exception e) {
+                product.setImagesName(Collections.emptyList());
+            }
+
+            Optional<Product> productFromWishlist = loggedUser.getWishList().getProducts().stream().filter(p ->  p.getId() == product.getId()).findFirst();
+            if (productFromWishlist.isPresent()) {
+                product.setInWishlist(true);
+            }
+
+        }
+        return new PageImpl<>(products, pageable, productPage.getTotalElements());
+    }
+
+    @Override
+    public Page<Product> getProductsByCategory(Pageable pageable, ProductCategory productCategory, String loggedUserEmail) throws IOException {
+
+        User loggedUser = userService.findByEmail(loggedUserEmail);
+        if (loggedUser == null) {
+            return Page.empty(pageable);
+        }
+
+        Page<Product> productPage = productRepository.findAvailableProductsByCategory(productCategory, pageable);
         List<Product> products = productPage.getContent();
 
         for (Product product : products) {

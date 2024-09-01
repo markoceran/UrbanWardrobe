@@ -20,4 +20,8 @@ export class OrderService {
         return this.http.get<any>(`${environment.baseApiUrl}/${this.url}/${orderId}`);
     }
 
+    cancel(orderId: number): Observable<JsonResponse> {
+        return this.http.put<JsonResponse>(`${environment.baseApiUrl}/${this.url}/cancelOrder/${orderId}`, {});
+    }
+
 }

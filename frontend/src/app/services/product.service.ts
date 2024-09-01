@@ -16,7 +16,14 @@ export class ProductService {
     
     getProducts(page: number): Observable<PaginationResponse> {
         const params = new HttpParams().set('page', page.toString());
-        return this.http.get<PaginationResponse>(`${environment.baseApiUrl}/${this.url}`, { params });
+        return this.http.get<PaginationResponse>(`${environment.baseApiUrl}/${this.url}/home`, { params });
+    }
+
+    getProductsByCategory(page: number, category: string): Observable<PaginationResponse> {
+        const params = new HttpParams()
+        .set('page', page.toString())
+        .set('category', category);
+        return this.http.get<PaginationResponse>(`${environment.baseApiUrl}/${this.url}/byCategory`, { params });
     }
 
     createProduct(product: NewProduct): Observable<Product> {

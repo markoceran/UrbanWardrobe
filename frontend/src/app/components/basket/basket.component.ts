@@ -83,7 +83,7 @@ export class BasketComponent implements OnInit {
     this.router.navigate(['/product/' + productCode]);
   }
 
-  askForDeleteBasketItem(basketItemId: number): void {
+  deleteBasketItem(basketItemId: number): void {
     this.yesNoSnackBarService.open('Are you sure you want to delete basket item?').then((result) => {
       if (result) {
         console.log('User clicked Yes');

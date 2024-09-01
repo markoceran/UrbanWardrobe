@@ -1,9 +1,35 @@
 <nav class="nav">
   <ul class="navbar">
     <li class="nav-item navbar-left">
-      <a routerLink="/Main-Page"><img class="logo" src="assets/IMG_1027.png" alt="Logo"></a>
-      <a class="nav-link">Woman</a>
-      <a class="nav-link">Men</a>
+      <a [routerLink]="['/Main-Page', 'home']"><img class="logo" src="assets/IMG_1027.png" alt="Logo"></a>
+      <div class="dropdown">
+        <a class="nav-link dropdown-toggle">Woman</a>
+        <ul class="dropdown-menu">
+          <li><a [routerLink]="['/Main-Page', 'WomenTShirts']">T-Shirts</a></li>
+          <li><a [routerLink]="['/Main-Page', 'WomenShirts']">Shirts</a></li>
+          <li><a [routerLink]="['/Main-Page', 'WomenTrousers']">Trousers</a></li>
+          <li><a [routerLink]="['/Main-Page', 'WomenJeans']">Jeans</a></li>
+          <li><a [routerLink]="['/Main-Page', 'WomenSweatshirts']">Sweatshirts</a></li>
+          <li><a [routerLink]="['/Main-Page', 'WomenJackets']">Jackets</a></li>
+          <li><a [routerLink]="['/Main-Page', 'WomenSport']">Sport</a></li>
+          <li><a [routerLink]="['/Main-Page', 'WomenElegant']">Elegant</a></li>
+          <li><a [routerLink]="['/Main-Page', 'WomenAccessories']">Accessories</a></li>
+        </ul>
+      </div>
+      <div class="dropdown">
+        <a class="nav-link dropdown-toggle">Men</a>
+        <ul class="dropdown-menu">
+          <li><a [routerLink]="['/Main-Page', 'MenTShirts']">T-Shirts</a></li>
+          <li><a [routerLink]="['/Main-Page', 'MenShirts']">Shirts</a></li>
+          <li><a [routerLink]="['/Main-Page', 'MenTrousers']">Trousers</a></li>
+          <li><a [routerLink]="['/Main-Page', 'MenJeans']">Jeans</a></li>
+          <li><a [routerLink]="['/Main-Page', 'MenSweatshirts']">Sweatshirts</a></li>
+          <li><a [routerLink]="['/Main-Page', 'MenJackets']">Jackets</a></li>
+          <li><a [routerLink]="['/Main-Page', 'MenSport']">Sport</a></li>
+          <li><a [routerLink]="['/Main-Page', 'MenElegant']">Elegant</a></li>
+          <li><a [routerLink]="['/Main-Page', 'MenAccessories']">Accessories</a></li>
+        </ul>
+      </div>
     </li>
     <li class="nav-item navbar-right">
       <a class="nav-link" routerLink="/createProduct">Create product</a>

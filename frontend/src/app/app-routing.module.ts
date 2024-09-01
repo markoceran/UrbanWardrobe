@@ -14,7 +14,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [
   {
-    path: 'Main-Page',
+    path: 'Main-Page/:category',
     component: MainPageComponent
   },
   {
