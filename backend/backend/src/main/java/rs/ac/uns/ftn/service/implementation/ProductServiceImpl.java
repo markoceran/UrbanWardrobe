@@ -35,12 +35,6 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private BasicUserService basicUserService;
 
-
-    @Override
-    public List<Product> getAll() {
-        return productRepository.findAll();
-    }
-
     @Override
     public Optional<Product> getById(Long id) {
         return productRepository.findById(id);
@@ -177,5 +171,75 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+
+    @Override
+    public Page<Product> getAllProducts(Pageable pageable, String loggedUserEmail) {
+
+        BasicUser loggedUser = basicUserService.findByEmail(loggedUserEmail);
+        if (loggedUser == null) {
+            return Page.empty(pageable);
+        }
+
+        Page<Product> productPage = productRepository.findAll(pageable);
+        List<Product> products = productPage.getContent();
+
+        for (Product product : products) {
+
+            try {
+                List<String> fileNameList = imageService.listFiles(product.getCode());
+                product.setImagesName(fileNameList);
+            } catch (Exception e) {
+                product.setImagesName(Collections.emptyList());
+            }
+
+            if(loggedUser.getRole() == Role.USER){
+                User user = userService.findByEmail(loggedUserEmail);
+                if (user == null) {
+                    return Page.empty(pageable);
+                }
+                Optional<Product> productFromWishlist = user.getWishList().getProducts().stream().filter(p ->  p.getId() == product.getId()).findFirst();
+                if (productFromWishlist.isPresent()) {
+                    product.setInWishlist(true);
+                }
+            }
+
+        }
+        return new PageImpl<>(products, pageable, productPage.getTotalElements());
+    }
+
+    @Override
+    public Page<Product> getAllProductsByCategory(Pageable pageable, ProductCategory productCategory, String loggedUserEmail) {
+
+        BasicUser loggedUser = basicUserService.findByEmail(loggedUserEmail);
+        if (loggedUser == null) {
+            return Page.empty(pageable);
+        }
+
+        Page<Product> productPage = productRepository.findByCategory(productCategory, pageable);
+        List<Product> products = productPage.getContent();
+
+        for (Product product : products) {
+
+            try {
+                List<String> fileNameList = imageService.listFiles(product.getCode());
+                product.setImagesName(fileNameList);
+            } catch (Exception e) {
+                product.setImagesName(Collections.emptyList());
+            }
+
+            if(loggedUser.getRole() == Role.USER){
+                User user = userService.findByEmail(loggedUserEmail);
+                if (user == null) {
+                    return Page.empty(pageable);
+                }
+                Optional<Product> productFromWishlist = user.getWishList().getProducts().stream().filter(p ->  p.getId() == product.getId()).findFirst();
+                if (productFromWishlist.isPresent()) {
+                    product.setInWishlist(true);
+                }
+            }
+
+        }
+        return new PageImpl<>(products, pageable, productPage.getTotalElements());
+    }
 
 }

@@ -44,4 +44,15 @@ export class ProductService {
         return this.http.put<JsonResponse>(`${environment.baseApiUrl}/${this.url}/refillQuantity/${productId}`, null, {params});
     }
     
+    getAllProducts(page: number): Observable<PaginationResponse> {
+        const params = new HttpParams().set('page', page.toString());
+        return this.http.get<PaginationResponse>(`${environment.baseApiUrl}/${this.url}/allProduct`, { params });
+    }
+
+    getAllProductsByCategory(page: number, category: string): Observable<PaginationResponse> {
+        const params = new HttpParams()
+        .set('page', page.toString())
+        .set('category', category);
+        return this.http.get<PaginationResponse>(`${environment.baseApiUrl}/${this.url}/allProductsByCategory`, { params });
+    }
 }

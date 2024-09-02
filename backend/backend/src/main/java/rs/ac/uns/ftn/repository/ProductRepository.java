@@ -14,7 +14,10 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
+
     Optional<Product> findByCode(String code);
+
+    Page<Product> findByCategory(ProductCategory productCategory, Pageable pageable);
 
     @Query("SELECT DISTINCT p FROM Product p JOIN p.sizeQuantities sq WHERE p.category = :productCategory AND sq.quantity > 0")
     Page<Product> findAvailableProductsByCategory(@Param("productCategory") ProductCategory productCategory, Pageable pageable);

@@ -32,7 +32,7 @@ public class Product {
     private String description;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference("product-sizeQuantities")
     private Set<SizeQuantity> sizeQuantities;
 
     @Column(name = "price",nullable = false)

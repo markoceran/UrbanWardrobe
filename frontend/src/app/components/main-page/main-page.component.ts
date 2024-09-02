@@ -48,25 +48,67 @@ export class MainPageComponent implements OnInit, OnDestroy  {
 
   loadProducts(): void {
     if (this.category === 'home') {
-      this.productService.getProducts(this.pageNumber).subscribe(response => {
-      this.products = [];
-      this.products = response.data.map((product: Product) => ({
-        ...product,
-        images: [] // Ensure images is initialized
-      }));
-      this.currentPage = response.currentPage;
-      this.totalElements = response.totalElements;
-      this.totalPages = response.totalPages;
 
-      this.products.forEach(product => {
-        this.imageService.getImage(product.code, product.imagesName[0]).subscribe(blob => {
-          const image = URL.createObjectURL(blob);
-          product.images.push(image);
+      if(this.role === 'ADMIN'){
+        this.productService.getAllProducts(this.pageNumber).subscribe(response => {
+          this.products = [];
+          this.products = response.data.map((product: Product) => ({
+            ...product,
+            images: [] // Ensure images is initialized
+          }));
+          this.currentPage = response.currentPage;
+          this.totalElements = response.totalElements;
+          this.totalPages = response.totalPages;
+    
+          this.products.forEach(product => {
+            this.imageService.getImage(product.code, product.imagesName[0]).subscribe(blob => {
+              const image = URL.createObjectURL(blob);
+              product.images.push(image);
+            });
+          });
         });
-      });
-      });
+      }else{
+        this.productService.getProducts(this.pageNumber).subscribe(response => {
+          this.products = [];
+          this.products = response.data.map((product: Product) => ({
+            ...product,
+            images: [] // Ensure images is initialized
+          }));
+          this.currentPage = response.currentPage;
+          this.totalElements = response.totalElements;
+          this.totalPages = response.totalPages;
+    
+          this.products.forEach(product => {
+            this.imageService.getImage(product.code, product.imagesName[0]).subscribe(blob => {
+              const image = URL.createObjectURL(blob);
+              product.images.push(image);
+            });
+          });
+        });
+      }
+      
     }else if(this.category){
-      this.productService.getProductsByCategory(this.pageNumber, this.category).subscribe(response => {
+
+      if(this.role === 'ADMIN'){
+        this.productService.getAllProductsByCategory(this.pageNumber, this.category).subscribe(response => {
+          this.products = [];
+          this.products = response.data.map((product: Product) => ({
+            ...product,
+            images: [] // Ensure images is initialized
+          }));
+          this.currentPage = response.currentPage;
+          this.totalElements = response.totalElements;
+          this.totalPages = response.totalPages;
+    
+          this.products.forEach(product => {
+            this.imageService.getImage(product.code, product.imagesName[0]).subscribe(blob => {
+              const image = URL.createObjectURL(blob);
+              product.images.push(image);
+            });
+          });
+        });
+      }else{
+        this.productService.getProductsByCategory(this.pageNumber, this.category).subscribe(response => {
         this.products = [];
         this.products = response.data.map((product: Product) => ({
           ...product,
@@ -82,7 +124,9 @@ export class MainPageComponent implements OnInit, OnDestroy  {
             product.images.push(image);
           });
         });
-      });
+        });
+      }
+      
     }
   }
 

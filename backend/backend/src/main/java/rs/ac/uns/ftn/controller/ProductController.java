@@ -40,11 +40,6 @@ public class ProductController {
         this.logger = Logger.getLogger(String.valueOf(UserController.class));
     }
 
-    @GetMapping("/allProduct")
-    public List<Product> allProduct() {
-        return this.productService.getAll();
-    }
-
     @GetMapping("/{code}")
     public ResponseEntity<?> getByCode(@PathVariable String code) throws IOException {
         logger.info("Find product by code");
@@ -163,6 +158,57 @@ public class ProductController {
         return ResponseEntity.ok(new JsonResponse("Product size successfully refilled."));
     }
 
+    @GetMapping("/allProduct")
+    public ResponseEntity<PaginationResponse> getAllProduct (
+            @RequestParam(defaultValue = "0") int page, HttpServletRequest request) throws IOException {
+
+        if(page < 0){
+            PaginationResponse response = new PaginationResponse("Page number is less than 0.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        String token = tokenUtils.extractTokenFromRequest(request);
+        String loggedUserEmail = tokenUtils.getEmailFromToken(token);
+
+        Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Order.asc("id")));
+
+        Page<Product> productsPage = productService.getAllProducts(pageable, loggedUserEmail);
+
+        PaginationResponse response = new PaginationResponse("Products fetched successfully.");
+        response.setData(productsPage.getContent());
+        response.setTotalElements(productsPage.getTotalElements());
+        response.setTotalPages(productsPage.getTotalPages());
+        response.setCurrentPage(productsPage.getNumber());
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/allProductsByCategory")
+    public ResponseEntity<PaginationResponse> getAllProductsByCategory(
+            @RequestParam(defaultValue = "0") int page, @RequestParam("category") String categoryString, HttpServletRequest request) throws IOException {
+
+        if(page < 0){
+            PaginationResponse response = new PaginationResponse("Page number is less than 0.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        ProductCategory productCategory = ProductCategory.valueOf(categoryString);
+
+        String token = tokenUtils.extractTokenFromRequest(request);
+        String loggedUserEmail = tokenUtils.getEmailFromToken(token);
+
+        Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Order.asc("id")));
+
+        Page<Product> productsPage = productService.getAllProductsByCategory(pageable, productCategory, loggedUserEmail);
+
+        PaginationResponse response = new PaginationResponse("Products fetched successfully.");
+        response.setData(productsPage.getContent());
+        response.setTotalElements(productsPage.getTotalElements());
+        response.setTotalPages(productsPage.getTotalPages());
+        response.setCurrentPage(productsPage.getNumber());
+
+        return ResponseEntity.ok(response);
+    }
 
 
 }

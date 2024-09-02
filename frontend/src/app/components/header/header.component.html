@@ -33,8 +33,9 @@
     </li>
     <li class="nav-item navbar-right">
       <a class="nav-link"><i class="fas fa-magnifying-glass"></i> Search</a>
-      <a class="nav-link" routerLink="/createProduct" *ngIf="role === 'ADMIN'">Create product</a>
-      <a class="nav-link" (click)="logout()" *ngIf="role === 'ADMIN'">Logout</a>
+      <a class="nav-link" routerLink="/createProduct" *ngIf="role === 'ADMIN'"><i class="fas fa-square-plus"></i> Create product</a>
+      <a class="nav-link" routerLink="/createUser" *ngIf="role === 'ADMIN'"><i class="fas fa-user-plus"></i> Create user</a>
+      <a class="nav-link" (click)="logout()" *ngIf="role === 'ADMIN'"><i class="fas fa-arrow-right-from-bracket"></i> Logout</a>
       <a class="nav-link" routerLink="/basket" *ngIf="role === 'USER'"><i class="fas fa-basket-shopping" ></i> Basket</a>
       <a class="nav-link" routerLink="/wishlist" *ngIf="role === 'USER'"><i class="fas fa-heart" ></i> Wishlist</a>
       <a class="nav-link" routerLink="/profile" *ngIf="role === 'USER'"><i class="fas fa-user" ></i> Profile</a>

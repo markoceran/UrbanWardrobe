@@ -10,6 +10,7 @@ import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { BasketComponent } from './components/basket/basket.component';
 import { OrderDetailsComponent } from './components/order-details/order-details.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { CreateUserComponent } from './components/create-user/create-user.component';
 
 
 const routes: Routes = [
@@ -49,6 +50,10 @@ const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent
+  },
+  {
+    path: 'createUser',
+    component: CreateUserComponent
   }
 ];
 

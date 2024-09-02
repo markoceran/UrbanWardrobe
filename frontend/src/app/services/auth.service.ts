@@ -10,6 +10,7 @@ import { Wishlist } from "../models/wishlist";
 import { Basket } from "../models/basket";
 import { Router } from "@angular/router";
 import { ShippingAddress } from "../models/shippingAddress";
+import { NewUser } from "../models/newUser";
 
 @Injectable({
 providedIn: 'root'
@@ -111,7 +112,7 @@ export class AuthService {
     }
    }
 
-  register(user: UserDTO): Observable<JsonResponse> {
+  register(user: NewUser): Observable<JsonResponse> {
     return this.http.post<JsonResponse>(`${environment.baseApiUrl}/${this.url}/registerUser`, user, {
       headers: { 'Content-Type': 'application/json' },
       responseType: 'json'

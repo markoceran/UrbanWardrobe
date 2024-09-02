@@ -21,12 +21,12 @@ public class Basket {
     private Long id;
 
     @OneToMany(mappedBy = "basket", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference("basket-basketItems")
     private Set<BasketItem> basketItems;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonBackReference
+    @JsonBackReference("user-basket")
     private User user;
 
 

@@ -29,6 +29,6 @@ public class Wishlist {
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonBackReference
+    @JsonBackReference("user-wishlist")
     private User user;
 }

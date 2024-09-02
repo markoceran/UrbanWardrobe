@@ -34,6 +34,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ChangeShippingAddressComponent } from './components/change-shipping-address/change-shipping-address.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { RefillQuantityComponent } from './components/refill-quantity/refill-quantity.component';
+import { CreateUserComponent } from './components/create-user/create-user.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { RefillQuantityComponent } from './components/refill-quantity/refill-qua
     OrderDetailsComponent,
     ProfileComponent,
     ChangeShippingAddressComponent,
-    RefillQuantityComponent
+    RefillQuantityComponent,
+    CreateUserComponent
   ],
   imports: [
     BrowserModule,

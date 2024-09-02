@@ -16,8 +16,6 @@ public interface ProductService {
 
     Optional<Product> getById(Long id);
 
-    List<Product> getAll();
-
     Product findByCode(String code) throws IOException;
 
     Page<Product> getProducts(Pageable pageable, String loggedUserEmail) throws IOException;
@@ -25,4 +23,8 @@ public interface ProductService {
     Page<Product> getProductsByCategory(Pageable pageable, ProductCategory productCategory, String loggedUserEmail) throws IOException;
 
     Product refillQuantity(Long productId, Size size, int quantity);
+
+    Page<Product> getAllProducts(Pageable pageable, String loggedUserEmail);
+
+    Page<Product> getAllProductsByCategory(Pageable pageable, ProductCategory productCategory, String loggedUserEmail);
 }

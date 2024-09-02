@@ -28,7 +28,7 @@ public class SizeQuantity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    @JsonBackReference
+    @JsonBackReference("product-sizeQuantities")
     private Product product;
 
 }

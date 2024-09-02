@@ -20,16 +20,16 @@ public class User extends BasicUser{
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "basket_id", referencedColumnName = "id")
-    @JsonManagedReference
+    @JsonManagedReference("user-basket")
     private Basket basket;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "wishlist_id", referencedColumnName = "id")
-    @JsonManagedReference
+    @JsonManagedReference("user-wishlist")
     private Wishlist wishList;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference("user-orders")
     private Set<Orderr> orders;
 
     @PrePersist

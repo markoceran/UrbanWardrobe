@@ -27,12 +27,12 @@ public class BasketItem {
 
     @ManyToOne
     @JoinColumn(name = "basket_id")
-    @JsonBackReference
+    @JsonBackReference("basket-basketItems")
     private Basket basket;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    @JsonBackReference
+    @JsonBackReference("order-basketItems")
     private Orderr order;
 
     @Column(name = "quantity", nullable = false)

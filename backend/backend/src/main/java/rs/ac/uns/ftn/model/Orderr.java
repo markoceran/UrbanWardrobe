@@ -29,12 +29,12 @@ public class Orderr {
     private LocalDate estimatedDeliveryTime;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference("order-basketItems")
     private Set<BasketItem> basketItems;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonBackReference
+    @JsonBackReference("user-orders")
     private User user;
 
     @Column(name = "productsAmount",nullable = false)

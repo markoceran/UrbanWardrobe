@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { JsonResponse } from 'src/app/models/jsonResponse';
+import { NewUser } from 'src/app/models/newUser';
 import { UserDTO } from 'src/app/models/userDTO';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -59,7 +60,7 @@ export class RegisterComponent implements OnInit {
     }
 
 
-    let user: UserDTO = new UserDTO();
+    let user: NewUser = new NewUser();
     user.email = this.formGroup.get('email')?.value;
     user.password = this.formGroup.get('password')?.value;
     user.firstName = this.formGroup.get('firstName')?.value;

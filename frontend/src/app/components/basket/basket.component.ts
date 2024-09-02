@@ -132,7 +132,7 @@ export class BasketComponent implements OnInit {
         this.openSnackBar(error.error?.message, "");
         setTimeout(() => {
           window.location.reload();
-        }, 4000);
+        }, 2000);
       });
     }
   }
