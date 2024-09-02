@@ -5,7 +5,7 @@
     <div class="carousel-slide">
       <div class="carousel-inner">
         <div class="carousel-item" [class.active]="currentSlideIndex >= 0">
-          <img *ngIf="product.images.length > 0" [src]="sanitizeUrl(product.images[currentSlideIndex])" class="d-block w-100" alt="Product Image">
+          <img *ngIf="product.images && product.images.length > 0" [src]="sanitizeUrl(product.images[currentSlideIndex])" class="d-block w-100" alt="Product Image">
         </div>
       </div>
       <button class="carousel-control-prev" (click)="prevSlide()">
@@ -36,6 +36,7 @@
       </div>
     </div>
   
-    <button class="add-to-cart-btn" (click)="addToBasket()">Add to basket</button>
+    <button class="add-to-cart-btn" (click)="addToBasket()" *ngIf="role === 'USER'">Add to basket</button>
+    <button class="refill-quantity-btn" (click)="refillQuantity(product.id)" *ngIf="role === 'ADMIN'">Refill quantity</button>
   </div>
 </div>

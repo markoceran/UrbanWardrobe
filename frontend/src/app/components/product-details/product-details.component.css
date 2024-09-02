@@ -144,6 +144,21 @@
   background-color: #459d8e;
 }
 
+.refill-quantity-btn {
+  padding: 15px;
+  font-size: 1.2rem;
+  background-color: #9d6445a7;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.refill-quantity-btn:hover {
+  background-color: #9d6445;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .product-details-container {

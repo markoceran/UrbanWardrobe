@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.model.*;
 import rs.ac.uns.ftn.repository.ProductRepository;
+import rs.ac.uns.ftn.service.BasicUserService;
 import rs.ac.uns.ftn.service.ProductService;
 import rs.ac.uns.ftn.service.SizeQuantityService;
 import rs.ac.uns.ftn.service.UserService;
@@ -30,6 +31,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private BasicUserService basicUserService;
 
 
     @Override
@@ -76,7 +80,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<Product> getProducts(Pageable pageable, String loggedUserEmail) {
 
-        User loggedUser = userService.findByEmail(loggedUserEmail);
+        BasicUser loggedUser = basicUserService.findByEmail(loggedUserEmail);
         if (loggedUser == null) {
             return Page.empty(pageable);
         }
@@ -93,9 +97,15 @@ public class ProductServiceImpl implements ProductService {
                 product.setImagesName(Collections.emptyList());
             }
 
-            Optional<Product> productFromWishlist = loggedUser.getWishList().getProducts().stream().filter(p ->  p.getId() == product.getId()).findFirst();
-            if (productFromWishlist.isPresent()) {
-                product.setInWishlist(true);
+            if(loggedUser.getRole() == Role.USER){
+                User user = userService.findByEmail(loggedUserEmail);
+                if (user == null) {
+                    return Page.empty(pageable);
+                }
+                Optional<Product> productFromWishlist = user.getWishList().getProducts().stream().filter(p ->  p.getId() == product.getId()).findFirst();
+                if (productFromWishlist.isPresent()) {
+                    product.setInWishlist(true);
+                }
             }
 
         }
@@ -105,7 +115,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<Product> getProductsByCategory(Pageable pageable, ProductCategory productCategory, String loggedUserEmail) throws IOException {
 
-        User loggedUser = userService.findByEmail(loggedUserEmail);
+        BasicUser loggedUser = basicUserService.findByEmail(loggedUserEmail);
         if (loggedUser == null) {
             return Page.empty(pageable);
         }
@@ -122,9 +132,15 @@ public class ProductServiceImpl implements ProductService {
                 product.setImagesName(Collections.emptyList());
             }
 
-            Optional<Product> productFromWishlist = loggedUser.getWishList().getProducts().stream().filter(p ->  p.getId() == product.getId()).findFirst();
-            if (productFromWishlist.isPresent()) {
-                product.setInWishlist(true);
+            if(loggedUser.getRole() == Role.USER){
+                User user = userService.findByEmail(loggedUserEmail);
+                if (user == null) {
+                    return Page.empty(pageable);
+                }
+                Optional<Product> productFromWishlist = user.getWishList().getProducts().stream().filter(p ->  p.getId() == product.getId()).findFirst();
+                if (productFromWishlist.isPresent()) {
+                    product.setInWishlist(true);
+                }
             }
 
         }

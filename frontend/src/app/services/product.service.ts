@@ -5,6 +5,8 @@ import { PaginationResponse } from "../models/paginationResponse";
 import { Product } from "../models/product";
 import { environment } from "src/environments/environment";
 import { NewProduct } from "../models/newProduct";
+import { JsonResponse } from "../models/jsonResponse";
+import { Size } from "../models/size";
 
 @Injectable({
     providedIn: 'root'
@@ -33,6 +35,13 @@ export class ProductService {
 
     getProductByCode(code: string): Observable<Product> {
         return this.http.get<Product>(`${environment.baseApiUrl}/${this.url}/${code}`);
+    }
+
+    refillQuantity(productId: number, size: string, quantity: number): Observable<JsonResponse> {
+        const params = new HttpParams()
+        .set('size', size)
+        .set('quantity', quantity.toString()); 
+        return this.http.put<JsonResponse>(`${environment.baseApiUrl}/${this.url}/refillQuantity/${productId}`, null, {params});
     }
     
 }

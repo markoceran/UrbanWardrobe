@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { JsonResponse } from 'src/app/models/jsonResponse';
 import { Product } from 'src/app/models/product';
+import { AuthService } from 'src/app/services/auth.service';
 import { ImageService } from 'src/app/services/image.service';
 import { ProductService } from 'src/app/services/product.service';
 import { WishlistService } from 'src/app/services/wishlist.service';
@@ -24,10 +25,12 @@ export class MainPageComponent implements OnInit, OnDestroy  {
   totalPages = 0;
   category: string | null = null;
   private routeSub: Subscription = new Subscription();  
+  role: any;
 
-  constructor(private route: ActivatedRoute, private _snackBar: MatSnackBar,private wishlistService: WishlistService, private productService: ProductService, private imageService: ImageService, private sanitizer: DomSanitizer, private router: Router) { }
+  constructor(private authService: AuthService, private route: ActivatedRoute, private _snackBar: MatSnackBar,private wishlistService: WishlistService, private productService: ProductService, private imageService: ImageService, private sanitizer: DomSanitizer, private router: Router) { }
 
   ngOnInit(): void {
+    this.role = this.authService.extractUserType();
     // Subscribe to route parameter changes
     this.routeSub = this.route.paramMap.subscribe(params => {
       this.category = params.get('category');

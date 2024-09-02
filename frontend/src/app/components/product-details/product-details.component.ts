@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { JsonResponse } from 'src/app/models/jsonResponse';
 import { Product } from 'src/app/models/product';
 import { Size } from 'src/app/models/size';
+import { AuthService } from 'src/app/services/auth.service';
 import { BasketService } from 'src/app/services/basket.service';
 import { ImageService } from 'src/app/services/image.service';
 import { ProductService } from 'src/app/services/product.service';
+import { RefillQuantityComponent } from '../refill-quantity/refill-quantity.component';
 
 @Component({
   selector: 'app-product-details',
@@ -19,6 +22,7 @@ export class ProductDetailsComponent implements OnInit {
   product!: Product;
   selectedSize: string | null = null;
   currentSlideIndex = 0;
+  role: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,10 +30,13 @@ export class ProductDetailsComponent implements OnInit {
     private imageService: ImageService,
     private sanitizer: DomSanitizer,
     private basketService: BasketService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private authService: AuthService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
+    this.role = this.authService.extractUserType();
    
     const productCode = this.route.snapshot.paramMap.get('productCode');
     if (productCode) {
@@ -97,6 +104,20 @@ export class ProductDetailsComponent implements OnInit {
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action,  {
       duration: 2000
+    });
+  }
+
+  refillQuantity(productId: number){
+    const dialogRef = this.dialog.open(RefillQuantityComponent, {
+      width: '400px',
+      data: productId 
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('The dialog was closed with result:', result);
+        // Optionally handle the result here
+      }
     });
   }
 

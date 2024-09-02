@@ -120,15 +120,14 @@ public class ProductController {
 
     @GetMapping("/byCategory")
     public ResponseEntity<PaginationResponse> getProductsByCategory(
-            @RequestParam(defaultValue = "0") int page, @RequestParam Map<String, String> categoryRequest, HttpServletRequest request) throws IOException {
+            @RequestParam(defaultValue = "0") int page, @RequestParam("category") String categoryString, HttpServletRequest request) throws IOException {
 
         if(page < 0){
             PaginationResponse response = new PaginationResponse("Page number is less than 0.");
             return ResponseEntity.badRequest().body(response);
         }
 
-        String categoryValue = categoryRequest.get("category");
-        ProductCategory productCategory = ProductCategory.valueOf(categoryValue);
+        ProductCategory productCategory = ProductCategory.valueOf(categoryString);
 
         String token = tokenUtils.extractTokenFromRequest(request);
         String loggedUserEmail = tokenUtils.getEmailFromToken(token);
@@ -146,8 +145,10 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/refillQuantity/{productId}/{quantity}")
-    public ResponseEntity<JsonResponse> refillQuantity(@PathVariable Long productId, @RequestBody Size size, @PathVariable int quantity) {
+    @PutMapping("/refillQuantity/{productId}")
+    public ResponseEntity<JsonResponse> refillQuantity(@PathVariable Long productId,  @RequestParam("size") String sizeString,  @RequestParam("quantity") Integer quantity) {
+
+        Size size = Size.valueOf(sizeString);
 
         if (quantity <= 0){
             return ResponseEntity.badRequest().body(new JsonResponse("Can't refill quantity. Quantity can't be less than 0 or 0."));

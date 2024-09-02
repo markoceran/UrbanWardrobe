@@ -9,8 +9,8 @@
               <div class="card-header">
                 <div class="image-container">
                   <img *ngIf="product.images.length > 0" [src]="sanitizeUrl(product.images[0])" alt="{{ product.name }} image" class="product-image">
-                  <a class="overlay-element" *ngIf="product.inWishlist" (click)="removeFromWishlist(product.id, $event)"><i class="fas fa-heart"></i></a>
-                  <a class="overlay-element" *ngIf="!product.inWishlist" (click)="addToWishlist(product.id, $event)"><i class="far fa-heart"></i></a>
+                  <a class="overlay-element" *ngIf="product.inWishlist && role === 'USER'" (click)="removeFromWishlist(product.id, $event)"><i class="fas fa-heart"></i></a>
+                  <a class="overlay-element" *ngIf="!product.inWishlist && role === 'USER'" (click)="addToWishlist(product.id, $event)"><i class="far fa-heart"></i></a>
                 </div>
               </div>
               <div class="card-body">
