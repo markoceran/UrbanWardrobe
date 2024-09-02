@@ -31,6 +31,8 @@ import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { BasketComponent } from './components/basket/basket.component';
 import { OrderDetailsComponent } from './components/order-details/order-details.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { ChangeShippingAddressComponent } from './components/change-shipping-address/change-shipping-address.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,8 @@ import { ProfileComponent } from './components/profile/profile.component';
     WishlistComponent,
     BasketComponent,
     OrderDetailsComponent,
-    ProfileComponent
+    ProfileComponent,
+    ChangeShippingAddressComponent
   ],
   imports: [
     BrowserModule,
@@ -69,6 +72,8 @@ import { ProfileComponent } from './components/profile/profile.component';
     MatNativeDateModule,
     FormsModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule, 
+    MatDialogModule
   ],
   providers:
   [{

@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UserDTO } from 'src/app/models/userDTO';
 import { AuthService } from 'src/app/services/auth.service';
+import { ChangeShippingAddressComponent } from '../change-shipping-address/change-shipping-address.component';
+import { ShippingAddress } from 'src/app/models/shippingAddress';
 
 @Component({
   selector: 'app-profile',
@@ -14,7 +17,7 @@ export class ProfileComponent implements OnInit {
   user: UserDTO | undefined; 
   selectedTab = 'personalInformation';
 
-  constructor(private authService: AuthService, private _snackBar: MatSnackBar, private router: Router) { }
+  constructor(private authService: AuthService, private _snackBar: MatSnackBar, private router: Router, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.authService.getUserProfile().subscribe(
@@ -63,5 +66,19 @@ export class ProfileComponent implements OnInit {
 
   openOrderDetails(id:number){
     this.router.navigate(['/order/' + id]);
+  }
+
+  openChangeShippingAddressDialog(shippingAddress: ShippingAddress | undefined): void {
+    const dialogRef = this.dialog.open(ChangeShippingAddressComponent, {
+      width: '400px',
+      data: shippingAddress 
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('The dialog was closed with result:', result);
+        // Optionally handle the result here
+      }
+    });
   }
 }

@@ -9,6 +9,7 @@ import { JsonResponse } from "../models/jsonResponse";
 import { Wishlist } from "../models/wishlist";
 import { Basket } from "../models/basket";
 import { Router } from "@angular/router";
+import { ShippingAddress } from "../models/shippingAddress";
 
 @Injectable({
 providedIn: 'root'
@@ -127,6 +128,13 @@ export class AuthService {
 
   getUserProfile(): Observable<UserDTO> {
     return this.http.get<UserDTO>(`${environment.baseApiUrl}/${this.url}/profile/${this.getUserEmailFromToken()}`);
+  }
+
+  updateShippingAddress(newShippingAddress: ShippingAddress): Observable<JsonResponse> {
+    return this.http.put<JsonResponse>(`${environment.baseApiUrl}/${this.url}/updateShippingAddress`, newShippingAddress, {
+      headers: { 'Content-Type': 'application/json' },
+      responseType: 'json'
+    });
   }
 
 }

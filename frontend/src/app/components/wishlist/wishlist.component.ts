@@ -70,10 +70,7 @@ export class WishlistComponent implements OnInit {
   removeProductFromWishlist(productId: number): void {
     this.wishlistService.removeFromWishlist(productId).subscribe(
           (response: JsonResponse) => {
-            this.openSnackBar(response.message, "");
-            setTimeout(() => {
-              window.location.reload();
-            }, 1000);
+            window.location.reload();
           },
           (error) => {
             this.openSnackBar(error.error?.message, "");

@@ -57,14 +57,17 @@
   
   .bg-illustration {
     position: relative;
-    height: 100vh;
-    width: 1194px;
-    background: #5a7cdba1 no-repeat center center scroll;
-    background-size: cover;
+    height: 1000px; /* Full viewport height */
+    width: 1194px; /* Specific width */
+    background-image: url('src/assets/Urban wardrobe.png');/* Path to your image */
+    background-size: 70%;
+    background-repeat: no-repeat; /* No repeating of the image */
+    background-position: center; /* Center the image */
     float: left;
     -webkit-animation: bgslide 2.3s forwards;
     animation: bgslide 2.3s forwards;
   }
+
   .bg-illustration img {
     width: 248px;
     -webkit-user-select: none;
@@ -120,7 +123,7 @@
     font-weight: bolder;
   }
   .register .container .register-form {
-    margin-top: 112px;
+    margin-top: 80px;
   }
   .register .container .register-form form {
     display: -ms-grid;

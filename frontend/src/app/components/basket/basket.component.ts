@@ -89,10 +89,7 @@ export class BasketComponent implements OnInit {
         console.log('User clicked Yes');
         this.basketService.removeBasketItem(basketItemId).subscribe(
           (response: JsonResponse) => {
-            this.openSnackBar(response.message, "");
-            setTimeout(() => {
-              window.location.reload();
-            }, 1000);
+            window.location.reload();
           },
           (error) => {
             this.openSnackBar(error.error?.message, "");
@@ -111,10 +108,7 @@ export class BasketComponent implements OnInit {
   decreaseQuantity(basketItemId: number): void {
     this.basketService.decreaseQuantityFromBasketItem(basketItemId).subscribe(
         (response: JsonResponse) => {
-          this.openSnackBar(response.message, "");
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
+          window.location.reload();
         },
         (error) => {
           this.openSnackBar(error.error?.message, "");

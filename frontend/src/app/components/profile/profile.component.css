@@ -44,6 +44,10 @@
     border-radius: 20px;
     cursor: pointer;
   }
+
+  .edit-profile-btn:hover {
+    background-color: rgb(210, 210, 210);
+  }
   
   .profile-tabs {
     display: flex;
@@ -90,10 +94,24 @@
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
+    text-decoration: none;
+  }
+
+  .change-shipping-address-btn {
+    background-color: #cc77159b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
   }
   
   .logout-btn:hover {
     background-color: #c82333;
+  }
+
+  .change-shipping-address-btn:hover {
+    background-color: #c17116e8;
   }
 
   .order-card {

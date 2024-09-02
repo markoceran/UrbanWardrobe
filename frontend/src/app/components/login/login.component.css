@@ -57,14 +57,17 @@ img {
 
 .bg-illustration {
   position: relative;
-  height: 100vh;
-  width: 1194px;
-  background: #5a7cdba1 no-repeat center center scroll;
-  background-size: cover;
+  height: 1000px; /* Full viewport height */
+  width: 1194px; /* Specific width */
+  background-image: url('src/assets/Urban wardrobe.png');/* Path to your image */
+  background-size: 70%;
+  background-repeat: no-repeat; /* No repeating of the image */
+  background-position: center; /* Center the image */
   float: left;
   -webkit-animation: bgslide 2.3s forwards;
   animation: bgslide 2.3s forwards;
 }
+
 .bg-illustration img {
   width: 248px;
   -webkit-user-select: none;
@@ -103,24 +106,27 @@ img {
 
 
 .login {
-  max-height: 100vh;
-  overflow-Y: auto;
-  float: left;
-  margin: 0 auto;
+  display: flex;           /* Set up Flexbox */
+  justify-content: center; /* Center horizontally */
+  align-items: center;     /* Center vertically */
+  height: 100vh;           /* Full viewport height */
   width: calc(100% - 1194px);
+  margin: 0 auto;
+  float: left;
 }
+
 .login .container {
   width: 505px;
-  margin: 0 auto;
   position: relative;
 }
+
 .login .container h1 {
   margin-top: 90px;
   font-size: 35px;
   font-weight: bolder;
 }
 .login .container .login-form {
-  margin-top: 112px;
+  margin-top: 80px;
 }
 .login .container .login-form form {
   display: -ms-grid;
