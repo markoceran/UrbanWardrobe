@@ -37,7 +37,7 @@
       <a class="nav-link" routerLink="/createProduct" *ngIf="role === 'ADMIN'"><i class="fas fa-square-plus"></i> Create product</a>
       <a class="nav-link" routerLink="/createUser" *ngIf="role === 'ADMIN'"><i class="fas fa-user-plus"></i> Create user</a>
       <a class="nav-link" routerLink="/pendingOrders" *ngIf="role === 'WORKER'"><i class="fas fa-cubes"></i> Pending orders</a>
-      <a class="nav-link" routerLink="" *ngIf="role === 'WORKER'"><i class="fas fa-truck-fast"></i> Send orders</a>
+      <a class="nav-link" routerLink="/sentOrders" *ngIf="role === 'WORKER'"><i class="fas fa-truck-fast"></i> Send orders</a>
       <a class="nav-link" (click)="logout()" *ngIf="role === 'ADMIN' || role === 'WORKER'"><i class="fas fa-arrow-right-from-bracket"></i> Logout</a>
       <a class="nav-link" routerLink="/basket" *ngIf="role === 'USER'"><i class="fas fa-basket-shopping" ></i> Basket</a>
       <a class="nav-link" routerLink="/wishlist" *ngIf="role === 'USER'"><i class="fas fa-heart" ></i> Wishlist</a>

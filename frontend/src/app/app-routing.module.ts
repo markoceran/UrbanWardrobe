@@ -12,6 +12,7 @@ import { OrderDetailsComponent } from './components/order-details/order-details.
 import { ProfileComponent } from './components/profile/profile.component';
 import { CreateUserComponent } from './components/create-user/create-user.component';
 import { PendingOrdersComponent } from './components/pending-orders/pending-orders.component';
+import { SentOrdersComponent } from './components/sent-orders/sent-orders.component';
 
 
 const routes: Routes = [
@@ -59,6 +60,10 @@ const routes: Routes = [
   {
     path: 'pendingOrders',
     component: PendingOrdersComponent
+  },
+  {
+    path: 'sentOrders',
+    component: SentOrdersComponent
   }
 ];
 

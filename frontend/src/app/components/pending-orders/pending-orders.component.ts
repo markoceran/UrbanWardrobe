@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Order } from 'src/app/models/order';
+import { AuthService } from 'src/app/services/auth.service';
 import { OrderService } from 'src/app/services/order.service';
 
 @Component({
@@ -16,10 +17,12 @@ export class PendingOrdersComponent implements OnInit {
   currentPage = 0;
   totalElements = 0;
   totalPages = 0;
+  role: any;
 
-  constructor(private orderService: OrderService, private _snackBar: MatSnackBar, private router: Router) { }
+  constructor(private authService: AuthService, private orderService: OrderService, private _snackBar: MatSnackBar, private router: Router) { }
 
   ngOnInit(): void {
+    this.role = this.authService.extractUserType();
     this.loadOrders();
   }
 
@@ -65,6 +68,10 @@ export class PendingOrdersComponent implements OnInit {
 
   openOrderDetails(code:string){
     this.router.navigate(['/order/' + code]);
+  }
+
+  sentOrder(orderId:number | undefined){
+
   }
 
 }

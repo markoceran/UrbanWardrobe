@@ -21,9 +21,11 @@
           </strong>
         </p>
       </div>
+      <div class="order-actions">
+        <button class="sent-order-btn" (click)="sentOrder(order?.id)" *ngIf="role === 'WORKER'">Sent order <i class="fas fa-angles-right"></i></button>
+      </div>
     </div>
 </div>
-
 
 <div class="pagination">
     <button class="btn btn-outline-secondary" (click)="goToPage(pageNumber - 1)" [disabled]="pageNumber === 0 || totalPages === 0">Previous</button>

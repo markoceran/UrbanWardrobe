@@ -97,7 +97,7 @@ public class OrderController {
     }
 
     @GetMapping("/sentOrders")
-    public ResponseEntity<PaginationResponse> getSentOrders(@RequestParam(defaultValue = "0") int page) {
+    public ResponseEntity<PaginationResponse> getSendOrders(@RequestParam(defaultValue = "0") int page) {
         if(page < 0){
             PaginationResponse response = new PaginationResponse("Page number is less than 0.");
             return ResponseEntity.badRequest().body(response);

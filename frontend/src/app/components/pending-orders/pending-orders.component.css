@@ -84,4 +84,21 @@
     margin: 0 10px;
 }
   
-  
+.order-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sent-order-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: rgba(0, 0, 255, 0.545);
+  color: white;
+  font-size: 16px;
+}
+
+.sent-order-btn:hover{
+  opacity: 0.5;
+}
