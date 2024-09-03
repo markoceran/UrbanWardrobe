@@ -1,6 +1,9 @@
 package rs.ac.uns.ftn.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import rs.ac.uns.ftn.model.Orderr;
+import rs.ac.uns.ftn.model.Product;
 import rs.ac.uns.ftn.model.User;
 
 import java.util.List;
@@ -15,18 +18,18 @@ public interface OrderService {
 
     List<Orderr> getAll();
 
-    Orderr getByIdWithImages(Long id);
+    Orderr getByCodeWithImages(String code);
 
     Optional<Orderr> getById(Long id);
 
     void save(Orderr order);
 
-    List<Orderr> getPendingOrders();
-
     Orderr sentOrder(Long orderId);
 
     Orderr deliverOrder(Long orderId);
 
-    List<Orderr> getSentOrders();
+    Page<Orderr> getSentOrders(Pageable pageable);
+
+    Page<Orderr> getPendingOrders(Pageable pageable);
 
 }

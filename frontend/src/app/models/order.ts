@@ -1,5 +1,6 @@
 import { BasketItem } from "./basketItem";
 import { OrderStatus } from "./orderStatus";
+import { UserDTO } from "./userDTO";
 
 export interface Order {
     id: number;
@@ -10,4 +11,6 @@ export interface Order {
     shippingAmount: number;
     totalAmount: number;
     status: OrderStatus;
+    code: string;
+    userDTO: UserDTO;
 }

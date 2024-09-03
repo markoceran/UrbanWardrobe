@@ -36,6 +36,19 @@
     </div>
 
     <div class="order-summary">
+        <h2>User info</h2>
+        <p>First name and last name: {{ order?.userDTO?.firstName }} {{ order?.userDTO?.lastName }}</p>
+        <p>Email: {{ order?.userDTO?.email }}</p>
+        <p>Phone number: {{ order?.userDTO?.phoneNumber }}</p>
+        <h2>Shipping address</h2>
+        <p>Country: {{ order?.userDTO?.shippingAddress?.country }}</p>
+        <p>City: {{ order?.userDTO?.shippingAddress?.city }}</p>
+        <p>Street: {{ order?.userDTO?.shippingAddress?.street }}</p>
+        <p>Street number: {{ order?.userDTO?.shippingAddress?.number }}</p>
+        <p>Postal code: {{ order?.userDTO?.shippingAddress?.postalCode }}</p>
+    </div>
+
+    <div class="order-summary">
         <h2>Order summary</h2>
         <p>Products amount: €{{ order?.productsAmount }}</p>
         <p>Shipping: €{{ order?.shippingAmount }}</p>
@@ -43,6 +56,6 @@
     </div>
 
     <div class="order-actions">
-        <button class="cancel-order-btn" (click)="cancelOrder(order?.id)">Cancel order</button>
+        <button class="cancel-order-btn" (click)="cancelOrder(order?.id)" *ngIf="role === 'USER'">Cancel order</button>
     </div>
 </div>

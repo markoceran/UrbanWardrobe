@@ -64,8 +64,8 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-  openOrderDetails(id:number){
-    this.router.navigate(['/order/' + id]);
+  openOrderDetails(code:string){
+    this.router.navigate(['/order/' + code]);
   }
 
   openChangeShippingAddressDialog(shippingAddress: ShippingAddress | undefined): void {

@@ -1,8 +1,9 @@
 <nav class="nav">
   <ul class="navbar">
     <li class="nav-item navbar-left">
-      <a [routerLink]="['/Main-Page', 'home']"><img class="logo" src="assets/IMG_1027.png" alt="Logo"></a>
-      <div class="dropdown">
+      <a [routerLink]="['/Main-Page', 'home']" *ngIf="role !== 'WORKER'"><img class="logo" src="assets/IMG_1027.png" alt="Logo"></a>
+      <a [routerLink]="['/pendingOrders']" *ngIf="role === 'WORKER'"><img class="logo" src="assets/IMG_1027.png" alt="Logo"></a>
+      <div class="dropdown" *ngIf="role !== 'WORKER'">
         <a class="nav-link dropdown-toggle">Woman</a>
         <ul class="dropdown-menu">
           <li><a [routerLink]="['/Main-Page', 'WomenTShirts']">T-Shirts</a></li>
@@ -16,7 +17,7 @@
           <li><a [routerLink]="['/Main-Page', 'WomenAccessories']">Accessories</a></li>
         </ul>
       </div>
-      <div class="dropdown">
+      <div class="dropdown" *ngIf="role !== 'WORKER'">
         <a class="nav-link dropdown-toggle">Men</a>
         <ul class="dropdown-menu">
           <li><a [routerLink]="['/Main-Page', 'MenTShirts']">T-Shirts</a></li>
@@ -35,7 +36,9 @@
       <a class="nav-link"><i class="fas fa-magnifying-glass"></i> Search</a>
       <a class="nav-link" routerLink="/createProduct" *ngIf="role === 'ADMIN'"><i class="fas fa-square-plus"></i> Create product</a>
       <a class="nav-link" routerLink="/createUser" *ngIf="role === 'ADMIN'"><i class="fas fa-user-plus"></i> Create user</a>
-      <a class="nav-link" (click)="logout()" *ngIf="role === 'ADMIN'"><i class="fas fa-arrow-right-from-bracket"></i> Logout</a>
+      <a class="nav-link" routerLink="/pendingOrders" *ngIf="role === 'WORKER'"><i class="fas fa-cubes"></i> Pending orders</a>
+      <a class="nav-link" routerLink="" *ngIf="role === 'WORKER'"><i class="fas fa-truck-fast"></i> Send orders</a>
+      <a class="nav-link" (click)="logout()" *ngIf="role === 'ADMIN' || role === 'WORKER'"><i class="fas fa-arrow-right-from-bracket"></i> Logout</a>
       <a class="nav-link" routerLink="/basket" *ngIf="role === 'USER'"><i class="fas fa-basket-shopping" ></i> Basket</a>
       <a class="nav-link" routerLink="/wishlist" *ngIf="role === 'USER'"><i class="fas fa-heart" ></i> Wishlist</a>
       <a class="nav-link" routerLink="/profile" *ngIf="role === 'USER'"><i class="fas fa-user" ></i> Profile</a>

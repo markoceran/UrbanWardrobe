@@ -1,12 +1,13 @@
 package rs.ac.uns.ftn.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.helper.Helper;
-import rs.ac.uns.ftn.model.BasketItem;
-import rs.ac.uns.ftn.model.OrderStatus;
-import rs.ac.uns.ftn.model.Orderr;
-import rs.ac.uns.ftn.model.User;
+import rs.ac.uns.ftn.model.*;
+import rs.ac.uns.ftn.model.dto.UserDTO;
 import rs.ac.uns.ftn.repository.OrderRepository;
 import rs.ac.uns.ftn.service.*;
 
@@ -128,10 +129,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Orderr getByIdWithImages(Long id) {
-        Optional<Orderr> orderOptional =  orderRepository.findById(id);
+    public Orderr getByCodeWithImages(String code) {
+        Optional<Orderr> orderOptional = orderRepository.findByCode(code);
         if (orderOptional.isPresent()) {
-            for (BasketItem basketItem : orderOptional.get().getBasketItems()){
+            Orderr order = orderOptional.get();
+            for (BasketItem basketItem : order.getBasketItems()){
                 if (basketItem == null) {
                     continue;
                 }
@@ -142,7 +144,15 @@ public class OrderServiceImpl implements OrderService {
                     basketItem.getProduct().setImagesName(Collections.emptyList());
                 }
             }
-            return orderOptional.get();
+            User user = order.getUser();
+            UserDTO userDTO = new UserDTO();
+            userDTO.setEmail(user.getEmail());
+            userDTO.setFirstName(user.getFirstName());
+            userDTO.setLastName(user.getLastName());
+            userDTO.setPhoneNumber(user.getPhoneNumber());
+            userDTO.setShippingAddress(user.getShippingAddress());
+            order.setUserDTO(userDTO);
+            return order;
         }else{
             return null;
         }
@@ -158,14 +168,6 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(order);
     }
 
-    @Override
-    public List<Orderr> getPendingOrders() {
-        List<Orderr> processingOrders = orderRepository.findByStatus(OrderStatus.Processing);
-
-        return processingOrders.stream()
-                .filter(order -> !helper.isOrderLessThanOneDayOld(order))
-                .collect(Collectors.toList());
-    }
 
     @Override
     public Orderr sentOrder(Long orderId) {
@@ -194,10 +196,22 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Orderr> getSentOrders() {
-        List<Orderr> processingOrders = orderRepository.findByStatus(OrderStatus.Sent);
+    public Page<Orderr> getSentOrders(Pageable pageable) {
 
-        return processingOrders;
+        Page<Orderr> orderPage = orderRepository.findByStatus(OrderStatus.Sent, pageable);
+        List<Orderr> orders = orderPage.getContent();
+
+        return new PageImpl<>(orders, pageable, orderPage.getTotalElements());
+    }
+
+
+    @Override
+    public Page<Orderr> getPendingOrders(Pageable pageable) {
+
+        Page<Orderr> orderPage = orderRepository.findByStatus(OrderStatus.Processing, pageable);
+        List<Orderr> orders = orderPage.getContent();
+
+        return new PageImpl<>(orders, pageable, orderPage.getTotalElements());
     }
 
 }

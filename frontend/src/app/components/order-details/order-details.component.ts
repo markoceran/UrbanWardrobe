@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BasketItem } from 'src/app/models/basketItem';
 import { JsonResponse } from 'src/app/models/jsonResponse';
 import { Order } from 'src/app/models/order';
+import { AuthService } from 'src/app/services/auth.service';
 import { ImageService } from 'src/app/services/image.service';
 import { OrderService } from 'src/app/services/order.service';
 import { YesNoSnackBarService } from 'src/app/services/yesNoSnackBar.service';
@@ -17,6 +18,7 @@ import { YesNoSnackBarService } from 'src/app/services/yesNoSnackBar.service';
 export class OrderDetailsComponent implements OnInit {
   
   order: Order | undefined;
+  role: any;
 
   constructor(
     private orderService: OrderService,
@@ -24,12 +26,15 @@ export class OrderDetailsComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private sanitizer: DomSanitizer,
     private imageService: ImageService,
-    private yesNoSnackBarService: YesNoSnackBarService
+    private yesNoSnackBarService: YesNoSnackBarService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
-    const orderId = Number(this.route.snapshot.paramMap.get('id'));
-    this.orderService.getById(orderId).subscribe(
+    this.role = this.authService.extractUserType();
+    const orderCode = this.route.snapshot.paramMap.get('code');
+    if(orderCode !== null){
+      this.orderService.getByCode(orderCode).subscribe(
       (response: Order) => {
         this.order = response;
         this.order.creationTime = this.convertToDate(this.order.creationTime.toString());
@@ -47,7 +52,8 @@ export class OrderDetailsComponent implements OnInit {
       },
       (error) => {
         this.openSnackBar(error.error?.message, "");
-    });
+      });
+    }
   }
 
   openSnackBar(message: string, action: string) {

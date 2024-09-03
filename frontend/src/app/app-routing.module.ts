@@ -11,6 +11,7 @@ import { BasketComponent } from './components/basket/basket.component';
 import { OrderDetailsComponent } from './components/order-details/order-details.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { CreateUserComponent } from './components/create-user/create-user.component';
+import { PendingOrdersComponent } from './components/pending-orders/pending-orders.component';
 
 
 const routes: Routes = [
@@ -44,7 +45,7 @@ const routes: Routes = [
     component: BasketComponent
   },
   {
-    path: 'order/:id',
+    path: 'order/:code',
     component: OrderDetailsComponent
   },
   {
@@ -54,6 +55,10 @@ const routes: Routes = [
   {
     path: 'createUser',
     component: CreateUserComponent
+  },
+  {
+    path: 'pendingOrders',
+    component: PendingOrdersComponent
   }
 ];
 

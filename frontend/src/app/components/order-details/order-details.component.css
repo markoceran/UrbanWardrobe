@@ -21,6 +21,9 @@
     color: #555;
 }
 
+.order-summary {
+    border-top: 1px solid gray;
+}
 
 .order-items h2, .order-summary h2 {
     font-size: 20px;

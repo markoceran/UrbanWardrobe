@@ -1,8 +1,10 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { JsonResponse } from "../models/jsonResponse";
 import { environment } from "src/environments/environment";
+import { PaginationResponse } from "../models/paginationResponse";
+import { Order } from "../models/order";
 
 @Injectable({
     providedIn: 'root'
@@ -16,12 +18,22 @@ export class OrderService {
         return this.http.post<JsonResponse>(`${environment.baseApiUrl}/${this.url}/create`, {});
     }
 
-    getById(orderId: number): Observable<any> {
-        return this.http.get<any>(`${environment.baseApiUrl}/${this.url}/${orderId}`);
+    getByCode(code: string): Observable<Order> {
+        return this.http.get<Order>(`${environment.baseApiUrl}/${this.url}/${code}`);
     }
 
     cancel(orderId: number): Observable<JsonResponse> {
         return this.http.put<JsonResponse>(`${environment.baseApiUrl}/${this.url}/cancelOrder/${orderId}`, {});
+    }
+
+    getSentOrders(page: number): Observable<PaginationResponse> {
+        const params = new HttpParams().set('page', page.toString());
+        return this.http.get<PaginationResponse>(`${environment.baseApiUrl}/${this.url}/sentOrders`, { params });
+    }
+
+    getPendingOrders(page: number): Observable<PaginationResponse> {
+        const params = new HttpParams().set('page', page.toString());
+        return this.http.get<PaginationResponse>(`${environment.baseApiUrl}/${this.url}/pendingOrders`, { params });
     }
 
 }

@@ -1,0 +1,32 @@
+<app-header></app-header>
+<div class="order-container">
+    <div class="order-card" *ngFor="let order of orders" (click)="openOrderDetails(order.code)">
+      <div class="order-info">
+        <h2>{{ order.code }}</h2>
+        <h2>{{ order.creationTime | date:'dd.MM.yyyy - HH:mm' }}</h2>
+        <div *ngFor="let basketItem of order.basketItems">
+          <p>{{ basketItem.product.code }} - {{ basketItem.product.name }}</p>
+        </div>
+        <p>Total amount: €{{ order.totalAmount }}</p>
+        <p>
+          <strong>Status:
+          <span [ngClass]="{
+            'status-processing': order.status === 'Processing',
+            'status-sent': order.status === 'Sent',
+            'status-delivered': order.status === 'Delivered',
+            'status-cancelled': order.status === 'Cancelled'
+          }">
+            {{ order.status }}
+          </span>
+          </strong>
+        </p>
+      </div>
+    </div>
+</div>
+
+
+<div class="pagination">
+    <button class="btn btn-outline-secondary" (click)="goToPage(pageNumber - 1)" [disabled]="pageNumber === 0 || totalPages === 0">Previous</button>
+    <span>Page {{ pageNumber + 1 }} of {{ totalPages }}</span>
+    <button class="btn btn-outline-secondary" (click)="goToPage(pageNumber + 1)" [disabled]="pageNumber + 1 === totalPages || totalPages === 0">Next</button>
+</div>
