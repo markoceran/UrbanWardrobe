@@ -153,7 +153,6 @@ export class MainPageComponent implements OnInit, OnDestroy  {
     event.stopPropagation(); 
     this.wishlistService.addToWishlist(productId).subscribe(
       (response:JsonResponse) => {
-        this.openSnackBar(response.message, "");
         const product = this.products.find(p => p.id === productId);
         if (product) {
           product.inWishlist = true;
@@ -169,7 +168,6 @@ export class MainPageComponent implements OnInit, OnDestroy  {
     event.stopPropagation(); 
     this.wishlistService.removeFromWishlist(productId).subscribe(
       (response:JsonResponse) => {
-        this.openSnackBar(response.message, "");
         const product = this.products.find(p => p.id === productId);
         if (product) {
           product.inWishlist = false;

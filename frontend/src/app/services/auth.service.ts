@@ -138,4 +138,25 @@ export class AuthService {
     });
   }
 
+  createWorker(user: NewUser): Observable<JsonResponse> {
+    return this.http.post<JsonResponse>(`${environment.baseApiUrl}/${this.url}/registerWorker`, user, {
+      headers: { 'Content-Type': 'application/json' },
+      responseType: 'json'
+    });
+  }
+
+  createAdmin(user: NewUser): Observable<JsonResponse> {
+    return this.http.post<JsonResponse>(`${environment.baseApiUrl}/${this.url}/registerAdmin`, user, {
+      headers: { 'Content-Type': 'application/json' },
+      responseType: 'json'
+    });
+  }
+
+  createCourier(user: NewUser): Observable<JsonResponse> {
+    return this.http.post<JsonResponse>(`${environment.baseApiUrl}/${this.url}/registerCourier`, user, {
+      headers: { 'Content-Type': 'application/json' },
+      responseType: 'json'
+    });
+  }
+
 }
