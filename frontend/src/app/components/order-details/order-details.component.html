@@ -56,6 +56,8 @@
     </div>
 
     <div class="order-actions">
-        <button class="cancel-order-btn" (click)="cancelOrder(order?.id)" *ngIf="role === 'USER'">Cancel order</button>
+        <button class="cancel-order-btn" (click)="cancelOrder(order?.id)" *ngIf="role === 'USER' && order?.status === 'Processing'">Cancel order</button>
+        <button class="sent-order-btn" (click)="sentOrder(order?.id)" *ngIf="role === 'WORKER' && order?.status === 'Processing'">Sent order</button>
+        <button class="deliver-order-btn" (click)="deliverOrder(order?.id)" *ngIf="role === 'COURIER' && order?.status === 'Sent'">Deliver order</button>
     </div>
 </div>

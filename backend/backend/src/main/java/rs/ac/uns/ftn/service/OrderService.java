@@ -32,4 +32,6 @@ public interface OrderService {
 
     Page<Orderr> getPendingOrders(Pageable pageable);
 
+    Page<Orderr> getDeliveredOrders(Pageable pageable);
+
 }

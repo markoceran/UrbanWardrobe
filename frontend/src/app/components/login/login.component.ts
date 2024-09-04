@@ -55,6 +55,8 @@ export class LoginComponent implements OnInit {
         const role = this.authService.extractUserType();
         if(role !== null && role === "WORKER"){
           this.router.navigate(['/pendingOrders']);
+        }else if(role !== null && role === "COURIER"){
+          this.router.navigate(['/sentOrders']);
         }else{
           this.router.navigate(['/Main-Page', 'home']);
         }

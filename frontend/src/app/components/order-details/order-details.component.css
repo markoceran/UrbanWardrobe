@@ -81,6 +81,34 @@
     opacity: 0.5;
 }
 
+.sent-order-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: rgba(0, 0, 255, 0.803);
+    color: white;
+    font-size: 16px;
+  }
+  
+  .sent-order-btn:hover{
+    opacity: 0.5;
+  }
+
+  .deliver-order-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: rgba(0, 255, 115, 0.878);
+    color: white;
+    font-size: 16px;
+  }
+  
+  .deliver-order-btn:hover{
+    opacity: 0.5;
+  }
+
 
 .status-processing {
     color: orange;

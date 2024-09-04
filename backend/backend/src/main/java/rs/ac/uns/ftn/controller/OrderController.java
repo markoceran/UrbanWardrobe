@@ -136,4 +136,24 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/deliveredOrders")
+    public ResponseEntity<PaginationResponse> getDeliveredOrders(@RequestParam(defaultValue = "0") int page) {
+        if(page < 0){
+            PaginationResponse response = new PaginationResponse("Page number is less than 0.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Order.asc("creationTime")));
+
+        Page<Orderr> ordersPage = orderService.getDeliveredOrders(pageable);
+
+        PaginationResponse response = new PaginationResponse("Orders fetched successfully.");
+        response.setData(ordersPage.getContent());
+        response.setTotalElements(ordersPage.getTotalElements());
+        response.setTotalPages(ordersPage.getTotalPages());
+        response.setCurrentPage(ordersPage.getNumber());
+
+        return ResponseEntity.ok(response);
+    }
+
 }

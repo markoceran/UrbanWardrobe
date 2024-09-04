@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import rs.ac.uns.ftn.model.OrderStatus;
 import rs.ac.uns.ftn.model.Orderr;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
@@ -16,6 +17,9 @@ import java.util.Set;
 public interface OrderRepository extends JpaRepository<Orderr, Long> {
 
     Page<Orderr> findByStatus(OrderStatus status, Pageable pageable);
+
+    @Query("SELECT o FROM Orderr o WHERE o.status = :status AND o.creationTime < :oneDayAgo")
+    Page<Orderr> findPendingOrdersByStatus(@Param("status") OrderStatus status, @Param("oneDayAgo") LocalDateTime oneDayAgo, Pageable pageable);
 
     Optional<Orderr> findByCode(String code);
 

@@ -2,32 +2,29 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Order } from 'src/app/models/order';
-import { AuthService } from 'src/app/services/auth.service';
 import { OrderService } from 'src/app/services/order.service';
 
 @Component({
-  selector: 'app-pending-orders',
-  templateUrl: './pending-orders.component.html',
-  styleUrls: ['./pending-orders.component.css']
+  selector: 'app-delivered-orders',
+  templateUrl: './delivered-orders.component.html',
+  styleUrls: ['./delivered-orders.component.css']
 })
-export class PendingOrdersComponent implements OnInit {
+export class DeliveredOrdersComponent implements OnInit {
 
   orders: Order[] = [];
   pageNumber = 0;
   currentPage = 0;
   totalElements = 0;
   totalPages = 0;
-  role: any;
 
-  constructor(private authService: AuthService, private orderService: OrderService, private _snackBar: MatSnackBar, private router: Router) { }
+  constructor(private orderService: OrderService, private _snackBar: MatSnackBar, private router: Router) { }
 
   ngOnInit(): void {
-    this.role = this.authService.extractUserType();
     this.loadOrders();
   }
 
   loadOrders(){
-    this.orderService.getPendingOrders(this.pageNumber).subscribe(
+    this.orderService.getDeliveredOrders(this.pageNumber).subscribe(
       (response: any) => {
         this.orders = response.data;
         this.orders.forEach(order => {

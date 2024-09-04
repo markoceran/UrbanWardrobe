@@ -37,6 +37,7 @@ import { RefillQuantityComponent } from './components/refill-quantity/refill-qua
 import { CreateUserComponent } from './components/create-user/create-user.component';
 import { PendingOrdersComponent } from './components/pending-orders/pending-orders.component';
 import { SentOrdersComponent } from './components/sent-orders/sent-orders.component';
+import { DeliveredOrdersComponent } from './components/delivered-orders/delivered-orders.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { SentOrdersComponent } from './components/sent-orders/sent-orders.compon
     RefillQuantityComponent,
     CreateUserComponent,
     PendingOrdersComponent,
-    SentOrdersComponent
+    SentOrdersComponent,
+    DeliveredOrdersComponent
   ],
   imports: [
     BrowserModule,

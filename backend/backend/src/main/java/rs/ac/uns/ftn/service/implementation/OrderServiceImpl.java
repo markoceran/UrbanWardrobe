@@ -11,6 +11,7 @@ import rs.ac.uns.ftn.model.dto.UserDTO;
 import rs.ac.uns.ftn.repository.OrderRepository;
 import rs.ac.uns.ftn.service.*;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -207,8 +208,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Page<Orderr> getPendingOrders(Pageable pageable) {
+        LocalDateTime oneDayAgo = LocalDateTime.now().minusDays(1);
+        Page<Orderr> orderPage = orderRepository.findPendingOrdersByStatus(OrderStatus.Processing, oneDayAgo, pageable);
+        List<Orderr> orders = orderPage.getContent();
 
-        Page<Orderr> orderPage = orderRepository.findByStatus(OrderStatus.Processing, pageable);
+        return new PageImpl<>(orders, pageable, orderPage.getTotalElements());
+    }
+
+    @Override
+    public Page<Orderr> getDeliveredOrders(Pageable pageable) {
+
+        Page<Orderr> orderPage = orderRepository.findByStatus(OrderStatus.Delivered, pageable);
         List<Orderr> orders = orderPage.getContent();
 
         return new PageImpl<>(orders, pageable, orderPage.getTotalElements());

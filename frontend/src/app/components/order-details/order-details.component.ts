@@ -95,7 +95,7 @@ export class OrderDetailsComponent implements OnInit {
             this.openSnackBar(error.error?.message, "");
             setTimeout(() => {
               window.location.reload();
-            }, 1000);
+            }, 2000);
           });
         }
       } else {
@@ -103,5 +103,41 @@ export class OrderDetailsComponent implements OnInit {
         console.log('User clicked No or SnackBar dismissed');
       }
     });
+  }
+
+  sentOrder(orderId:number | undefined){
+    if(orderId != undefined){
+      this.orderService.sent(orderId).subscribe(
+      (response: JsonResponse) => {
+        this.openSnackBar(response.message, "");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      },
+      (error) => {
+        this.openSnackBar(error.error?.message, "");
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      });
+    }
+  }
+
+  deliverOrder(orderId:number | undefined){
+    if(orderId != undefined){
+      this.orderService.deliver(orderId).subscribe(
+      (response: JsonResponse) => {
+        this.openSnackBar(response.message, "");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      },
+      (error) => {
+        this.openSnackBar(error.error?.message, "");
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      });
+    }
   }
 }

@@ -36,4 +36,17 @@ export class OrderService {
         return this.http.get<PaginationResponse>(`${environment.baseApiUrl}/${this.url}/pendingOrders`, { params });
     }
 
+    getDeliveredOrders(page: number): Observable<PaginationResponse> {
+        const params = new HttpParams().set('page', page.toString());
+        return this.http.get<PaginationResponse>(`${environment.baseApiUrl}/${this.url}/deliveredOrders`, { params });
+    }
+
+    sent(orderId: number): Observable<JsonResponse> {
+        return this.http.put<JsonResponse>(`${environment.baseApiUrl}/${this.url}/sentOrder/${orderId}`, {});
+    }
+
+    deliver(orderId: number): Observable<JsonResponse> {
+        return this.http.put<JsonResponse>(`${environment.baseApiUrl}/${this.url}/deliverOrder/${orderId}`, {});
+    }
+
 }
