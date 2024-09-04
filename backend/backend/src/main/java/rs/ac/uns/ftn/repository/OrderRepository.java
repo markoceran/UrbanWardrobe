@@ -18,11 +18,17 @@ public interface OrderRepository extends JpaRepository<Orderr, Long> {
 
     Page<Orderr> findByStatus(OrderStatus status, Pageable pageable);
 
-    @Query("SELECT o FROM Orderr o WHERE o.status = :status AND o.creationTime < :oneDayAgo")
-    Page<Orderr> findPendingOrdersByStatus(@Param("status") OrderStatus status, @Param("oneDayAgo") LocalDateTime oneDayAgo, Pageable pageable);
+    @Query("SELECT o FROM Orderr o WHERE o.status = 'Processing' AND o.creationTime < :oneDayAgo")
+    Page<Orderr> findPendingOrders(@Param("oneDayAgo") LocalDateTime oneDayAgo, Pageable pageable);
 
     Optional<Orderr> findByCode(String code);
 
     @Query("SELECT o FROM Orderr o WHERE o.user.email = :email ORDER BY o.creationTime DESC")
     Set<Orderr> findOrdersByUserEmail(@Param("email") String email);
+
+    @Query("SELECT o FROM Orderr o WHERE o.status = 'Processing' AND o.code LIKE %:code%")
+    Set<Orderr> findPendingOrdersBySearch(@Param("code") String code);
+
+    @Query("SELECT o FROM Orderr o WHERE o.status = 'Sent' AND o.code LIKE %:code%")
+    Set<Orderr> findSentOrdersBySearch(@Param("code") String code);
 }

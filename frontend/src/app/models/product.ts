@@ -6,7 +6,7 @@ export interface Product {
     code: string;
     name: string;
     description: string;
-    sizeQuantities: Set<SizeQuantity>;
+    sizeQuantities: SizeQuantity[];
     price: number;
     category: ProductCategory;
     imagesName: string[];

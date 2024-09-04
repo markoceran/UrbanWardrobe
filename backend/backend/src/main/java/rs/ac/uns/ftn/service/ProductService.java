@@ -10,6 +10,7 @@ import rs.ac.uns.ftn.model.Size;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface ProductService {
 
@@ -29,7 +30,7 @@ public interface ProductService {
 
     Page<Product> getAllProductsByCategory(Pageable pageable, ProductCategory productCategory, String loggedUserEmail);
 
-    List<Product> searchProductsByCode(String code, String loggedUserEmail);
+    Set<Product> searchProductsByCode(String code, String loggedUserEmail);
 
-    List<Product> searchAllProductsByCode(String code, String loggedUserEmail);
+    Set<Product> searchAllProductsByCode(String code, String loggedUserEmail);
 }

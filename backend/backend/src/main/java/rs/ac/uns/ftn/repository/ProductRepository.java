@@ -11,6 +11,7 @@ import rs.ac.uns.ftn.model.ProductCategory;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
@@ -26,8 +27,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findAvailableProducts(Pageable pageable);
 
     @Query("SELECT DISTINCT p FROM Product p JOIN p.sizeQuantities sq WHERE p.code LIKE %:code% AND sq.quantity > 0")
-    List<Product> findAvailableProductsBySearch(@Param("code") String code);
+    Set<Product> findAvailableProductsBySearch(@Param("code") String code);
 
     @Query("SELECT p FROM Product p WHERE p.code LIKE %:code%")
-    List<Product> findProductsBySearch(@Param("code") String code);
+    Set<Product> findProductsBySearch(@Param("code") String code);
 }

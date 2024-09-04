@@ -17,6 +17,7 @@ import rs.ac.uns.ftn.service.OrderService;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Logger;
 
 @RestController
@@ -154,6 +155,16 @@ public class OrderController {
         response.setCurrentPage(ordersPage.getNumber());
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/searchPendingOrdersByCode")
+    public ResponseEntity<Set<Orderr>> searchPendingOrdersByCode(@RequestParam("code") String code) {
+        return ResponseEntity.ok().body(orderService.searchPendingOrdersByCode(code));
+    }
+
+    @GetMapping("/searchSentOrdersByCode")
+    public ResponseEntity<Set<Orderr>> searchSentOrdersByCode(@RequestParam("code") String code) {
+        return ResponseEntity.ok().body(orderService.searchSentOrdersByCode(code));
     }
 
 }

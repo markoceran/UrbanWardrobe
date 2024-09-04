@@ -13,10 +13,7 @@ import rs.ac.uns.ftn.service.SizeQuantityService;
 import rs.ac.uns.ftn.service.UserService;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -244,13 +241,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> searchProductsByCode(String code, String loggedUserEmail) {
+    public Set<Product> searchProductsByCode(String code, String loggedUserEmail) {
 
         BasicUser loggedUser = basicUserService.findByEmail(loggedUserEmail);
         if (loggedUser == null) {
-            return List.of();
+            return Set.of();
         }
-        List<Product> products = productRepository.findAvailableProductsBySearch(code.toUpperCase());
+        Set<Product> products = productRepository.findAvailableProductsBySearch(code.toUpperCase());
 
         for (Product product : products) {
 
@@ -264,7 +261,7 @@ public class ProductServiceImpl implements ProductService {
             if(loggedUser.getRole() == Role.USER){
                 User user = userService.findByEmail(loggedUserEmail);
                 if (user == null) {
-                    return List.of();
+                    return Set.of();
                 }
                 Optional<Product> productFromWishlist = user.getWishList().getProducts().stream().filter(p ->  p.getId() == product.getId()).findFirst();
                 if (productFromWishlist.isPresent()) {
@@ -274,17 +271,17 @@ public class ProductServiceImpl implements ProductService {
 
         }
 
-        return new ArrayList<>(products);
+        return products;
     }
 
     @Override
-    public List<Product> searchAllProductsByCode(String code, String loggedUserEmail) {
+    public Set<Product> searchAllProductsByCode(String code, String loggedUserEmail) {
 
         BasicUser loggedUser = basicUserService.findByEmail(loggedUserEmail);
         if (loggedUser == null) {
-            return List.of();
+            return Set.of();
         }
-        List<Product> products = productRepository.findProductsBySearch(code.toUpperCase());
+        Set<Product> products = productRepository.findProductsBySearch(code.toUpperCase());
 
         for (Product product : products) {
 
@@ -298,7 +295,7 @@ public class ProductServiceImpl implements ProductService {
             if(loggedUser.getRole() == Role.USER){
                 User user = userService.findByEmail(loggedUserEmail);
                 if (user == null) {
-                    return List.of();
+                    return Set.of();
                 }
                 Optional<Product> productFromWishlist = user.getWishList().getProducts().stream().filter(p ->  p.getId() == product.getId()).findFirst();
                 if (productFromWishlist.isPresent()) {
@@ -308,7 +305,7 @@ public class ProductServiceImpl implements ProductService {
 
         }
 
-        return new ArrayList<>(products);
+        return products;
     }
 
 }

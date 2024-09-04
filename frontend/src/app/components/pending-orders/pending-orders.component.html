@@ -1,6 +1,9 @@
 <app-header></app-header>
 <div class="order-container">
     <div *ngIf="orders.length === 0">There are no orders</div>
+    <div *ngIf="orders.length > 0" class="div-search">
+      <input type="text" placeholder="Search by code..." (keydown.enter)="onEnter($event)">
+    </div>
     <div class="order-card" *ngFor="let order of orders" (click)="openOrderDetails(order.code)">
       <div class="order-info">
         <h2>{{ order.code }}</h2>

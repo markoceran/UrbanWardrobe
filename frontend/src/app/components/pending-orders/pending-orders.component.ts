@@ -70,4 +70,22 @@ export class PendingOrdersComponent implements OnInit {
     this.router.navigate(['/order/' + code]);
   }
 
+  onEnter(event: Event): void {
+    const inputValue = (event.target as HTMLInputElement).value;
+    console.log('Enter pressed, input value:', inputValue);
+
+    this.orderService.searchPendingOrdersByCode(inputValue).subscribe(
+      (response: any) => {
+        this.orders = [];
+        this.orders = response;
+        this.orders.forEach(order => {
+          order.creationTime = this.convertToDate(order.creationTime.toString());
+        })
+        this.pageNumber = 0; 
+      },
+      (error) => {
+        this.openSnackBar(error.error?.message, "");
+    });
+  }
+
 }

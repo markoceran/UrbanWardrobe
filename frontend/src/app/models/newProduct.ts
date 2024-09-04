@@ -4,7 +4,7 @@ import { SizeQuantity } from "./sizeQuantity";
 export interface NewProduct {
     name: string;
     description: string;
-    sizeQuantities: Set<SizeQuantity>;
+    sizeQuantities: SizeQuantity[];
     price: number;
     category: ProductCategory;
 }

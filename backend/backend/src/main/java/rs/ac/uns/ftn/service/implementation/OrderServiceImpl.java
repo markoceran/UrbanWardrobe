@@ -12,10 +12,7 @@ import rs.ac.uns.ftn.repository.OrderRepository;
 import rs.ac.uns.ftn.service.*;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -209,7 +206,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Page<Orderr> getPendingOrders(Pageable pageable) {
         LocalDateTime oneDayAgo = LocalDateTime.now().minusDays(1);
-        Page<Orderr> orderPage = orderRepository.findPendingOrdersByStatus(OrderStatus.Processing, oneDayAgo, pageable);
+        Page<Orderr> orderPage = orderRepository.findPendingOrders(oneDayAgo, pageable);
         List<Orderr> orders = orderPage.getContent();
 
         return new PageImpl<>(orders, pageable, orderPage.getTotalElements());
@@ -223,5 +220,16 @@ public class OrderServiceImpl implements OrderService {
 
         return new PageImpl<>(orders, pageable, orderPage.getTotalElements());
     }
+
+    @Override
+    public Set<Orderr> searchPendingOrdersByCode(String code) {
+        return orderRepository.findPendingOrdersBySearch(code.toUpperCase());
+    }
+
+    @Override
+    public Set<Orderr> searchSentOrdersByCode(String code) {
+        return orderRepository.findSentOrdersBySearch(code.toUpperCase());
+    }
+
 
 }

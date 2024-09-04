@@ -8,5 +8,5 @@ export class UserDTO {
     lastName!: string;
     phoneNumber!: string;
     shippingAddress!: ShippingAddress;
-    orders!: Set<Order>;
+    orders!: Order[];
 }

@@ -49,4 +49,17 @@ export class OrderService {
         return this.http.put<JsonResponse>(`${environment.baseApiUrl}/${this.url}/deliverOrder/${orderId}`, {});
     }
 
+    searchPendingOrdersByCode(code: string): Observable<Order[]> {
+        const params = new HttpParams()
+        .set('code', code);
+        return this.http.get<Order[]>(`${environment.baseApiUrl}/${this.url}/searchPendingOrdersByCode`, { params });
+    }
+
+    searchSentOrdersByCode(code: string): Observable<Order[]> {
+        const params = new HttpParams()
+        .set('code', code);
+        return this.http.get<Order[]>(`${environment.baseApiUrl}/${this.url}/searchSentOrdersByCode`, { params });
+    }
+
+
 }

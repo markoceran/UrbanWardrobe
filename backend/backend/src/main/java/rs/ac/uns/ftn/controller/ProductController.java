@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 @RestController
@@ -211,7 +212,7 @@ public class ProductController {
     }
 
     @GetMapping("/searchByCode")
-    public ResponseEntity<List<Product>> searchByCode(@RequestParam("code") String code, HttpServletRequest request) {
+    public ResponseEntity<Set<Product>> searchByCode(@RequestParam("code") String code, HttpServletRequest request) {
 
         String token = tokenUtils.extractTokenFromRequest(request);
         String loggedUserEmail = tokenUtils.getEmailFromToken(token);
@@ -220,7 +221,7 @@ public class ProductController {
     }
 
     @GetMapping("/searchAllByCode")
-    public ResponseEntity<List<Product>> searchAllByCode(@RequestParam("code") String code, HttpServletRequest request) {
+    public ResponseEntity<Set<Product>> searchAllByCode(@RequestParam("code") String code, HttpServletRequest request) {
 
         String token = tokenUtils.extractTokenFromRequest(request);
         String loggedUserEmail = tokenUtils.getEmailFromToken(token);

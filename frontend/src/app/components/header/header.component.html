@@ -35,7 +35,7 @@
     </li>
     <li class="nav-item navbar-right">
       <a class="nav-link" *ngIf="showSearchInput"><input type="text" (keydown.enter)="onEnter($event)" placeholder="Search by code..."></a>
-      <a class="nav-link" (click)="clickSearch()"><i class="fas fa-magnifying-glass"></i> Search</a>
+      <a class="nav-link" (click)="clickSearch()" *ngIf="role === 'ADMIN' || role === 'USER'"><i class="fas fa-magnifying-glass"></i> Search</a>
       <a class="nav-link" routerLink="/createProduct" *ngIf="role === 'ADMIN'"><i class="fas fa-square-plus"></i> Create product</a>
       <a class="nav-link" routerLink="/createUser" *ngIf="role === 'ADMIN'"><i class="fas fa-user-plus"></i> Create user</a>
       <a class="nav-link" routerLink="/pendingOrders" *ngIf="role === 'WORKER'"><i class="fas fa-cubes"></i> Pending orders</a>

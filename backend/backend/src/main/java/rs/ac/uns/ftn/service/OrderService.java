@@ -34,4 +34,8 @@ public interface OrderService {
 
     Page<Orderr> getDeliveredOrders(Pageable pageable);
 
+    Set<Orderr> searchPendingOrdersByCode(String code);
+
+    Set<Orderr> searchSentOrdersByCode(String code);
+
 }
