@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import rs.ac.uns.ftn.model.Product;
 import rs.ac.uns.ftn.model.ProductCategory;
 import rs.ac.uns.ftn.model.Size;
@@ -27,4 +28,8 @@ public interface ProductService {
     Page<Product> getAllProducts(Pageable pageable, String loggedUserEmail);
 
     Page<Product> getAllProductsByCategory(Pageable pageable, ProductCategory productCategory, String loggedUserEmail);
+
+    List<Product> searchProductsByCode(String code, String loggedUserEmail);
+
+    List<Product> searchAllProductsByCode(String code, String loggedUserEmail);
 }

@@ -87,6 +87,52 @@ export class MainPageComponent implements OnInit, OnDestroy  {
         });
       }
       
+    }else if(this.category === 'search'){
+
+      this.route.paramMap.subscribe(params => {
+        const code = params.get('code');
+        if(code !== null){
+          if(this.role === "ADMIN"){
+            this.productService.searchAllByCode(code).subscribe(
+              (response: any) => {
+                  this.products = [];
+                  this.products = response.map((product: Product) => ({
+                    ...product,
+                    images: [] // Ensure images is initialized
+                  }));
+                  this.products.forEach(product => {
+                    this.imageService.getImage(product.code, product.imagesName[0]).subscribe(blob => {
+                      const image = URL.createObjectURL(blob);
+                      product.images.push(image);
+                  });
+              });
+              },
+              (error) => {
+                this.openSnackBar("Error during search", "");
+            });
+          }else {
+            this.productService.searchByCode(code).subscribe(
+              (response: any) => {
+                  this.products = [];
+                  this.products = response.map((product: Product) => ({
+                    ...product,
+                    images: [] // Ensure images is initialized
+                  }));
+                  this.products.forEach(product => {
+                    this.imageService.getImage(product.code, product.imagesName[0]).subscribe(blob => {
+                      const image = URL.createObjectURL(blob);
+                      product.images.push(image);
+                  });
+              });
+              },
+              (error) => {
+                this.openSnackBar("Error during search", "");
+            });
+          }
+          
+        }
+      });
+
     }else if(this.category){
 
       if(this.role === 'ADMIN'){

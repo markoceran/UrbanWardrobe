@@ -41,8 +41,15 @@ export class ProfileComponent implements OnInit {
     
   }
 
-  logout() {
-    this.authService.logout();
+  logout(){
+    this.authService.logout().subscribe(
+      () => {
+        localStorage.clear();
+        this.router.navigate(['']);
+      },
+      (error) => {
+        this.openSnackBar(error.error?.message, "");
+    });
   }
 
   openSnackBar(message: string, action: string) {

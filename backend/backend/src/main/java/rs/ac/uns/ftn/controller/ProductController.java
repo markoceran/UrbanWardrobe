@@ -210,5 +210,23 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/searchByCode")
+    public ResponseEntity<List<Product>> searchByCode(@RequestParam("code") String code, HttpServletRequest request) {
+
+        String token = tokenUtils.extractTokenFromRequest(request);
+        String loggedUserEmail = tokenUtils.getEmailFromToken(token);
+
+        return ResponseEntity.ok().body(productService.searchProductsByCode(code, loggedUserEmail));
+    }
+
+    @GetMapping("/searchAllByCode")
+    public ResponseEntity<List<Product>> searchAllByCode(@RequestParam("code") String code, HttpServletRequest request) {
+
+        String token = tokenUtils.extractTokenFromRequest(request);
+        String loggedUserEmail = tokenUtils.getEmailFromToken(token);
+
+        return ResponseEntity.ok().body(productService.searchAllProductsByCode(code, loggedUserEmail));
+    }
+
 
 }

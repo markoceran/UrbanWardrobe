@@ -22,6 +22,10 @@ const routes: Routes = [
     component: MainPageComponent
   },
   {
+    path: 'Main-Page/:category/:code',
+    component: MainPageComponent
+  },
+  {
     path: '',
     component: LoginComponent,
     canActivate: [LoginGuardService]

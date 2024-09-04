@@ -55,4 +55,17 @@ export class ProductService {
         .set('category', category);
         return this.http.get<PaginationResponse>(`${environment.baseApiUrl}/${this.url}/allProductsByCategory`, { params });
     }
+
+    searchByCode(code: string): Observable<Product[]> {
+        const params = new HttpParams()
+        .set('code', code);
+        return this.http.get<Product[]>(`${environment.baseApiUrl}/${this.url}/searchByCode`, { params });
+    }
+
+    searchAllByCode(code: string): Observable<Product[]> {
+        const params = new HttpParams()
+        .set('code', code);
+        return this.http.get<Product[]>(`${environment.baseApiUrl}/${this.url}/searchAllByCode`, { params });
+    }
+
 }

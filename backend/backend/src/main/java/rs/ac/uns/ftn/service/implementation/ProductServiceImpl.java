@@ -13,6 +13,7 @@ import rs.ac.uns.ftn.service.SizeQuantityService;
 import rs.ac.uns.ftn.service.UserService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -240,6 +241,74 @@ public class ProductServiceImpl implements ProductService {
 
         }
         return new PageImpl<>(products, pageable, productPage.getTotalElements());
+    }
+
+    @Override
+    public List<Product> searchProductsByCode(String code, String loggedUserEmail) {
+
+        BasicUser loggedUser = basicUserService.findByEmail(loggedUserEmail);
+        if (loggedUser == null) {
+            return List.of();
+        }
+        List<Product> products = productRepository.findAvailableProductsBySearch(code.toUpperCase());
+
+        for (Product product : products) {
+
+            try {
+                List<String> fileNameList = imageService.listFiles(product.getCode());
+                product.setImagesName(fileNameList);
+            } catch (Exception e) {
+                product.setImagesName(Collections.emptyList());
+            }
+
+            if(loggedUser.getRole() == Role.USER){
+                User user = userService.findByEmail(loggedUserEmail);
+                if (user == null) {
+                    return List.of();
+                }
+                Optional<Product> productFromWishlist = user.getWishList().getProducts().stream().filter(p ->  p.getId() == product.getId()).findFirst();
+                if (productFromWishlist.isPresent()) {
+                    product.setInWishlist(true);
+                }
+            }
+
+        }
+
+        return new ArrayList<>(products);
+    }
+
+    @Override
+    public List<Product> searchAllProductsByCode(String code, String loggedUserEmail) {
+
+        BasicUser loggedUser = basicUserService.findByEmail(loggedUserEmail);
+        if (loggedUser == null) {
+            return List.of();
+        }
+        List<Product> products = productRepository.findProductsBySearch(code.toUpperCase());
+
+        for (Product product : products) {
+
+            try {
+                List<String> fileNameList = imageService.listFiles(product.getCode());
+                product.setImagesName(fileNameList);
+            } catch (Exception e) {
+                product.setImagesName(Collections.emptyList());
+            }
+
+            if(loggedUser.getRole() == Role.USER){
+                User user = userService.findByEmail(loggedUserEmail);
+                if (user == null) {
+                    return List.of();
+                }
+                Optional<Product> productFromWishlist = user.getWishList().getProducts().stream().filter(p ->  p.getId() == product.getId()).findFirst();
+                if (productFromWishlist.isPresent()) {
+                    product.setInWishlist(true);
+                }
+            }
+
+        }
+
+        return new ArrayList<>(products);
     }
 
 }

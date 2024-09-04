@@ -18,7 +18,7 @@ providedIn: 'root'
 export class AuthService {
   
   private url = "user";
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient) { }
 
   Login(loginDTO: LoginDTO): Observable<string> {
     return this.http.post(`${environment.baseApiUrl}/${this.url}/login`, loginDTO, {responseType : 'text'});
@@ -31,9 +31,8 @@ export class AuthService {
     return true;
   }
 
-  logout() {
-    localStorage.clear();
-    this.router.navigate(['']);
+  logout(): Observable<JsonResponse> {
+    return this.http.post<JsonResponse>(`${environment.baseApiUrl}/${this.url}/logout`, {});
   }
 
    private secretKey = 'my_secret_key';

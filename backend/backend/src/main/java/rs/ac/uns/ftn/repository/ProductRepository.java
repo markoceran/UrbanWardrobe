@@ -24,4 +24,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT DISTINCT p FROM Product p JOIN p.sizeQuantities sq WHERE sq.quantity > 0")
     Page<Product> findAvailableProducts(Pageable pageable);
+
+    @Query("SELECT DISTINCT p FROM Product p JOIN p.sizeQuantities sq WHERE p.code LIKE %:code% AND sq.quantity > 0")
+    List<Product> findAvailableProductsBySearch(@Param("code") String code);
+
+    @Query("SELECT p FROM Product p WHERE p.code LIKE %:code%")
+    List<Product> findProductsBySearch(@Param("code") String code);
 }
