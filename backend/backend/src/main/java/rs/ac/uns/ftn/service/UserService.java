@@ -29,4 +29,6 @@ public interface UserService {
     Basket getUserBasket(String email);
 
     UserDTO getUserProfile(String email);
+
+    User updateUser(UserDTO userDTO, String loggedUserEmail);
 }

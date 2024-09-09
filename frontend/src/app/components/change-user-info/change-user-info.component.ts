@@ -2,41 +2,45 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ShippingAddress } from 'src/app/models/shippingAddress';
+import { defaultIfEmpty } from 'rxjs';
+import { UserDTO } from 'src/app/models/userDTO';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
-  selector: 'app-change-shipping-address',
-  templateUrl: './change-shipping-address.component.html',
-  styleUrls: ['./change-shipping-address.component.css']
+  selector: 'app-change-user-info',
+  templateUrl: './change-user-info.component.html',
+  styleUrls: ['./change-user-info.component.css']
 })
-export class ChangeShippingAddressComponent implements OnInit {
+export class ChangeUserInfoComponent implements OnInit {
 
   editForm!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    public dialogRef: MatDialogRef<ChangeShippingAddressComponent>,
+    public dialogRef: MatDialogRef<ChangeUserInfoComponent>,
     private authService: AuthService,
     private _snackBar: MatSnackBar,
-    @Inject(MAT_DIALOG_DATA) private data: ShippingAddress | undefined
+    @Inject(MAT_DIALOG_DATA) private data: UserDTO | undefined
   ){}
 
   ngOnInit(): void {
     this.editForm = this.fb.group({
-      country: [this.data?.country, Validators.required],
-      city: [this.data?.city, Validators.required],
-      street: [this.data?.street, Validators.required],
-      number: [this.data?.number, Validators.required],
-      postalCode: [this.data?.postalCode, Validators.required]
+      firstName: [this.data?.firstName, Validators.required],
+      lastName: [this.data?.lastName, Validators.required],
+      phoneNumber: [this.data?.phoneNumber, Validators.required],
+      password: ["", Validators.minLength(6)],
     });
   }
 
   onSubmit(): void {
     console.log('Form submitted');
     if (this.editForm.valid) {
-      const formValues = this.editForm.value;
-      this.authService.updateShippingAddress(formValues).subscribe(
+      let formValues:UserDTO; 
+      formValues = this.editForm.value;
+      if(formValues.password === ""){
+        formValues.password = "dontChange"
+      }
+      this.authService.updateUser(formValues).subscribe(
         (message) => {
           this.dialogRef.close(this.editForm.value);
           this.openSnackBar(message.message, "");
@@ -64,5 +68,6 @@ export class ChangeShippingAddressComponent implements OnInit {
       duration: 3500
     });
   }
+
 
 }

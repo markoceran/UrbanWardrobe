@@ -183,6 +183,19 @@ public class UserController {
         return null;
     }
 
+    public String validateUserInfo(UserDTO newUser) {
+        if (newUser.getFirstName() == null || newUser.getFirstName().isEmpty() ||
+                newUser.getLastName() == null || newUser.getLastName().isEmpty() ||
+                newUser.getPassword() == null || newUser.getPassword().isEmpty() ||
+                newUser.getPhoneNumber() == null || newUser.getPhoneNumber().isEmpty()) {
+            return "Validation error. All fields are required.";
+        }
+        if (newUser.getPassword().length() < 6) {
+            return "Validation error. Password must be at least 6 characters long.";
+        }
+        return null;
+    }
+
     public String validateShippingAddress(ShippingAddress shippingAddress) {
         if (shippingAddress == null) {
             return "Validation error. Shipping address is required.";
@@ -263,6 +276,27 @@ public class UserController {
             return ResponseEntity.ok(new JsonResponse("Shipping address updated successfully."));
         } else {
             return ResponseEntity.badRequest().body(new JsonResponse("Failed to update shipping address."));
+        }
+    }
+
+    @PutMapping("/updateUser")
+    public ResponseEntity<JsonResponse> updateUser(@RequestBody UserDTO userDTO, HttpServletRequest request) {
+
+        String token = tokenUtils.extractTokenFromRequest(request);
+        String loggedUserEmail = tokenUtils.getEmailFromToken(token);
+
+        String validationError = validateUserInfo(userDTO);
+        if (validationError != null) {
+            logger.info(validationError);
+            return ResponseEntity.badRequest().body(new JsonResponse(validationError));
+        }
+
+        User user = userService.updateUser(userDTO, loggedUserEmail);
+
+        if (user != null) {
+            return ResponseEntity.ok(new JsonResponse("User updated successfully."));
+        } else {
+            return ResponseEntity.badRequest().body(new JsonResponse("Failed to update user."));
         }
     }
 

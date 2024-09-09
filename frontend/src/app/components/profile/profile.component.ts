@@ -6,6 +6,7 @@ import { UserDTO } from 'src/app/models/userDTO';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChangeShippingAddressComponent } from '../change-shipping-address/change-shipping-address.component';
 import { ShippingAddress } from 'src/app/models/shippingAddress';
+import { ChangeUserInfoComponent } from '../change-user-info/change-user-info.component';
 
 @Component({
   selector: 'app-profile',
@@ -38,7 +39,17 @@ export class ProfileComponent implements OnInit {
   }
 
   editProfile() {
-    
+    const dialogRef = this.dialog.open(ChangeUserInfoComponent, {
+      width: '400px',
+      data: this.user 
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('The dialog was closed with result:', result);
+        // Optionally handle the result here
+      }
+    });
   }
 
   logout(){

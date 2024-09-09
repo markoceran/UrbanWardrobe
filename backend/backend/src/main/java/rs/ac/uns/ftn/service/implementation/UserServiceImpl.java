@@ -99,6 +99,25 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public User updateUser(UserDTO userDTO, String loggedUserEmail) {
+        User existingUser = this.findByEmail(loggedUserEmail);
+        if (existingUser != null) {
+            existingUser.setFirstName(userDTO.getFirstName());
+            existingUser.setLastName(userDTO.getLastName());
+            existingUser.setPhoneNumber(userDTO.getPhoneNumber());
+            if(!userDTO.getPassword().equals("dontChange")){
+                existingUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            }
+
+            this.save(existingUser);
+
+            return existingUser;
+        }
+        return null;
+    }
+
+
 
     @Override
     public Wishlist getUserWishlist(String email) {

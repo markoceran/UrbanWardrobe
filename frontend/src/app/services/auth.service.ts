@@ -158,4 +158,11 @@ export class AuthService {
     });
   }
 
+  updateUser(user: UserDTO): Observable<JsonResponse> {
+    return this.http.put<JsonResponse>(`${environment.baseApiUrl}/${this.url}/updateUser`, user, {
+      headers: { 'Content-Type': 'application/json' },
+      responseType: 'json'
+    });
+  }
+
 }

@@ -38,6 +38,7 @@ import { CreateUserComponent } from './components/create-user/create-user.compon
 import { PendingOrdersComponent } from './components/pending-orders/pending-orders.component';
 import { SentOrdersComponent } from './components/sent-orders/sent-orders.component';
 import { DeliveredOrdersComponent } from './components/delivered-orders/delivered-orders.component';
+import { ChangeUserInfoComponent } from './components/change-user-info/change-user-info.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { DeliveredOrdersComponent } from './components/delivered-orders/delivere
     CreateUserComponent,
     PendingOrdersComponent,
     SentOrdersComponent,
-    DeliveredOrdersComponent
+    DeliveredOrdersComponent,
+    ChangeUserInfoComponent
   ],
   imports: [
     BrowserModule,
