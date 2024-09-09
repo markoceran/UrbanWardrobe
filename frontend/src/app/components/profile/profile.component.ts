@@ -86,17 +86,24 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['/order/' + code]);
   }
 
-  openChangeShippingAddressDialog(shippingAddress: ShippingAddress | undefined): void {
-    const dialogRef = this.dialog.open(ChangeShippingAddressComponent, {
+  openChangeShippingAddressDialog(): void {
+    if(this.user?.shippingAddress){
+      const dialogRef = this.dialog.open(ChangeShippingAddressComponent, {
       width: '400px',
-      data: shippingAddress 
-    });
+      data: this.user.shippingAddress 
+      });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log('The dialog was closed with result:', result);
-        // Optionally handle the result here
-      }
-    });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          console.log('The dialog was closed with result:', result);
+          // Optionally handle the result here
+        }
+      });
+    }else {
+      console.log('No shipping address found.');
+      // Optionally, show a message or redirect the user
+    }
+  
+    
   }
 }

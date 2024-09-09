@@ -27,7 +27,7 @@
         <p>Postal code: {{ user?.shippingAddress?.postalCode }}</p>
         <br>
         <p>Phone number: {{ user?.phoneNumber }}</p>
-        <button class="change-shipping-address-btn" (click)="openChangeShippingAddressDialog(user?.shippingAddress)">Change shipping address</button>
+        <button class="change-shipping-address-btn" (click)="openChangeShippingAddressDialog()">Change shipping address</button>
       </div>
       <div *ngIf="selectedTab === 'orders'">
         <div class="order-card" *ngFor="let order of user?.orders" (click)="openOrderDetails(order.code)">
