@@ -6,3 +6,10 @@ Tech Stack
 -Backend: Java, Spring Boot
 -Database: MySQL
 -Authentication: JWT (JSON Web Tokens)
+
+Run comands:
+Docker compose - docker-compose up --build
+Front - ng serve
+MySQL - create database urbanwardrobe;
+
+Project url: http://localhost:4200
