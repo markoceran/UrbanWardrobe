@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import {Observable, of} from 'rxjs';
-import {HttpResponse} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -21,11 +20,15 @@ export class RoleGuardService implements CanActivate {
     const token = localStorage.getItem('authToken');
     const jwt: JwtHelperService = new JwtHelperService();
 
-    // Moze i ne mora da se prikazuje
-    //console.log('Expected Roles:', expectedRoles);
-
     if (!token) {
       console.error('Access forbidden. Invalid token or missing user type.');
+      this.router.navigate(['']);
+      return false;
+    }
+
+     // Check if token is expired
+     if (jwt.isTokenExpired(token)) {
+      console.error('Access forbidden. Token is expired.');
       this.router.navigate(['']);
       return false;
     }
