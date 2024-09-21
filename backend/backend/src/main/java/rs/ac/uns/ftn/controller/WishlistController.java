@@ -26,8 +26,12 @@ public class WishlistController {
         this.logger = Logger.getLogger(String.valueOf(UserController.class));
     }
 
-    @PutMapping("/addProduct/{productId}")
-    public ResponseEntity<JsonResponse> addProduct(@PathVariable Long productId, HttpServletRequest request) {
+    @PostMapping("/addProduct")
+    public ResponseEntity<JsonResponse> addProduct(@RequestParam("productId") Long productId, HttpServletRequest request) {
+        if (productId < 0) {
+            return ResponseEntity.badRequest().body(new JsonResponse("Product id can't be negative"));
+        }
+
         String token = tokenUtils.extractTokenFromRequest(request);
         String loggedUserEmail = tokenUtils.getEmailFromToken(token);
         Product product = wishlistService.addProduct(productId, loggedUserEmail);
@@ -39,7 +43,7 @@ public class WishlistController {
         return ResponseEntity.ok(new JsonResponse("Product successfully added to wishlist."));
     }
 
-    @PutMapping("/removeProduct/{productId}")
+    @DeleteMapping("/removeProduct/{productId}")
     public ResponseEntity<JsonResponse> removeProduct(@PathVariable Long productId, HttpServletRequest request) {
         String token = tokenUtils.extractTokenFromRequest(request);
         String loggedUserEmail = tokenUtils.getEmailFromToken(token);

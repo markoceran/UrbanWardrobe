@@ -1,6 +1,9 @@
 package rs.ac.uns.ftn.security;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +24,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final TokenUtils tokenUtils;
     private final UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
     public JwtRequestFilter(TokenUtils tokenUtils, UserDetailsServiceImpl userDetailsService) {
         this.tokenUtils = tokenUtils;
         this.userDetailsService = userDetailsService;
@@ -36,13 +40,20 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String jwtToken = null;
 
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-            jwtToken = requestTokenHeader.substring(7);
+            String tokenJson = requestTokenHeader.substring(7); // Remove "Bearer " prefix
             try {
+                // Parse the JSON to get the accessToken
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode tokenNode = objectMapper.readTree(tokenJson);
+                jwtToken = tokenNode.get("accessToken").asText(); // Extract accessToken
+
                 email = tokenUtils.getEmailFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
                 System.out.println("JWT Token has expired");
+            } catch (Exception e) {
+                System.out.println("Error parsing token JSON");
             }
         } else {
             logger.warn("JWT Token does not begin with Bearer String");
@@ -53,11 +64,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
 
             if (tokenUtils.validateToken(jwtToken, userDetails)) {
-
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken
-                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }

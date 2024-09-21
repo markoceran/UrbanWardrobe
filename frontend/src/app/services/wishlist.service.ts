@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { JsonResponse } from "../models/jsonResponse";
@@ -13,11 +13,13 @@ export class WishlistService {
     constructor(private http: HttpClient) { }
 
     addToWishlist(productId: number): Observable<JsonResponse> {
-        return this.http.put<JsonResponse>(`${environment.baseApiUrl}/${this.url}/addProduct/${productId}`, {});
+        const params = new HttpParams()
+        .set('productId', productId.toString())
+        return this.http.post<JsonResponse>(`${environment.baseApiUrl}/${this.url}/addProduct`, {}, {params});
     }
 
     removeFromWishlist(productId: number): Observable<JsonResponse> {
-        return this.http.put<JsonResponse>(`${environment.baseApiUrl}/${this.url}/removeProduct/${productId}`, {});
+        return this.http.delete<JsonResponse>(`${environment.baseApiUrl}/${this.url}/removeProduct/${productId}`, {});
     }
 
 }

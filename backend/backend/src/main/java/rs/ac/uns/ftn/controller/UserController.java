@@ -8,7 +8,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.model.*;
 import rs.ac.uns.ftn.model.dto.*;
@@ -17,8 +16,6 @@ import rs.ac.uns.ftn.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
 import java.util.logging.Logger;
 
 @RestController
@@ -50,34 +47,11 @@ public class UserController {
 
     private final Logger logger;
 
-    private final PasswordEncoder passwordEncoder;
 
-    public UserController(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
+    public UserController() {
         this.logger = Logger.getLogger(String.valueOf(UserController.class));
     }
 
-
-    @GetMapping("/allAdmin")
-    public List<Admin> allAdmin() {
-        return this.adminService.getAll();
-    }
-    @GetMapping("/allUser")
-    public List<User> allUser() {
-        return this.userService.getAll();
-    }
-    @GetMapping("/allWorker")
-    public List<Worker> allWorker() {
-        return this.workerService.getAll();
-    }
-    @GetMapping("/allCourier")
-    public List<Courier> allCourier() {
-        return this.courierService.getAll();
-    }
-    @GetMapping("/allBasicUser")
-    public List<BasicUser> allBasicUser() {
-        return this.basicUserService.getAll();
-    }
 
     @GetMapping("/wishlist/{email}")
     public Wishlist wishlist(@PathVariable String email) {

@@ -25,10 +25,12 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    if (!localStorage.getItem('authToken')) {
-      return false;
+    const token = localStorage.getItem('authToken');
+    // Check if the token exists and if it is not expired
+    if(token && !this.isTokenExpired()){
+      return true
     }
-    return true;
+    return false
   }
 
   logout(): Observable<JsonResponse> {

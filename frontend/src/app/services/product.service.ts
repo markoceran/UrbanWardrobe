@@ -29,7 +29,7 @@ export class ProductService {
     }
 
     createProduct(product: NewProduct): Observable<Product> {
-        return this.http.post<Product>(`${environment.baseApiUrl}/${this.url}`, product);
+        return this.http.post<Product>(`${environment.baseApiUrl}/${this.url}/create`, product);
     }
 
 

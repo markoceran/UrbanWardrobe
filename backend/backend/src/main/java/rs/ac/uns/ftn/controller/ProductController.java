@@ -19,8 +19,6 @@ import rs.ac.uns.ftn.service.ProductService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -53,7 +51,7 @@ public class ProductController {
         }
     }
 
-    @PostMapping("")
+    @PostMapping("/create")
     public ResponseEntity<Product> create(@RequestBody Product newProduct) {
 
         String validationError = validateProduct(newProduct);
@@ -116,14 +114,20 @@ public class ProductController {
 
     @GetMapping("/byCategory")
     public ResponseEntity<PaginationResponse> getProductsByCategory(
-            @RequestParam(defaultValue = "0") int page, @RequestParam("category") String categoryString, HttpServletRequest request) throws IOException {
+            @RequestParam(defaultValue = "0") int page, @RequestParam("category") String categoryParam, HttpServletRequest request) throws IOException {
 
         if(page < 0){
             PaginationResponse response = new PaginationResponse("Page number is less than 0.");
             return ResponseEntity.badRequest().body(response);
         }
 
-        ProductCategory productCategory = ProductCategory.valueOf(categoryString);
+        ProductCategory productCategory;
+        try {
+            productCategory = ProductCategory.valueOf(categoryParam);
+        } catch (IllegalArgumentException e) {
+            PaginationResponse response = new PaginationResponse("Invalid category parameter.");
+            return ResponseEntity.badRequest().body(response);
+        }
 
         String token = tokenUtils.extractTokenFromRequest(request);
         String loggedUserEmail = tokenUtils.getEmailFromToken(token);
@@ -142,9 +146,14 @@ public class ProductController {
     }
 
     @PutMapping("/refillQuantity/{productId}")
-    public ResponseEntity<JsonResponse> refillQuantity(@PathVariable Long productId,  @RequestParam("size") String sizeString,  @RequestParam("quantity") Integer quantity) {
+    public ResponseEntity<JsonResponse> refillQuantity(@PathVariable Long productId,  @RequestParam("size") String sizeParam,  @RequestParam("quantity") Integer quantity) {
 
-        Size size = Size.valueOf(sizeString);
+        Size size;
+        try {
+            size = Size.valueOf(sizeParam);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new JsonResponse("Invalid size parameter."));
+        }
 
         if (quantity <= 0){
             return ResponseEntity.badRequest().body(new JsonResponse("Can't refill quantity. Quantity can't be less than 0 or 0."));
@@ -161,7 +170,7 @@ public class ProductController {
 
     @GetMapping("/allProduct")
     public ResponseEntity<PaginationResponse> getAllProduct (
-            @RequestParam(defaultValue = "0") int page, HttpServletRequest request) throws IOException {
+            @RequestParam(defaultValue = "0") int page, HttpServletRequest request) {
 
         if(page < 0){
             PaginationResponse response = new PaginationResponse("Page number is less than 0.");
@@ -186,14 +195,20 @@ public class ProductController {
 
     @GetMapping("/allProductsByCategory")
     public ResponseEntity<PaginationResponse> getAllProductsByCategory(
-            @RequestParam(defaultValue = "0") int page, @RequestParam("category") String categoryString, HttpServletRequest request) throws IOException {
+            @RequestParam(defaultValue = "0") int page, @RequestParam("category") String categoryParam, HttpServletRequest request) {
 
         if(page < 0){
             PaginationResponse response = new PaginationResponse("Page number is less than 0.");
             return ResponseEntity.badRequest().body(response);
         }
 
-        ProductCategory productCategory = ProductCategory.valueOf(categoryString);
+        ProductCategory productCategory;
+        try {
+            productCategory = ProductCategory.valueOf(categoryParam);
+        } catch (IllegalArgumentException e) {
+            PaginationResponse response = new PaginationResponse("Invalid category parameter.");
+            return ResponseEntity.badRequest().body(response);
+        }
 
         String token = tokenUtils.extractTokenFromRequest(request);
         String loggedUserEmail = tokenUtils.getEmailFromToken(token);

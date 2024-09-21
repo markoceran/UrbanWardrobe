@@ -30,6 +30,7 @@
         <button class="change-shipping-address-btn" (click)="openChangeShippingAddressDialog()">Change shipping address</button>
       </div>
       <div *ngIf="selectedTab === 'orders'">
+        <h6 *ngIf="user?.orders?.length === 0">No orders</h6>
         <div class="order-card" *ngFor="let order of user?.orders" (click)="openOrderDetails(order.code)">
           <div class="order-info">
             <h2>{{ order.creationTime | date:'dd.MM.yyyy - HH:mm' }}</h2>

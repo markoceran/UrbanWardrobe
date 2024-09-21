@@ -34,10 +34,11 @@ public class TokenUtils {
     public String extractTokenFromRequest(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String tokenJson = authorizationHeader.substring(7); // Remove "Bearer " prefix
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
-                JsonNode tokenJson = objectMapper.readTree(authorizationHeader.substring(7));
-                return tokenJson.get("accessToken").asText();
+                JsonNode tokenNode = objectMapper.readTree(tokenJson);
+                return tokenNode.get("accessToken").asText(); // Extract accessToken
             } catch (Exception e) {
                 return null;
             }

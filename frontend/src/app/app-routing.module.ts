@@ -14,29 +14,38 @@ import { CreateUserComponent } from './components/create-user/create-user.compon
 import { PendingOrdersComponent } from './components/pending-orders/pending-orders.component';
 import { SentOrdersComponent } from './components/sent-orders/sent-orders.component';
 import { DeliveredOrdersComponent } from './components/delivered-orders/delivered-orders.component';
+import { RoleGuardService } from './guards/role-guard.service';
+
 
 
 const routes: Routes = [
   {
     path: 'Main-Page/:category',
-    component: MainPageComponent
+    component: MainPageComponent,
+    canActivate: [RoleGuardService], 
+    data: { expectedRoles: 'ADMIN|USER' }
   },
   {
     path: 'Main-Page/:category/:code',
-    component: MainPageComponent
+    component: MainPageComponent,
+    canActivate: [RoleGuardService], 
+    data: { expectedRoles: 'ADMIN|USER' }
   },
   {
     path: '',
-    component: LoginComponent,
-    canActivate: [LoginGuardService]
+    component: LoginComponent
   },
   {
     path: 'createProduct',
-    component: CreateProductComponent
+    component: CreateProductComponent,
+    canActivate: [RoleGuardService], 
+    data: { expectedRoles: 'ADMIN' }
   },
   {
     path: 'product/:productCode',
-    component: ProductDetailsComponent
+    component: ProductDetailsComponent,
+    canActivate: [RoleGuardService], 
+    data: { expectedRoles: 'ADMIN|USER' }
   },
   {
     path: 'register',
@@ -44,35 +53,51 @@ const routes: Routes = [
   },
   {
     path: 'wishlist',
-    component: WishlistComponent
+    component: WishlistComponent,
+    canActivate: [RoleGuardService], 
+    data: { expectedRoles: 'USER' }
   },
   {
     path: 'basket',
-    component: BasketComponent
+    component: BasketComponent,
+    canActivate: [RoleGuardService], 
+    data: { expectedRoles: 'USER' }
   },
   {
     path: 'order/:code',
-    component: OrderDetailsComponent
+    component: OrderDetailsComponent,
+    canActivate: [RoleGuardService], 
+    data: { expectedRoles: 'COURIER|USER|WORKER' }
   },
   {
     path: 'profile',
-    component: ProfileComponent
+    component: ProfileComponent,
+    canActivate: [RoleGuardService], 
+    data: { expectedRoles: 'USER' }
   },
   {
     path: 'createUser',
-    component: CreateUserComponent
+    component: CreateUserComponent,
+    canActivate: [RoleGuardService], 
+    data: { expectedRoles: 'ADMIN' }
   },
   {
     path: 'pendingOrders',
-    component: PendingOrdersComponent
+    component: PendingOrdersComponent,
+    canActivate: [RoleGuardService], 
+    data: { expectedRoles: 'WORKER' }
   },
   {
     path: 'sentOrders',
-    component: SentOrdersComponent
+    component: SentOrdersComponent,
+    canActivate: [RoleGuardService], 
+    data: { expectedRoles: 'WORKER|COURIER' }
   },
   {
     path: 'deliveredOrders',
-    component: DeliveredOrdersComponent
+    component: DeliveredOrdersComponent,
+    canActivate: [RoleGuardService], 
+    data: { expectedRoles: 'COURIER' }
   }
 ];
 

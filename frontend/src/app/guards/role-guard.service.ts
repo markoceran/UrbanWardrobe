@@ -33,15 +33,15 @@ export class RoleGuardService implements CanActivate {
       return false;
     }
 
-    const info = jwt.decodeToken(token);
+    const tokenData = jwt.decodeToken(token);
 
-    // Check if info.userType is defined and contains at least one element
-    if (info && info.userType) {
+    if (tokenData.role[0].authority) {
+      
       const roles: string[] = expectedRoles.split('|', 3);
 
-      if (roles.indexOf(info.userType) === -1) {
+      if (roles.indexOf(tokenData.role[0].authority) === -1) {
         console.error('Access forbidden. User does not have the required role.');
-        this.router.navigate(['']);
+        this.router.navigate(['/Main-Page', 'home']);
         return of(false);
       }
     } else {

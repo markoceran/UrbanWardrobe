@@ -10,7 +10,6 @@ import rs.ac.uns.ftn.model.dto.JsonResponse;
 import rs.ac.uns.ftn.service.BasketService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 import java.util.logging.Logger;
 
 @RestController
@@ -29,10 +28,18 @@ public class BasketController {
         this.logger = Logger.getLogger(String.valueOf(UserController.class));
     }
 
-    @PutMapping("/addBasketItem/{productId}")
-    public ResponseEntity<JsonResponse> addBasketItem(@PathVariable Long productId, @RequestBody Map<String, String> sizeRequest, HttpServletRequest request) {
-        String sizeValue = sizeRequest.get("size");
-        Size size = Size.valueOf(sizeValue);
+    @PostMapping("/addBasketItem")
+    public ResponseEntity<JsonResponse> addBasketItem(@RequestParam("productId") Long productId, @RequestParam("size") String sizeParam, HttpServletRequest request) {
+        Size size;
+        try {
+            size = Size.valueOf(sizeParam);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new JsonResponse("Invalid size parameter."));
+        }
+
+        if (productId < 0) {
+            return ResponseEntity.badRequest().body(new JsonResponse("Product id can't be negative"));
+        }
 
         String token = tokenUtils.extractTokenFromRequest(request);
         String loggedUserEmail = tokenUtils.getEmailFromToken(token);
@@ -46,7 +53,7 @@ public class BasketController {
         return ResponseEntity.ok(new JsonResponse("Product successfully added to basket."));
     }
 
-    @PutMapping("/removeBasketItem/{basketItemId}")
+    @DeleteMapping("/removeBasketItem/{basketItemId}")
     public ResponseEntity<JsonResponse> removeBasketItem(@PathVariable Long basketItemId, HttpServletRequest request) {
         String token = tokenUtils.extractTokenFromRequest(request);
         String loggedUserEmail = tokenUtils.getEmailFromToken(token);
