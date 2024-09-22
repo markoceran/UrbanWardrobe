@@ -9,8 +9,6 @@ import rs.ac.uns.ftn.model.dto.UserDTO;
 import rs.ac.uns.ftn.repository.WorkerRepository;
 import rs.ac.uns.ftn.service.BasicUserService;
 import rs.ac.uns.ftn.service.WorkerService;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class WorkerServiceImpl implements WorkerService {
@@ -28,21 +26,6 @@ public class WorkerServiceImpl implements WorkerService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Override
-    public List<Worker> getAll() {
-        return workerRepository.findAll();
-    }
-
-    @Override
-    public Optional<Worker> getById(Long id) {
-        return workerRepository.findById(id);
-    }
-
-
-    @Override
-    public Worker findByEmail(String email) {
-        return workerRepository.findByEmail(email).orElse(null);
-    }
     @Override
     public Worker createWorker(UserDTO worker) {
 

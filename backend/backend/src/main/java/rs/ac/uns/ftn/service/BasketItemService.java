@@ -1,7 +1,6 @@
 package rs.ac.uns.ftn.service;
 
 import rs.ac.uns.ftn.model.BasketItem;
-import rs.ac.uns.ftn.model.User;
 
 import java.util.Optional;
 

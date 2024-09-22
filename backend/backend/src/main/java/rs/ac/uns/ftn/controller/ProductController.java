@@ -65,7 +65,7 @@ public class ProductController {
             return ResponseEntity.ok(createdProduct);
         } catch (DataIntegrityViolationException e) {
             logger.info("Unique constraint violation.");
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         } catch (Exception e) {
             logger.info("Database error.");
             return ResponseEntity.internalServerError().body(null);
@@ -162,7 +162,7 @@ public class ProductController {
         Product product = productService.refillQuantity(productId, size, quantity);
         if (product == null) {
             logger.info("Error refilling quantity.");
-            return ResponseEntity.badRequest().body(new JsonResponse("Error refilling quantity."));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponse("Error refilling quantity."));
         }
 
         return ResponseEntity.ok(new JsonResponse("Product size successfully refilled."));

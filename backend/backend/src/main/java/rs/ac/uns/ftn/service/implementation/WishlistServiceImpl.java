@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.helper.Helper;
 import rs.ac.uns.ftn.model.Product;
 import rs.ac.uns.ftn.model.User;
-import rs.ac.uns.ftn.repository.WishlistRepository;
-import rs.ac.uns.ftn.helper.TokenUtils;
 import rs.ac.uns.ftn.service.ProductService;
 import rs.ac.uns.ftn.service.UserService;
 import rs.ac.uns.ftn.service.WishlistService;
@@ -17,16 +15,10 @@ import java.util.Optional;
 public class WishlistServiceImpl implements WishlistService {
 
     @Autowired
-    WishlistRepository wishListRepository;
-
-    @Autowired
     ProductService productService;
 
     @Autowired
     Helper helper;
-
-    @Autowired
-    TokenUtils tokenUtils;
 
     @Autowired
     UserService userService;

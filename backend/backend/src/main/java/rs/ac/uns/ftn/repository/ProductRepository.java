@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import rs.ac.uns.ftn.model.Product;
 import rs.ac.uns.ftn.model.ProductCategory;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 

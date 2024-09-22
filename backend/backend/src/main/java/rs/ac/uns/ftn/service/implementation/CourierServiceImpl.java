@@ -10,9 +10,6 @@ import rs.ac.uns.ftn.repository.CourierRepository;
 import rs.ac.uns.ftn.service.BasicUserService;
 import rs.ac.uns.ftn.service.CourierService;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 public class CourierServiceImpl implements CourierService {
 
@@ -29,21 +26,6 @@ public class CourierServiceImpl implements CourierService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Override
-    public List<Courier> getAll() {
-        return courierRepository.findAll();
-    }
-
-    @Override
-    public Optional<Courier> getById(Long id) {
-        return courierRepository.findById(id);
-    }
-
-
-    @Override
-    public Courier findByEmail(String email) {
-        return courierRepository.findByEmail(email).orElse(null);
-    }
     @Override
     public Courier createCourier(UserDTO courier) {
 

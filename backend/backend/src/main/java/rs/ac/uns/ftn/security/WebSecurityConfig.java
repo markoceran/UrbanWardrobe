@@ -16,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import rs.ac.uns.ftn.helper.TokenUtils;
 import rs.ac.uns.ftn.service.implementation.UserDetailsServiceImpl;
 
 
@@ -27,9 +26,6 @@ public class WebSecurityConfig {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsServiceImpl;
-
-    @Autowired
-    private TokenUtils tokenUtils;
 
     @Autowired
     private JwtRequestFilter jwtRequestFilter;

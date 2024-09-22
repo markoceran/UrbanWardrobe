@@ -9,9 +9,6 @@ import rs.ac.uns.ftn.model.dto.UserDTO;
 import rs.ac.uns.ftn.repository.AdminRepository;
 import rs.ac.uns.ftn.service.AdminService;
 import rs.ac.uns.ftn.service.BasicUserService;
-import rs.ac.uns.ftn.service.UserService;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -29,20 +26,6 @@ public class AdminServiceImpl implements AdminService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Override
-    public List<Admin> getAll() {
-        return adminRepository.findAll();
-    }
-
-    @Override
-    public Optional<Admin> getById(Long id) {
-        return adminRepository.findById(id);
-    }
-
-    @Override
-    public Admin findByEmail(String email) {
-        return adminRepository.findByEmail(email).orElse(null);
-    }
     @Override
     public Admin createAdmin(UserDTO admin) {
 

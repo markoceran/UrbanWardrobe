@@ -18,13 +18,5 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new JsonResponse("Internal server error"));
     }
 
-    // You can add more specific exception handlers here if needed
-//    @ExceptionHandler(SpecificException.class)
-//    public ResponseEntity<JsonResponse> handleSpecificException(SpecificException ex, WebRequest request) {
-//        logger.error("SpecificException occurred: ", ex);
-//        return ResponseEntity.badRequest().body(new JsonResponse("Specific error message"));
-//    }
-
-
 }
 

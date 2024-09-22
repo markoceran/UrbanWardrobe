@@ -35,10 +35,6 @@ public class UserController {
     private CourierService courierService;
 
     @Autowired
-    private BasicUserService basicUserService;
-
-
-    @Autowired
     AuthenticationManager authenticationManager;
 
     @Autowired
@@ -89,7 +85,10 @@ public class UserController {
             return ResponseEntity.badRequest().body(new JsonResponse(validationErrorShippingAddress));
         }
 
-        userService.createUser(newUser);
+        User user = userService.createUser(newUser);
+        if(user == null){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponse("User with this email already exists."));
+        }
 
         return ResponseEntity.ok(new JsonResponse("User successfully registered"));
     }
@@ -103,7 +102,10 @@ public class UserController {
             return ResponseEntity.badRequest().body(new JsonResponse(validationError));
         }
 
-        adminService.createAdmin(newAdmin);
+        Admin admin = adminService.createAdmin(newAdmin);
+        if(admin == null){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponse("User with this email already exists."));
+        }
 
         return ResponseEntity.ok(new JsonResponse("Admin successfully registered"));
     }
@@ -117,7 +119,10 @@ public class UserController {
             return ResponseEntity.badRequest().body(new JsonResponse(validationError));
         }
 
-        workerService.createWorker(newWorker);
+        Worker worker = workerService.createWorker(newWorker);
+        if(worker == null){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponse("User with this email already exists."));
+        }
 
         return ResponseEntity.ok(new JsonResponse("Worker successfully registered"));
     }
@@ -131,7 +136,10 @@ public class UserController {
             return ResponseEntity.badRequest().body(new JsonResponse(validationError));
         }
 
-        courierService.createCourier(newCourier);
+        Courier courier = courierService.createCourier(newCourier);
+        if(courier == null){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponse("User with this email already exists."));
+        }
 
         return ResponseEntity.ok(new JsonResponse("Courier successfully registered"));
     }
@@ -149,10 +157,6 @@ public class UserController {
         }
         if (newUser.getPassword().length() < 6) {
             return "Validation error. Password must be at least 6 characters long.";
-        }
-        BasicUser user = basicUserService.findByEmail(newUser.getEmail());
-        if (user != null) {
-            return "User with this email already exists.";
         }
         return null;
     }
@@ -219,17 +223,19 @@ public class UserController {
     @PostMapping("/logout")
     public ResponseEntity<JsonResponse> logout(HttpServletRequest request, HttpServletResponse response) {
 
-        // Clear the authentication and security context
-        SecurityContextHolder.clearContext();
+        try{
+            // Clear the authentication and security context
+            SecurityContextHolder.clearContext();
 
-        // Clear the authentication cookie
-        TokenUtils.clearAuthenticationCookie(request, response);
+            // Clear the authentication cookie
+            TokenUtils.clearAuthenticationCookie(request, response);
 
-        // Create response body
-        logger.info("Logged out successfully");
-
-        // Return the response
-        return ResponseEntity.ok(new JsonResponse("Logged out successfully"));
+            // Return the response
+            return ResponseEntity.ok(new JsonResponse("Logged out successfully"));
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new JsonResponse("Logout failed"));
+        }
     }
 
     @PutMapping("/updateShippingAddress")
@@ -249,7 +255,7 @@ public class UserController {
         if (shippingAddress != null) {
             return ResponseEntity.ok(new JsonResponse("Shipping address updated successfully."));
         } else {
-            return ResponseEntity.badRequest().body(new JsonResponse("Failed to update shipping address."));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponse("Failed to update shipping address."));
         }
     }
 
@@ -270,7 +276,7 @@ public class UserController {
         if (user != null) {
             return ResponseEntity.ok(new JsonResponse("User updated successfully."));
         } else {
-            return ResponseEntity.badRequest().body(new JsonResponse("Failed to update user."));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponse("Failed to update user."));
         }
     }
 

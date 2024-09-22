@@ -41,8 +41,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product createProduct(Product newProduct) {
 
-        Product savedProduct  = productRepository.save(newProduct);
-        //savedProduct.setSizeQuantities(newProduct.getSizeQuantities());
+        Product savedProduct = productRepository.save(newProduct);
         for (SizeQuantity sq : newProduct.getSizeQuantities()) {
             sq.setProduct(savedProduct);
             sizeQuantityService.createSizeQuantity(sq);

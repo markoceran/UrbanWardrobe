@@ -2,13 +2,11 @@ package rs.ac.uns.ftn.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import rs.ac.uns.ftn.model.Product;
 import rs.ac.uns.ftn.model.ProductCategory;
 import rs.ac.uns.ftn.model.Size;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 

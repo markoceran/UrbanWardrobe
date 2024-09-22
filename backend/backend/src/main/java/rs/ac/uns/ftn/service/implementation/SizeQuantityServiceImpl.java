@@ -8,19 +8,11 @@ import rs.ac.uns.ftn.model.SizeQuantity;
 import rs.ac.uns.ftn.repository.SizeQuantityRepository;
 import rs.ac.uns.ftn.service.SizeQuantityService;
 
-import java.util.List;
-
 @Service
 public class SizeQuantityServiceImpl implements SizeQuantityService {
 
     @Autowired
     private SizeQuantityRepository sizeQuantityRepository;
-
-
-    @Override
-    public List<SizeQuantity> getAll() {
-        return sizeQuantityRepository.findAll();
-    }
 
     @Override
     public SizeQuantity createSizeQuantity(SizeQuantity newSizeQuantity) {

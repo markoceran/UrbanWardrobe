@@ -39,17 +39,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public Optional<User> getById(Long id) {
-        return userRepository.findById(id);
-    }
-
-
-    @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
     }

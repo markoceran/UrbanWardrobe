@@ -5,18 +5,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.helper.TokenUtils;
 import rs.ac.uns.ftn.model.Orderr;
-import rs.ac.uns.ftn.model.Product;
 import rs.ac.uns.ftn.model.dto.JsonResponse;
 import rs.ac.uns.ftn.model.dto.PaginationResponse;
 import rs.ac.uns.ftn.service.OrderService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -44,7 +42,7 @@ public class OrderController {
         String message = orderService.createOrder(loggedUserEmail);
         if (message != null) {
             logger.info(message);
-            return ResponseEntity.badRequest().body(new JsonResponse(message));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponse(message));
         }
 
         return ResponseEntity.ok(new JsonResponse("Order successfully created."));
@@ -67,7 +65,7 @@ public class OrderController {
         Orderr order = orderService.cancelOrder(loggedUserEmail, orderId);
         if (order == null) {
             logger.info("Order can't be cancelled.");
-            return ResponseEntity.badRequest().body(new JsonResponse("Order can't be cancelled."));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponse("Order can't be cancelled."));
         }
 
         return ResponseEntity.ok(new JsonResponse("Order successfully cancelled."));
@@ -79,7 +77,7 @@ public class OrderController {
         Orderr order = orderService.sentOrder(orderId);
         if (order == null) {
             logger.info("Order can't be sent.");
-            return ResponseEntity.badRequest().body(new JsonResponse("Order can't be sent."));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponse("Order can't be sent."));
         }
 
         return ResponseEntity.ok(new JsonResponse("Order successfully sent."));
@@ -91,7 +89,7 @@ public class OrderController {
         Orderr order = orderService.deliverOrder(orderId);
         if (order == null) {
             logger.info("Order can't be deliver.");
-            return ResponseEntity.badRequest().body(new JsonResponse("Order can't be deliver."));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponse("Order can't be deliver."));
         }
 
         return ResponseEntity.ok(new JsonResponse("Order successfully delivered."));

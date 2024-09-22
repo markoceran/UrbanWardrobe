@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.model.Product;
@@ -37,7 +38,7 @@ public class WishlistController {
         Product product = wishlistService.addProduct(productId, loggedUserEmail);
         if (product == null) {
             logger.info("Error while adding product to wishlist");
-            return ResponseEntity.badRequest().body(new JsonResponse("Error while adding product to wishlist"));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponse("Error while adding product to wishlist"));
         }
 
         return ResponseEntity.ok(new JsonResponse("Product successfully added to wishlist."));
@@ -51,7 +52,7 @@ public class WishlistController {
         Product product = wishlistService.removeProduct(productId, loggedUserEmail);
         if (product == null) {
             logger.info("Error while removing product from wishlist");
-            return ResponseEntity.badRequest().body(new JsonResponse("Error while removing product from wishlist"));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponse("Error while removing product from wishlist"));
         }
 
         return ResponseEntity.ok(new JsonResponse("Product successfully removed from wishlist."));

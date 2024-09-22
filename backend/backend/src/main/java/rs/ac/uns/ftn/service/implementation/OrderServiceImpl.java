@@ -13,7 +13,6 @@ import rs.ac.uns.ftn.service.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -119,11 +118,6 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return null;
-    }
-
-    @Override
-    public List<Orderr> getAll() {
-        return orderRepository.findAll();
     }
 
     @Override

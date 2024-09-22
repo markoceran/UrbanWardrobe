@@ -27,10 +27,6 @@ import static javax.persistence.InheritanceType.SINGLE_TABLE;
 @DiscriminatorValue("BU")
 public class BasicUser implements UserDetails {
 
-    //    @Id
-//    @SequenceGenerator(name = "mySeqGenV3", sequenceName = "mySeqV3", initialValue = 1, allocationSize = 1)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV3")
-//    @Column(name="id", unique=true, nullable=false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
