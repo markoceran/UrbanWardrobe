@@ -217,7 +217,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Set<Orderr> searchPendingOrdersByCode(String code) {
-        return orderRepository.findPendingOrdersBySearch(code.toUpperCase());
+        LocalDateTime oneDayAgo = LocalDateTime.now().minusDays(1);
+        return orderRepository.findPendingOrdersBySearch(code.toUpperCase(), oneDayAgo);
     }
 
     @Override

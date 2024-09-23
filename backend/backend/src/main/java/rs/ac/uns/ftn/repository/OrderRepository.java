@@ -26,8 +26,8 @@ public interface OrderRepository extends JpaRepository<Orderr, Long> {
     @Query("SELECT o FROM Orderr o WHERE o.user.email = :email ORDER BY o.creationTime DESC")
     Set<Orderr> findOrdersByUserEmail(@Param("email") String email);
 
-    @Query("SELECT o FROM Orderr o WHERE o.status = 'Processing' AND o.code LIKE %:code%")
-    Set<Orderr> findPendingOrdersBySearch(@Param("code") String code);
+    @Query("SELECT o FROM Orderr o WHERE o.status = 'Processing' AND o.creationTime < :oneDayAgo AND o.code LIKE %:code%")
+    Set<Orderr> findPendingOrdersBySearch(@Param("code") String code, @Param("oneDayAgo") LocalDateTime oneDayAgo);
 
     @Query("SELECT o FROM Orderr o WHERE o.status = 'Sent' AND o.code LIKE %:code%")
     Set<Orderr> findSentOrdersBySearch(@Param("code") String code);
