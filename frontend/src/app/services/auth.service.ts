@@ -2,7 +2,7 @@ import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 import { environment } from "src/environments/environment";
-import { LoginDTO } from "../dto/loginDTO";
+import { LoginDTO } from "../models/loginDTO";
 import { jwtDecode } from 'jwt-decode';
 import { UserDTO } from "../models/userDTO";
 import { JsonResponse } from "../models/jsonResponse";
