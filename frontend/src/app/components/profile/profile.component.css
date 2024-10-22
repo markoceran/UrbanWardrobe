@@ -1,0 +1,166 @@
+.profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    margin-top: 30px;
+  }
+  
+  .profile-header {
+    display: flex;
+    padding: 20px;
+    background-color: #a1adcfba;
+    color: white;
+    align-items: center;
+  }
+  
+  .profile-avatar img {
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    margin-right: 20px;
+  }
+  
+  .profile-info h2 {
+    margin: 0;
+    font-size: 24px;
+    color: rgba(0, 0, 0, 0.587);
+  }
+  
+  .profile-info p {
+    margin: 5px 0;
+    color: rgba(0, 0, 0, 0.587);
+  }
+  
+  .edit-profile-btn {
+    background-color: white;
+    color: rgba(0, 0, 0, 0.711);
+    border: none;
+    padding: 8px 12px;
+    margin-top: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+
+  .edit-profile-btn:hover {
+    background-color: rgb(210, 210, 210);
+  }
+  
+  .profile-tabs {
+    display: flex;
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #e1e1e1;
+  }
+  
+  .profile-tabs button {
+    flex: 1;
+    padding: 15px;
+    background-color: #f1f1f1;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .profile-tabs button.active {
+    background-color: white;
+    border-bottom: 3px solid #2e55e3a3;
+  }
+  
+  .profile-tabs button:hover {
+    background-color: #e1e1e1;
+  }
+  
+  .profile-content {
+    padding: 54px;
+    text-align: center;
+  }
+  
+  .profile-content h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .profile-content p{
+    margin: 5px;
+  }
+  
+  .logout-btn {
+    background-color: #cc1515b5;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .change-shipping-address-btn {
+    background-color: #cc77159b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .logout-btn:hover {
+    background-color: #c82333;
+  }
+
+  .change-shipping-address-btn:hover {
+    background-color: #c17116e8;
+  }
+
+  .order-card {
+    display: flex;
+    flex-direction: row;
+    background-color: #adbadc31;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-top: 10px;
+    border: 1px solid rgba(97, 97, 97, 0.7);
+  }
+
+  .order-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.465);
+    cursor: pointer;
+  }
+  
+  .order-info {
+    flex: 1;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .order-info h2 {
+    font-size: 20px;
+    margin-top: 5px;
+    margin-bottom: 17px;
+  }
+  
+  .order-info p {
+    margin: 4px 0;
+    font-size: 15px;
+  }
+  
+
+.status-processing {
+  color: orange;
+}
+
+.status-sent {
+  color: blue;
+}
+
+.status-delivered {
+  color: green;
+}
+
+.status-cancelled {
+  color: red;
+}

@@ -1,0 +1,43 @@
+<app-header></app-header>
+<div class="product-details-container">
+
+  <div class="product-images">
+    <div class="carousel-slide">
+      <div class="carousel-inner">
+        <div class="carousel-item" [class.active]="currentSlideIndex >= 0">
+          <img *ngIf="product.images && product.images.length > 0" [src]="sanitizeUrl(product.images[currentSlideIndex])" class="d-block w-100" alt="Product Image">
+        </div>
+      </div>
+      <button class="carousel-control-prev" (click)="prevSlide()">
+        <span><i class="fas fa-angle-left" style="background-color: rgba(89, 89, 89, 0.726);"></i></span>
+      </button>
+      <button class="carousel-control-next" (click)="nextSlide()">
+        <span><i class="fas fa-angle-right" style="background-color: rgba(89, 89, 89, 0.726);"></i></span>
+      </button>
+    </div>
+  </div>
+  
+  <div class="product-info">
+    <h1 class="product-title">{{ product.name }}</h1>
+    <p class="product-description">{{ product.code }}</p>
+    <p class="product-description">{{ product.description }}</p>
+    <p class="product-price">€{{ product.price }}</p>
+
+    <div class="size-selection">
+      <label for="size" class="size-label">Select size:</label>
+      <div class="size-options">
+          <div 
+              *ngFor="let size of sortedSizeQuantities" 
+              class="size-circle" 
+              [class.selected]="selectedSize === size.size" 
+              [class.disabled]="size.quantity === 0"
+              (click)="size.quantity > 0 && selectSize(size.size)">
+              {{ size.size }}
+          </div>
+      </div>
+    </div>
+  
+    <button class="add-to-cart-btn" (click)="addToBasket()" *ngIf="role === 'USER'">Add to basket</button>
+    <button class="refill-quantity-btn" (click)="refillQuantity(product.id)" *ngIf="role === 'ADMIN'">Refill quantity</button>
+  </div>
+</div>

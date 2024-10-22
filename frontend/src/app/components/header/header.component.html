@@ -1,0 +1,50 @@
+<nav class="nav">
+  <ul class="navbar">
+    <li class="nav-item navbar-left">
+      <a [routerLink]="['/Main-Page', 'home']" *ngIf="role === 'USER' || role === 'ADMIN'"><img class="logo" src="assets/IMG_1027.png" alt="Logo"></a>
+      <a [routerLink]="['/pendingOrders']" *ngIf="role === 'WORKER'"><img class="logo" src="assets/IMG_1027.png" alt="Logo"></a>
+      <a [routerLink]="['/sentOrders']" *ngIf="role === 'COURIER'"><img class="logo" src="assets/IMG_1027.png" alt="Logo"></a>
+      <div class="dropdown" *ngIf="role === 'USER' || role === 'ADMIN'">
+        <a class="nav-link dropdown-toggle">Woman</a>
+        <ul class="dropdown-menu">
+          <li><a [routerLink]="['/Main-Page', 'WomenTShirts']">T-Shirts</a></li>
+          <li><a [routerLink]="['/Main-Page', 'WomenShirts']">Shirts</a></li>
+          <li><a [routerLink]="['/Main-Page', 'WomenTrousers']">Trousers</a></li>
+          <li><a [routerLink]="['/Main-Page', 'WomenJeans']">Jeans</a></li>
+          <li><a [routerLink]="['/Main-Page', 'WomenSweatshirts']">Sweatshirts</a></li>
+          <li><a [routerLink]="['/Main-Page', 'WomenJackets']">Jackets</a></li>
+          <li><a [routerLink]="['/Main-Page', 'WomenSport']">Sport</a></li>
+          <li><a [routerLink]="['/Main-Page', 'WomenElegant']">Elegant</a></li>
+          <li><a [routerLink]="['/Main-Page', 'WomenAccessories']">Accessories</a></li>
+        </ul>
+      </div>
+      <div class="dropdown" *ngIf="role === 'USER' || role === 'ADMIN'">
+        <a class="nav-link dropdown-toggle">Men</a>
+        <ul class="dropdown-menu">
+          <li><a [routerLink]="['/Main-Page', 'MenTShirts']">T-Shirts</a></li>
+          <li><a [routerLink]="['/Main-Page', 'MenShirts']">Shirts</a></li>
+          <li><a [routerLink]="['/Main-Page', 'MenTrousers']">Trousers</a></li>
+          <li><a [routerLink]="['/Main-Page', 'MenJeans']">Jeans</a></li>
+          <li><a [routerLink]="['/Main-Page', 'MenSweatshirts']">Sweatshirts</a></li>
+          <li><a [routerLink]="['/Main-Page', 'MenJackets']">Jackets</a></li>
+          <li><a [routerLink]="['/Main-Page', 'MenSport']">Sport</a></li>
+          <li><a [routerLink]="['/Main-Page', 'MenElegant']">Elegant</a></li>
+          <li><a [routerLink]="['/Main-Page', 'MenAccessories']">Accessories</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item navbar-right">
+      <a class="nav-link" *ngIf="showSearchInput"><input type="text" (keydown.enter)="onEnter($event)" placeholder="Search by code..."></a>
+      <a class="nav-link" (click)="clickSearch()" *ngIf="role === 'ADMIN' || role === 'USER'"><i class="fas fa-magnifying-glass"></i> Search</a>
+      <a class="nav-link" routerLink="/createProduct" *ngIf="role === 'ADMIN'"><i class="fas fa-square-plus"></i> Create product</a>
+      <a class="nav-link" routerLink="/createUser" *ngIf="role === 'ADMIN'"><i class="fas fa-user-plus"></i> Create user</a>
+      <a class="nav-link" routerLink="/pendingOrders" *ngIf="role === 'WORKER'"><i class="fas fa-cubes"></i> Pending orders</a>
+      <a class="nav-link" routerLink="/sentOrders" *ngIf="role === 'WORKER' || role === 'COURIER'"><i class="fas fa-truck-fast"></i> Sent orders</a>
+      <a class="nav-link" routerLink="/deliveredOrders" *ngIf="role === 'COURIER'"><i class="fas fa-truck-ramp-box"></i> Delivered orders</a>
+      <a class="nav-link" (click)="logout()" *ngIf="role === 'ADMIN' || role === 'WORKER' || role === 'COURIER'"><i class="fas fa-arrow-right-from-bracket"></i> Logout</a>
+      <a class="nav-link" routerLink="/basket" *ngIf="role === 'USER'"><i class="fas fa-basket-shopping" ></i> Basket</a>
+      <a class="nav-link" routerLink="/wishlist" *ngIf="role === 'USER'"><i class="fas fa-heart" ></i> Wishlist</a>
+      <a class="nav-link" routerLink="/profile" *ngIf="role === 'USER'"><i class="fas fa-user" ></i> Profile</a>
+    </li>
+  </ul>
+</nav>

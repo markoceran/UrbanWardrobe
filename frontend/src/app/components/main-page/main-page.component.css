@@ -1,0 +1,128 @@
+.background {
+  background-color: #a1adcfc1;
+  width: 100%;
+  min-height: 100vh; /* Ensures the background covers the full viewport height */
+  position: relative; /* Ensures stacking context is correct */
+  z-index: 1; /* Makes sure .background is above other elements */
+  box-sizing: border-box; /* Includes padding in height calculation */
+}
+
+  h2 {
+    margin-bottom: 20px;
+    color: #6d6d6d;
+    font-size: 26px;
+    display: inline-block;
+    padding-bottom: 35px;
+  }
+
+  
+  .product-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  
+  .product-card {
+    border-radius: 10px;
+    padding: 50px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 600px;
+  }
+  
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+  
+  .card-header {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    width: 100%;
+    height: 80%;
+  }
+  
+  .card-header h3 {
+    margin: 0;
+    font-size: 14px;
+    color: #00124e;
+  }
+  
+  .card-header p {
+    margin: 5px 0 0;
+    color: #666;
+    width: 100%;
+    height: 80%;
+  }
+
+  .card-body p {
+    font-size: 15px;
+  }
+
+  
+  .button-container {
+    display: block;
+    margin-top: 20px;
+  }
+  
+  .product-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .image-container {
+    position: relative; /* This allows the overlay-element to be positioned relative to this container */
+    display: inline-block; /* Ensures container fits the image size */
+    width: 100%;
+    height: 100%;
+    box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.200);
+  }
+  
+  .overlay-element {
+    position: absolute;
+    bottom: 10px; /* Distance from the bottom of the image */
+    right: 10px; /* Distance from the right of the image */
+    background: rgba(0, 0, 0, 0.23); /* Background with transparency */
+    color: #000000b6; /* Text color */
+    padding: 5px; /* Padding around the text */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 20px; /* Adjust font size as needed */
+    cursor: pointer; /* Changes cursor to pointer on hover */
+    z-index: 10; /* Ensure it is clickable above other elements */
+  }
+  
+
+.content {
+  max-width: 1600px;
+  margin: auto;
+  font-family: Arial, sans-serif;
+  border-radius: 10px;
+  text-align: center; /* Ensure all text within container is centered */
+  padding-bottom: 60px; /* Ensure space for pagination */
+}
+
+.pagination {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  display: flex;
+  justify-content: center; /* Centers the items horizontally */
+  align-items: center; /* Centers the items vertically */
+  background: #a1adcfad; /* Ensure pagination background matches or contrasts with the content */
+  z-index: 2; /* Ensure pagination is above other elements */
+}
+  
+  .pagination button {
+    margin: 0 5px;
+  }
+  
+  .pagination span {
+    margin: 0 10px;
+  }
+

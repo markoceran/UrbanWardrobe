@@ -1,0 +1,33 @@
+<app-header></app-header>
+<div class="basket-page">
+    <h4 class="title">Basket</h4>
+    <div class="basket-card" *ngFor="let basketItem of basket.basketItems">
+        <div class="basket-image">
+            <img *ngIf="basketItem.product.images.length > 0" [src]="sanitizeUrl(basketItem.product.images[0])" alt="{{ basketItem.product.name }} image" class="product-image" (click)="openProductDetails(basketItem.product.code)">
+        </div>
+        <div class="basket-info">
+            <h2>{{ basketItem.product.name }}</h2>
+            <p>{{ basketItem.product.code }}</p>
+            <p>{{ basketItem.size }}</p>
+            <p><span *ngIf="basketItem.quantity > 1">{{ basketItem.quantity }}x </span><strong>€{{ basketItem.product.price }}</strong></p>
+            <p class="out-of-stock" *ngIf="!basketItem.sizeOnStock">Size out of stock!</p>
+            <p class="out-of-stock" *ngIf="!basketItem.haveEnoughOnStock && basketItem.sizeOnStock">Quantity out of stock, decrease quantity from basket item!</p>
+        </div>
+        <button class="options-btn" (click)="decreaseQuantity(basketItem.id)"><i class="fas fa-pencil"></i></button>
+        <button class="options-btn" (click)="deleteBasketItem(basketItem.id)"> <i class="fas fa-trash-can"></i></button>
+    </div>
+    <div class="basket-card">
+        <div class="basket-info-price">
+            <p>Products amount: €{{ productsAmount }}</p>
+            <p>Shipping amount: €{{ shippingAmount }}</p>
+            <p><strong>Total: €{{ totalAmount }}</strong> </p>
+            <br>
+            <div class="tooltip-container">
+                <span class="text-with-tooltip">Shipping?</span>
+                <span class="tooltip-text">Standard shipping €3 Free shipping over €100</span>
+            </div>
+        </div>
+        <button class="buy-btn" (click)="createOrder()" [ngStyle]="{'pointer-events': !basket.basketItems.length ? 'none' : 'auto'}">Buy  <i class="fas fa-angles-right"></i></button>
+    </div>
+</div>
+

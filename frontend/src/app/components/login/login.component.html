@@ -1,0 +1,36 @@
+<div class="parent clearfix">
+  <div class="bg-illustration"></div>
+
+  <div class="login">
+    <div class="container">
+      <h1>LOGIN</h1>
+
+      <div class="login-form">
+        <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+          <label for="email"><b>Email:</b></label>
+          <div>
+            <input type="text" id="email" name="email" class="form-control" formControlName="email"
+                   [ngClass]="{ 'is-invalid': loginGroup['email'].touched && loginGroup['email'].errors}">
+            <div *ngIf="loginGroup['email'].touched && loginGroup['email'].errors" class="invalid-feedback">
+              <div *ngIf="loginGroup['email'].errors['required']">Email is not entered.</div>
+            </div>
+          </div>
+          <label for="password"><b>Password:</b></label>
+          <div>
+            <input type="password" id="password" name="password" maxlength="30" class="form-control" formControlName="password"
+                   [ngClass]="{ 'is-invalid': loginGroup['password'].touched && loginGroup['password'].errors}">
+            <div *ngIf="loginGroup['password'].touched && loginGroup['password'].errors" class="invalid-feedback">
+              <div *ngIf="loginGroup['password'].errors['required']">Password is not entered.</div>
+            </div>
+          </div>
+          <a routerLink="/register">Register here.</a>
+          <br>
+          <br>
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        <br>
+        <br>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+.container {
+  width: 40%;
+  min-height: 100vh; /* Ensures the background covers the full viewport height */
+  margin-top: 30px;
+}
+
+.form-container input,textarea,select {
+    background-color: #40404015;
+}
+
+
+.form-container {
+    padding: 20px;
+    border-radius: 8px
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.invalid-feedback {
+    color: #dc3545;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.list-unstyled {
+    padding-left: 0;
+}
+
+.list-unstyled li {
+    background-color: #e9ecef;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+}

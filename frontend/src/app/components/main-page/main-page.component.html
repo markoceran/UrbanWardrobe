@@ -1,0 +1,30 @@
+<app-header></app-header>
+<div class="background">
+    <div class="content">
+        <div *ngIf="products.length === 0">
+          <p>No products available.</p>
+        </div>
+        <div class="product-list">
+          <div *ngFor="let product of products" class="product-card" (click)="openProductDetails(product.code)">
+              <div class="card-header">
+                <div class="image-container">
+                  <img *ngIf="product.images.length > 0" [src]="sanitizeUrl(product.images[0])" alt="{{ product.name }} image" class="product-image">
+                  <a class="overlay-element" *ngIf="product.inWishlist && role === 'USER'" (click)="removeFromWishlist(product.id, $event)"><i class="fas fa-heart"></i></a>
+                  <a class="overlay-element" *ngIf="!product.inWishlist && role === 'USER'" (click)="addToWishlist(product.id, $event)"><i class="far fa-heart"></i></a>
+                </div>
+              </div>
+              <div class="card-body">
+                  <p>{{ product.name }}</p> 
+                  <p>€{{ product.price }}</p>                   
+              </div>
+          </div>
+        </div>
+    </div>
+</div>
+<div class="pagination">
+  <button class="btn btn-outline-secondary" (click)="goToPage(pageNumber - 1)" [disabled]="pageNumber === 0 || totalPages === 0">Previous</button>
+  <span>Page {{ pageNumber + 1 }} of {{ totalPages }}</span>
+  <button class="btn btn-outline-secondary" (click)="goToPage(pageNumber + 1)" [disabled]="pageNumber + 1 === totalPages || totalPages === 0">Next</button>
+</div>
+  
+

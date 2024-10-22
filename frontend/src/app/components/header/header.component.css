@@ -1,0 +1,94 @@
+.nav {
+  background-color: #a1adcfad;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.logo {
+  height: 80px; /* Adjust based on your logo size */
+  width: 220px;
+  margin-right: 20px; /* Space between logo and "Logout" link */
+}
+
+.navbar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-between; /* Distribute space between left and right */
+  align-items: center;
+  background-color: #a1adcf70;
+  border-radius: 20px;
+  width: 100%;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+}
+
+.nav-item a {
+  color: black;
+  text-align: center;
+  padding: 10px 17px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.nav-item a:hover {
+  background-color: #fff5ee46;
+  color: black;
+  cursor: pointer;
+}
+
+/* Ensure items in navbar-left and navbar-right are placed at the ends */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  margin-right: auto; /* Pushes the item to the left */
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  margin-left: auto; /* Pushes the item to the right */
+}
+
+
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-right: 30px;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute; 
+  background-color: #aeb6cdf5;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  list-style: none;
+  margin: 0;
+  padding: 10px 0;
+  min-width: 160px;
+  z-index: 1000; 
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+
+.dropdown-menu li {
+  padding: 8px 16px;
+}
+
+.dropdown-menu li a {
+  text-decoration: none;
+  color: #000000;
+}
+
+.dropdown-menu li a:hover {
+  background-color: #fff5ee46;
+}

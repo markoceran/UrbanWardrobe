@@ -1,0 +1,63 @@
+<app-header></app-header>
+<div class="order-details-container">
+    <div class="order-header">
+        <h1>Order details</h1>
+        <p>Order date: {{ order?.creationTime | date:'dd.MM.yyyy - HH:mm' }}</p>
+        <p>Estimated delivery: {{ order?.estimatedDeliveryTime | date:'dd.MM.yyyy' }}</p>
+    </div>
+
+    <div class="order-status">
+        <h4>
+            <strong>Status:
+            <span [ngClass]="{
+              'status-processing': order?.status === 'Processing',
+              'status-sent': order?.status === 'Sent',
+              'status-delivered': order?.status === 'Delivered',
+              'status-cancelled': order?.status === 'Cancelled'
+            }">
+              {{ order?.status }}
+            </span>
+            </strong>
+        </h4>
+    </div>
+
+    <div class="order-items">
+        <h2>Items in your order</h2>
+        <div class="order-item" *ngFor="let item of order?.basketItems">
+            <img *ngIf="item.product.images.length > 0" [src]="sanitizeUrl(item.product.images[0])" alt="{{ item.product.name }} image" class="product-image">
+            <div class="item-details">
+                <h3>{{ item.product.name }}</h3>
+                <p>Code: {{ item.product.code }}</p>
+                <p>Size: {{ item.size }}</p>
+                <p>Quantity: {{ item.quantity }}</p>
+                <p>Price: €{{ item.product.price }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="order-summary">
+        <h2>User info</h2>
+        <p>First name and last name: {{ order?.userDTO?.firstName }} {{ order?.userDTO?.lastName }}</p>
+        <p>Email: {{ order?.userDTO?.email }}</p>
+        <p>Phone number: {{ order?.userDTO?.phoneNumber }}</p>
+        <h2>Shipping address</h2>
+        <p>Country: {{ order?.userDTO?.shippingAddress?.country }}</p>
+        <p>City: {{ order?.userDTO?.shippingAddress?.city }}</p>
+        <p>Street: {{ order?.userDTO?.shippingAddress?.street }}</p>
+        <p>Street number: {{ order?.userDTO?.shippingAddress?.number }}</p>
+        <p>Postal code: {{ order?.userDTO?.shippingAddress?.postalCode }}</p>
+    </div>
+
+    <div class="order-summary">
+        <h2>Order summary</h2>
+        <p>Products amount: €{{ order?.productsAmount }}</p>
+        <p>Shipping: €{{ order?.shippingAmount }}</p>
+        <h3>Total: €{{ order?.totalAmount }}</h3>
+    </div>
+
+    <div class="order-actions">
+        <button class="cancel-order-btn" (click)="cancelOrder(order?.id)" *ngIf="role === 'USER' && order?.status === 'Processing'">Cancel order</button>
+        <button class="sent-order-btn" (click)="sentOrder(order?.id)" *ngIf="role === 'WORKER' && order?.status === 'Processing'">Sent order</button>
+        <button class="deliver-order-btn" (click)="deliverOrder(order?.id)" *ngIf="role === 'COURIER' && order?.status === 'Sent'">Deliver order</button>
+    </div>
+</div>

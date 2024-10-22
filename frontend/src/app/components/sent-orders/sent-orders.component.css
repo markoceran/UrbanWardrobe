@@ -1,0 +1,89 @@
+.order-container {
+    padding-top: 30px;
+    padding-bottom: 130px;
+    display: flex;           /* Enable flexbox on the container */
+    flex-direction: column;  /* Stack child elements vertically */
+    justify-content: center; /* Center the .order-card vertically */
+    align-items: center;     /* Center the .order-card horizontally */
+}
+
+.order-card {
+    display: flex;
+    flex-direction: row;
+    background-color: #adbadc31;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-top: 10px;
+    border: 1px solid rgba(97, 97, 97, 0.7);
+    width: 40%;           
+    text-align: center;  
+}
+
+
+  .order-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.465);
+    cursor: pointer;
+  }
+  
+  .order-info {
+    flex: 1;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .order-info h2 {
+    font-size: 20px;
+    margin-top: 5px;
+    margin-bottom: 17px;
+  }
+  
+  .order-info p {
+    margin: 4px 0;
+    font-size: 15px;
+  }
+  
+
+.status-processing {
+  color: orange;
+}
+
+.status-sent {
+  color: blue;
+}
+
+.status-delivered {
+  color: green;
+}
+
+.status-cancelled {
+  color: red;
+}
+
+
+.pagination {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    display: flex;
+    justify-content: center; /* Centers the items horizontally */
+    align-items: center; /* Centers the items vertically */
+    background: #a1adcfad; /* Ensure pagination background matches or contrasts with the content */
+    z-index: 2; /* Ensure pagination is above other elements */
+  }
+    
+.pagination button {
+    margin: 0 5px;
+}
+    
+.pagination span {
+    margin: 0 10px;
+}
+  
+.div-search{
+  margin-bottom: 50px;
+}

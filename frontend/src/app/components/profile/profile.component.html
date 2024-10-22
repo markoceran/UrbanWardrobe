@@ -1,0 +1,62 @@
+<app-header></app-header>
+<div class="profile-container">
+    <div class="profile-header">
+      <div class="profile-avatar">
+        <img src="assets\6596121.png" alt="{{ user?.firstName }} {{ user?.lastName }}">
+      </div>
+      <div class="profile-info">
+        <h2>{{ user?.firstName }} {{ user?.lastName }}</h2>
+        <p>{{ user?.email }}</p>
+        <button class="edit-profile-btn" (click)="editProfile()">Edit Profile</button>
+      </div>
+    </div>
+  
+    <div class="profile-tabs">
+      <button [ngClass]="{active: selectedTab === 'personalInformation'}" (click)="selectTab('personalInformation')">Personal information <i class="fas fa-circle-info"></i></button>
+      <button [ngClass]="{active: selectedTab === 'orders'}" (click)="selectTab('orders')">My orders <i class="fas fa-box-open"></i></button>
+      <button [ngClass]="{active: selectedTab === 'settings'}" (click)="selectTab('settings')">Settings <i class="fas fa-gear"></i></button>
+    </div>
+  
+    <div class="profile-content">
+      <div *ngIf="selectedTab === 'personalInformation'">
+        <h3>Shipping address</h3>
+        <p>Country: {{ user?.shippingAddress?.country }}</p>
+        <p>City: {{ user?.shippingAddress?.city }}</p>
+        <p>Street: {{ user?.shippingAddress?.street }}</p>
+        <p>Street number: {{ user?.shippingAddress?.number }}</p>
+        <p>Postal code: {{ user?.shippingAddress?.postalCode }}</p>
+        <br>
+        <p>Phone number: {{ user?.phoneNumber }}</p>
+        <button class="change-shipping-address-btn" (click)="openChangeShippingAddressDialog()">Change shipping address</button>
+      </div>
+      <div *ngIf="selectedTab === 'orders'">
+        <h6 *ngIf="user?.orders?.length === 0">No orders</h6>
+        <div class="order-card" *ngFor="let order of user?.orders" (click)="openOrderDetails(order.code)">
+          <div class="order-info">
+            <h2>{{ order.creationTime | date:'dd.MM.yyyy - HH:mm' }}</h2>
+            <div *ngFor="let basketItem of order.basketItems">
+              <p>{{ basketItem.product.code }} - {{ basketItem.product.name }}</p>
+            </div>
+            <p>Total amount: €{{ order.totalAmount }}</p>
+            <p>
+              <strong>Status:
+              <span [ngClass]="{
+                'status-processing': order.status === 'Processing',
+                'status-sent': order.status === 'Sent',
+                'status-delivered': order.status === 'Delivered',
+                'status-cancelled': order.status === 'Cancelled'
+              }">
+                {{ order.status }}
+              </span>
+              </strong>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="selectedTab === 'settings'">
+        
+        <button class="logout-btn" (click)="logout()">Logout  <i class="fas fa-arrow-right-from-bracket"></i></button>
+      </div>
+    </div>
+</div>
+  
