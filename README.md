@@ -5,7 +5,8 @@ Tech Stack:
 Frontend: HTML, CSS, JavaScript, Angular, Node.js,
 Backend: Java, Spring Boot,
 Database: MySQL,
-Authentication: JWT (JSON Web Tokens)
+Authentication: JWT (JSON Web Tokens),
+Other: MinIO, Docker.
 
 Run comands:
 Docker compose: docker-compose up --build,
