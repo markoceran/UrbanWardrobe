@@ -13,7 +13,7 @@ UrbanWardrobe is an online clothing store designed to offer the latest fashion t
 To run this project locally, follow these steps:
 
 1. Clone the repository:
-   git clone <repository-url>
+   git clone repository-url, 
    cd urbanwardrobe
 
 2. Set up the database:
