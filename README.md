@@ -17,7 +17,7 @@ To run this project locally, follow these steps:
    cd urbanwardrobe
 
 2. Set up the database:
-Create a new database in MySQL using: create database urbanwardrobe.
+Create a new database in MySQL using: create database urbanwardrobe. Set up datasource url in application.properties.
 
 3. Build and run the Docker containers:
 Navigate to the directory where docker-compose.yml is placed and execute: docker-compose up --build.
@@ -30,3 +30,16 @@ Navigate to the frontend directory and run: npm install then ng serve.
 
 
 Open the project at: http://localhost:4200
+
+![login](assets/screenshots/login.jpg)
+![main-page](assets/screenshots/main-page.jpg)
+![product-page](assets/screenshots/product-page.jpg)
+![wishlist](assets/screenshots/wishlist.jpg)
+![basket](assets/screenshots/basket.jpg)
+![profile](assets/screenshots/profile.jpg)
+![profile2](assets/screenshots/profile2.jpg)
+![order-details](assets/screenshots/order-details.jpg)
+![new-product](assets/screenshots/new-product.jpg)
+![product-page2](assets/screenshots/product-page2.jpg)
+![orders](assets/screenshots/orders.jpg)
+![orders2](assets/screenshots/orders2.jpg)
