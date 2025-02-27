@@ -32,6 +32,7 @@ Navigate to the frontend directory and run: npm install then ng serve.
 Open the project at: http://localhost:4200
 
 ![login](assets/screenshots/login.jpg)
+![register](assets/screenshots/register.jpg)
 ![main-page](assets/screenshots/main-page.jpg)
 ![product-page](assets/screenshots/product-page.jpg)
 ![wishlist](assets/screenshots/wishlist.jpg)
